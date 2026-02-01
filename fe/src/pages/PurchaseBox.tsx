@@ -38,8 +38,8 @@ const PurchaseBox: React.FC = () => {
     const priceIota = box.price / 1_000_000_000;
     const canBuy = priceIota <= maxBuyValue;
 
-    // Trust Deposit Calculation: Buyer pays 100% of price as stake (Move contract rule)
-    const buyerStake = box.price; 
+    // Trust Deposit Calculation: Buyer pays 110% Face Value (Move contract rule)
+    const buyerStake = (box.value * 110) / 100; 
     const totalToPay = box.price + buyerStake;
 
     const nanoPrice = box.price;

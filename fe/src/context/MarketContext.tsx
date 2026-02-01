@@ -28,6 +28,7 @@ export const MarketProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     const refreshBoxes = useCallback(async () => {
         try {
             const chainBoxes = await fetchAllBoxes();
+            console.log("Updating global boxes state with data from chain:", chainBoxes.length, "boxes found");
             setBoxes(chainBoxes as Box[]);
         } catch (err) {
             console.error("Failed to fetch boxes:", err);

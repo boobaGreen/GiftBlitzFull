@@ -92,7 +92,7 @@ const Profile: React.FC = () => {
 
     const filteredBoxes = allMyRelatedBoxes.filter(box => {
         // Always hide Canceled boxes from the main history as per user request
-        if (box.status === 'CANCELED') return false;
+        // if (box.status === 'CANCELED') return false; 
 
         if (filter === 'ALL') return true;
         if (filter === 'ACTIVE') return box.status === 'OPEN' || box.status === 'LOCKED' || box.status === 'REVEALED';

@@ -144,6 +144,9 @@ export const useGiftBlitz = () => {
         try {
             const result = await signAndExecute({ transaction: tx });
             console.log("Join transaction successful:", result);
+            if (result.digest) {
+                console.log(`View transaction on Explorer: https://explorer.rebased.iota.org/txblock/${result.digest}?network=testnet`);
+            }
             return result;
         } catch (err) {
             console.error("Join transaction failed:", err);
