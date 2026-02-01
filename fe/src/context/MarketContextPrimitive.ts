@@ -18,6 +18,7 @@ export interface MarketContextType {
     updateVaultIdentity: (repNftId: string) => Promise<unknown>;
     isSyncModalOpen: boolean;
     setIsSyncModalOpen: (open: boolean) => void;
+    sellersRep: Record<string, { trades: number, volume: number, disputes: number }>;
 }
 
 export const MarketContext = createContext<MarketContextType | undefined>(undefined);

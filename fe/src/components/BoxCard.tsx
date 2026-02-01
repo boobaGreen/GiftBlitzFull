@@ -50,7 +50,7 @@ interface BoxCardProps {
 
 
 const BoxCard: React.FC<BoxCardProps> = ({ box, onClick }) => {
-    const { user } = useMarket();
+    const { user, sellersRep } = useMarket();
     const discount = Math.round(((box.value - box.price) / box.value) * 100);
     const brand = getBrand(box.brand);
     const { getReputationNFT } = useGiftBlitz();
@@ -61,15 +61,25 @@ const BoxCard: React.FC<BoxCardProps> = ({ box, onClick }) => {
     const isSeller = user.address === box.seller;
     const isBuyer = user.address === box.buyer;
     
-    // Mock data for initial display (tier badge)
+    // Real stats from context
+    const contextRep = sellersRep[box.seller.toLowerCase()];
+    const currentTier = contextRep ? getTierConfig(contextRep.trades) : getTierConfig(0);
+
+    // Mock data for initial display (legacy fallback, but we prefer currentTier)
     const sellerData = getSellerData(box.seller);
+    
     // Real stats comparison for modal
-    const displayStats = realSellerStats || {
+    const displayStats = realSellerStats || (contextRep ? {
+        trades: contextRep.trades,
+        volume: contextRep.volume,
+        disputes: contextRep.disputes,
+        tier: currentTier
+    } : {
         trades: 0,
         volume: 0,
         disputes: 0,
         tier: getTierConfig(0)
-    };
+    });
 
     // Dynamic Button Logic
     const getButtonConfig = () => {
@@ -200,7 +210,7 @@ const BoxCard: React.FC<BoxCardProps> = ({ box, onClick }) => {
                             />
                             <div className="text-left">
                                 <p className="text-white text-sm font-medium">{box.seller.slice(0, 6)}...</p>
-                                <p className={`text-[10px] ${sellerData.tier.color}`}>{sellerData.tier.icon} {sellerData.tier.name}</p>
+                                <p className={`text-[10px] ${currentTier.color}`}>{currentTier.icon} {currentTier.name}</p>
                             </div>
                         </button>
 

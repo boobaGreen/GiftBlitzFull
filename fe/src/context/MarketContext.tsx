@@ -20,6 +20,7 @@ export const MarketProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     } = useGiftBlitz();
     
     const [boxes, setBoxes] = useState<Box[]>([]);
+    const [sellersRep, setSellersRep] = useState<Record<string, { trades: number, volume: number, disputes: number }>>({});
     const [repNftId, setRepNftId] = useState<string | null>(null);
     const [isSyncModalOpen, setIsSyncModalOpen] = useState(false);
     const [lastActionTime, setLastActionTime] = useState(0);
@@ -34,10 +35,34 @@ export const MarketProvider: React.FC<{ children: ReactNode }> = ({ children }) 
             const chainBoxes = await fetchAllBoxes();
             console.log("Updating global boxes state with data from chain:", chainBoxes.length, "boxes found");
             setBoxes(chainBoxes as Box[]);
+
+            // Batch fetch reputations for unique sellers
+            const uniqueSellers = Array.from(new Set(chainBoxes.map(b => b.seller)));
+            const repPromises = uniqueSellers.map(address => getReputationNFT(address));
+            const repResults = await Promise.all(repPromises);
+            
+            const newRepMap: Record<string, { trades: number, volume: number, disputes: number }> = {};
+            uniqueSellers.forEach((address, index) => {
+                const rep = repResults[index];
+                if (rep) {
+                    newRepMap[address.toLowerCase()] = {
+                        trades: rep.tradeCount,
+                        volume: rep.volume,
+                        disputes: rep.disputes
+                    };
+                } else {
+                    newRepMap[address.toLowerCase()] = {
+                        trades: 0,
+                        volume: 0,
+                        disputes: 0
+                    };
+                }
+            });
+            setSellersRep(newRepMap);
         } catch (err) {
-            console.error("Failed to fetch boxes:", err);
+            console.error("Failed to fetch boxes or reps:", err);
         }
-    }, [fetchAllBoxes]);
+    }, [fetchAllBoxes, getReputationNFT]);
 
     const refreshUserStats = useCallback(async () => {
         if (!account) return;
@@ -202,7 +227,8 @@ export const MarketProvider: React.FC<{ children: ReactNode }> = ({ children }) 
             syncIdentity,
             updateVaultIdentity,
             isSyncModalOpen,
-            setIsSyncModalOpen
+            setIsSyncModalOpen,
+            sellersRep
         }}>
             {children}
         </MarketContext.Provider>
