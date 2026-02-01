@@ -36,7 +36,7 @@ KEY_DISTRIBUTION_SOLUTIONS.md
   Update claim_auto_finalize() - change from 24h to 72h
   New Functions
   Implement claim_reveal_timeout() - buyer refund if seller doesn't reveal
-  Add compensation logic (50% to buyer, 50% BURN)
+  Add compensation logic (50% to buyer, 50% Protocol Treasury)
   Add new event BoxExpired
   Testing
   Test claim_reveal_timeout() at 72h
@@ -133,7 +133,7 @@ KEY_DISTRIBUTION_SOLUTIONS.md
   ✅ NO cancellation after buyer joins
   ✅ 72h reveal timeout (seller must reveal or buyer gets refund)
   ✅ 72h auto-finalize (buyer must verify or trade auto-completes)
-  ✅ 50% seller stake to buyer as compensation (50% BURN)
+  ✅ 50% seller stake to buyer as compensation (50% Protocol Treasury)
   ✅ Symmetric timeouts (both 72h for fairness)
   Risks & Mitigations:
   Risk: Buyer doesn't verify in 72h, gets invalid code

@@ -215,8 +215,18 @@ const Profile: React.FC = () => {
                                 {isMinting ? "Initialising..." : "✨ Initialize Profile"}
                             </button>
                         ) : (
-                            <div className="text-[10px] text-gray-500 text-center md:text-right">
-                                NFT: {repNftId.slice(0, 6)}...{repNftId.slice(-4)}
+                            <div className="space-y-2">
+                                <div className="text-[10px] text-gray-500 text-center md:text-right">
+                                    NFT: {repNftId.slice(0, 6)}...{repNftId.slice(-4)}
+                                </div>
+                                {(user.address.toLowerCase() === "0x724d1c6cbba57d4b5b68a60ce5bef7f660a7d28f5c68ab096991bbe904a49afa" || user.address.toLowerCase() === "0x0000000000000000000000000000000000000000000000000000000000000000") && (
+                                    <button
+                                        onClick={() => navigate('/admin')}
+                                        className="w-full py-2 rounded-xl bg-slate-900 border border-cyan-500/30 text-cyan-400 font-bold text-xs hover:bg-slate-800 transition-all flex items-center justify-center gap-2"
+                                    >
+                                        <Shield className="w-3 h-3" /> Admin Panel
+                                    </button>
+                                )}
                             </div>
                         )}
                     </div>

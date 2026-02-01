@@ -13,7 +13,8 @@
 2. ✅ **Reveal Timeout: 72h**: Seller must reveal key within 72 hours or buyer gets refund + compensation
 3. ✅ **Auto-Finalize: 72h**: If buyer doesn't confirm/dispute within 72h after reveal, trade auto-finalizes (assumes valid)
 4. ✅ **Compensation**: Buyer gets 50% of seller stake if seller doesn't reveal in time
-5. ✅ **UX Optimization**: Clear countdowns, warnings, and auto-polling
+5. ✅ **1% Protocol Fee**: A 1% fee is deducted from the seller's revenue on every successful trade
+6. ✅ **UX Optimization**: Clear countdowns, warnings, and auto-polling
 
 ---
 
@@ -34,7 +35,8 @@
 - [ ] Remove `cancel_box()` function (or restrict to OPEN state only)
 - [ ] Implement `claim_reveal_timeout()` function
 - [ ] Update `claim_auto_finalize()` to work 72h after reveal (not 24h)
-- [ ] Add compensation logic (50% stake to buyer, 50% BURN)
+- [ ] Add compensation logic (50% stake to buyer, 50% Protocol Treasury)
+- [ ] Implement 1% platform fee in `finalize()`
 - [ ] Update events to include timestamps
 - [ ] Add helper view functions for timeout calculations
 
@@ -79,8 +81,8 @@ States Flow:
    ├─→ [EXPIRED] → Seller didn't reveal in 72h (buyer claims refund)
    └─→ [REVEALED] → Seller reveals key (72h countdown starts)
        ↓
-       ├─→ [COMPLETED] → Buyer confirms OR 72h auto-finalize
-       └─→ [BURNED] → Buyer disputes
+       ├─→ [COMPLETED] → Buyer confirms OR 72h auto-finalize (1% fee collected)
+       └─→ [BURNED/CONFISCATED] → Buyer disputes (All stakes to Treasury)
 
 Timeouts:
 - LOCKED → EXPIRED: 72h (reveal timeout)
@@ -193,7 +195,8 @@ Step-by-step instructions for testing gift codes on different platforms.
 - [ ] claim_reveal_timeout at 72h
 - [ ] claim_auto_finalize at 72h after reveal
 - [ ] cancel_box restricted to OPEN state
-- [ ] Compensation calculation (50% buyer, 50% BURN)
+- [ ] Compensation calculation (50% buyer, 50% Treasury)
+- [ ] 1% Platform fee calculation and collection
 
 ### Frontend Tests
 

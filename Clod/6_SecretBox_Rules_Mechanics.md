@@ -29,11 +29,11 @@
 - Seller riceve: trust deposit + prezzo - 1% fee = **€159.20**
 - Buyer riceve: trust deposit indietro + carta = **€80 + carta da €100**
 
-### Se DISPUTA (BURN) 🔥
+### Se DISPUTA (Protocol Treasury) 🏦
 
-- Entrambi perdono il trust deposit (bruciato)
+- Entrambi perdono il trust deposit (confiscato dal protocollo)
 - Buyer recupera il prezzo pagato
-- **Nessuno vince → entrambi perdono**
+- **Deterrente massimo**: i fondi mancanti alimentano il fondo di sviluppo della piattaforma.
 
 ---
 
@@ -57,7 +57,7 @@
 ### ⚠️ Se Truffi (Codice Falso)
 
 ```
-Buyer fa BURN → Perdi tutto il trust deposit (€80)
+Buyer attiva DISPUTA → Perdi il trust deposit (va al Protocol Treasury)
 Non guadagni nulla → Solo perdita garantita
 ```
 
@@ -137,7 +137,7 @@ Trade 3: COMPRA €30    → tradeCount = 3 → MAX BUY = €50! ✨
 
 - Buyer può richiedere rimborso completo
 - Buyer recupera: prezzo + trust deposit + 50% del trust deposit seller
-- Seller perde: 100% del trust deposit (50% va al buyer, 50% BURN)
+- Seller perde: 100% del trust deposit (50% va al buyer, 50% Protocol Treasury)
 
 **Esempio:**
 
@@ -147,7 +147,7 @@ Box: Amazon €100, prezzo €80
 Seller NON rivela entro 72h:
 → Buyer recupera: €80 (prezzo) + €110 (suo trust deposit) + €40 (50% trust deposit seller) = €230
 → Seller perde: €80 (trust deposit)
-→ BURN: €40
+→ Protocol Treasury: €40
 ```
 
 **Perché 72 ore?**
@@ -208,7 +208,7 @@ Scenario B (Auto-Finalize):
 T+74h:    Nessuna azione → ✅ Auto-finalize (assume valido)
 
 Scenario C (Dispute):
-T+5h:     Codice invalido → ❌ Buyer disputa → BURN
+T+5h:     Codice invalido → ❌ Buyer disputa → Protocol Treasury
 
 Scenario D (Seller Ghosting):
 T+72h:    Seller NON ha rivelato → ⚠️ Buyer richiede rimborso + compensazione
@@ -241,10 +241,10 @@ T+72h:    Seller NON ha rivelato → ⚠️ Buyer richiede rimborso + compensazi
          │                               └────┬────┘ └────┬────┘
          │                                    │           │
          ▼                                    ▼           ▼
-    ┌─────────────────┐              ┌─────────┐    ┌─────────┐
-    │ Riceve Deposit +│◄─────────────│ Riceve  │    │ BURN    │
-    │ Prezzo - 1% Fee │              │ Deposit │    │ ENTRAMBI│
-    └─────────────────┘              └─────────┘    └─────────┘
+    ┌─────────────────┐              ┌─────────┐    ┌─────────────┐
+    │ Riceve Deposit +│◄─────────────│ Riceve  │    │ Protocol    │
+    │ Prezzo - 1% Fee │              │ Deposit │    │ Treasury    │
+    └─────────────────┘              └─────────┘    └─────────────┘
 ```
 
 ---

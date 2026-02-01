@@ -10,6 +10,7 @@ import PurchaseBox from './pages/PurchaseBox';
 
 import TradeDetail from './pages/TradeDetail';
 import Wiki from './pages/Wiki';
+import AdminDashboard from './pages/AdminDashboard';
 
 import { NotificationProvider } from './context/NotificationContext';
 
@@ -27,6 +28,7 @@ function App() {
               <Route path="/trade/:id" element={<TradeDetail />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/wiki" element={<Wiki />} />
+              <Route path="/admin" element={<AdminDashboard />} />
             </Route>
           </Routes>
         </Router>

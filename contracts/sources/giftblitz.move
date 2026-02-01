@@ -30,6 +30,12 @@ module giftblitz::giftblitz {
     /// Admin Capability for emergency actions
     public struct AdminCap has key { id: UID }
 
+    /// Shared Treasury object to store collected fees and disputed stakes
+    public struct Treasury has key {
+        id: UID,
+        balance: Balance<IOTA>
+    }
+
     /// The main GiftBox object (Shared Object)
     public struct GiftBox has key, store {
         id: UID,
@@ -87,6 +93,12 @@ module giftblitz::giftblitz {
 
     fun init(ctx: &mut TxContext) {
         transfer::transfer(AdminCap { id: object::new(ctx) }, tx_context::sender(ctx));
+        
+        // Initialize global treasury
+        transfer::share_object(Treasury {
+            id: object::new(ctx),
+            balance: balance::zero(),
+        });
     }
 
     // --- Core Functions ---
@@ -206,6 +218,7 @@ module giftblitz::giftblitz {
     public entry fun finalize(
         box: &mut GiftBox,
         rep_nft: &mut ReputationNFT,
+        treasury: &mut Treasury,
         ctx: &mut TxContext
     ) {
         let sender = tx_context::sender(ctx);
@@ -215,9 +228,15 @@ module giftblitz::giftblitz {
         assert!(box.state == STATE_REVEALED, EInvalidState);
 
         // Distributions:
-        // 1. Payment -> Seller
+        // 1. Payment -> Seller (minus 1% fee)
         let payment_val = balance::value(&box.payment);
-        let payment = balance::split(&mut box.payment, payment_val);
+        let fee_val = (payment_val * 1) / 100; // 1% Fee
+        
+        let fee = balance::split(&mut box.payment, fee_val);
+        balance::join(&mut treasury.balance, fee);
+        
+        let payment_remaining = balance::value(&box.payment);
+        let payment = balance::split(&mut box.payment, payment_remaining);
         transfer::public_transfer(coin::from_balance(payment, ctx), box.seller);
 
         // 2. Seller Stake -> Seller
@@ -244,10 +263,11 @@ module giftblitz::giftblitz {
         });
     }
 
-    /// Buyer raises a dispute (e.g. key invalid) -> BURNS everything
+    /// Buyer raises a dispute (e.g. key invalid) -> Confiscate to Treasury
     public entry fun dispute(
         box: &mut GiftBox,
         rep_nft: &mut ReputationNFT,
+        treasury: &mut Treasury,
         ctx: &mut TxContext
     ) {
         let sender = tx_context::sender(ctx);
@@ -256,18 +276,18 @@ module giftblitz::giftblitz {
         // Can dispute in REVEALED state
         assert!(box.state == STATE_REVEALED, EInvalidState);
 
-        // BURN EVERYTHING (Send to 0x0)
+        // Send all funds to Treasury
         let payment_val = balance::value(&box.payment);
         let payment = balance::split(&mut box.payment, payment_val);
-        transfer::public_transfer(coin::from_balance(payment, ctx), @0x0);
+        balance::join(&mut treasury.balance, payment);
 
         let s_val = balance::value(&box.seller_stake);
         let s_stake = balance::split(&mut box.seller_stake, s_val);
-        transfer::public_transfer(coin::from_balance(s_stake, ctx), @0x0);
+        balance::join(&mut treasury.balance, s_stake);
 
         let b_val = balance::value(&box.buyer_stake);
         let b_stake = balance::split(&mut box.buyer_stake, b_val);
-        transfer::public_transfer(coin::from_balance(b_stake, ctx), @0x0);
+        balance::join(&mut treasury.balance, b_stake);
 
         // Reset Reputation
         reputation::reset_on_dispute(rep_nft);
@@ -278,6 +298,7 @@ module giftblitz::giftblitz {
     /// Auto-finalize if buyer doesn't confirm/dispute within 72h after reveal
     public entry fun claim_auto_finalize(
         box: &mut GiftBox,
+        treasury: &mut Treasury,
         clock: &Clock,
         ctx: &mut TxContext
     ) {
@@ -293,7 +314,13 @@ module giftblitz::giftblitz {
         let seller = box.seller;
         
         let payment_val = balance::value(&box.payment);
-        let payment = balance::split(&mut box.payment, payment_val);
+        let fee_val = (payment_val * 1) / 100;
+        
+        let fee = balance::split(&mut box.payment, fee_val);
+        balance::join(&mut treasury.balance, fee);
+        
+        let payment_remaining = balance::value(&box.payment);
+        let payment = balance::split(&mut box.payment, payment_remaining);
         transfer::public_transfer(coin::from_balance(payment, ctx), seller);
 
         let s_val = balance::value(&box.seller_stake);
@@ -313,6 +340,7 @@ module giftblitz::giftblitz {
     /// Buyer can claim refund if seller doesn't reveal within 72h
     public entry fun claim_reveal_timeout(
         box: &mut GiftBox,
+        treasury: &mut Treasury,
         clock: &Clock,
         ctx: &mut TxContext
     ) {
@@ -357,14 +385,8 @@ module giftblitz::giftblitz {
         transfer::public_transfer(compensation_coin, sender);
         
         // Send remaining 50% to PROTOCOL (Treasury)
-        // For MVP we use 0x0 (burn) or a specific address. 
-        // Using 0x0 as placeholder for protocol treasury.
         let protocol_fee = balance::value(&box.seller_stake);
-        let fee_coin = coin::from_balance(
-            balance::split(&mut box.seller_stake, protocol_fee),
-            ctx
-        );
-        transfer::public_transfer(fee_coin, @0x0); // REPLACE WITH TREASURY ADDRESS
+        balance::join(&mut treasury.balance, balance::split(&mut box.seller_stake, protocol_fee));
         
         // Update state
         box.state = STATE_EXPIRED;
@@ -391,5 +413,25 @@ module giftblitz::giftblitz {
         transfer::public_transfer(coin::from_balance(stake, ctx), sender);
 
         box.state = STATE_BURNED; 
+    }
+
+    /// Admin can withdraw accumulated fees from Treasury
+    public entry fun withdraw_fees(
+        _: &AdminCap,
+        treasury: &mut Treasury,
+        amount: Option<u64>,
+        ctx: &mut TxContext
+    ) {
+        let total_val = balance::value(&treasury.balance);
+        let withdraw_val = if (option::is_some(&amount)) {
+            let req_val = *option::borrow(&amount);
+            assert!(req_val <= total_val, EIncorrectStake);
+            req_val
+        } else {
+            total_val
+        };
+
+        let withdrawal = balance::split(&mut treasury.balance, withdraw_val);
+        transfer::public_transfer(coin::from_balance(withdrawal, ctx), tx_context::sender(ctx));
     }
 }

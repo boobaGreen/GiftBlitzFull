@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useMarket } from '../hooks/useMarket';
-import { Lock, CheckCircle, ArrowRight, Flame, Trash2, Clock } from 'lucide-react';
+import { Lock, CheckCircle, ArrowRight, Flame, Trash2, Clock, TrendingUp } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useGiftBlitz } from '../hooks/useGiftBlitz';
 import { useNotifications } from '../context/NotificationContext';
@@ -55,8 +55,9 @@ const TradeDetail: React.FC = () => {
             setIsRevealed(true);
             showToast("Key revealed successfully!", "success");
             setIsProcessing(false);
-        } catch (error: any) {
-            showToast(error.message || "Reveal failed", "error");
+        } catch (error: unknown) {
+            const err = error as Error;
+            showToast(err.message || "Reveal failed", "error");
             setIsProcessing(false);
         }
     };
@@ -98,9 +99,10 @@ const TradeDetail: React.FC = () => {
             setDecryptedCode(code);
             setIsRevealed(true);
             setIsProcessing(false);
-        } catch (error: any) {
-            console.error("Decryption failed:", error);
-            showToast(error.message || "Decryption failed", "error");
+        } catch (error: unknown) {
+            const err = error as Error;
+            console.error("Action failed:", err);
+            showToast(err.message || "Action failed", "error");
             setIsProcessing(false);
         }
     };
@@ -113,9 +115,10 @@ const TradeDetail: React.FC = () => {
             localFinalize(box.id);
             showToast("Trade completed successfully!", "success");
             setIsProcessing(false);
-        } catch (error: any) {
-            console.error("Finalization failed:", error);
-            showToast(error.message || "Finalization failed", "error");
+        } catch (error: unknown) {
+            const err = error as Error;
+            console.error("Finalization failed:", err);
+            showToast(err.message || "Finalization failed", "error");
             setIsProcessing(false);
         }
     };
@@ -134,9 +137,10 @@ const TradeDetail: React.FC = () => {
             localDispute(box.id);
             showToast("Dispute initiated. Stakes burned.", "warning");
             setIsProcessing(false);
-        } catch (error: any) {
-            console.error("Dispute failed:", error);
-            showToast(error.message || "Dispute failed", "error");
+        } catch (error: unknown) {
+            const err = error as Error;
+            console.error("Dispute failed:", err);
+            showToast(err.message || "Dispute failed", "error");
             setIsProcessing(false);
         }
     };
@@ -154,9 +158,10 @@ const TradeDetail: React.FC = () => {
             showToast("Listing canceled successfully", "info");
             setIsProcessing(false);
             navigate('/profile');
-        } catch (error: any) {
-            console.error("Cancel failed:", error);
-            showToast(error.message || "Cancellation failed", "error");
+        } catch (error: unknown) {
+            const err = error as Error;
+            console.error("Cancel failed:", err);
+            showToast(err.message || "Cancellation failed", "error");
             setIsProcessing(false);
         }
     };
@@ -169,9 +174,10 @@ const TradeDetail: React.FC = () => {
             localClaimTimeout(box.id);
             showToast("Claim successful! Refunded with bonus.", "success");
             setIsProcessing(false);
-        } catch (error: any) {
-            console.error("Claim timeout failed:", error);
-            showToast(error.message || "Failed to claim timeout", "error");
+        } catch (error: unknown) {
+            const err = error as Error;
+            console.error("Claim timeout failed:", err);
+            showToast(err.message || "Failed to claim timeout", "error");
             setIsProcessing(false);
         }
     };
@@ -184,9 +190,10 @@ const TradeDetail: React.FC = () => {
             localClaimAutoFinalize(box.id);
             showToast("Auto-finalize successful! Funds released.", "success");
             setIsProcessing(false);
-        } catch (error: any) {
-            console.error("Claim auto-finalize failed:", error);
-            showToast(error.message || "Failed to claim auto-finalize", "error");
+        } catch (error: unknown) {
+            const err = error as Error;
+            console.error("Claim auto-finalize failed:", err);
+            showToast(err.message || "Failed to claim auto-finalize", "error");
             setIsProcessing(false);
         }
     };
@@ -294,6 +301,45 @@ const TradeDetail: React.FC = () => {
                         </p>
                     </div>
                 </div>
+                
+                {/* Trade Financials */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 }}
+                    className="p-6 rounded-3xl bg-slate-800/50 border border-white/5 space-y-4"
+                >
+                    <div className="flex items-center gap-3 mb-2">
+                        <TrendingUp className="w-5 h-5 text-cyan-400" />
+                        <h3 className="text-lg font-bold text-white">Financial Breakdown</h3>
+                    </div>
+                    
+                    <div className="space-y-3">
+                        <div className="flex justify-between items-center text-sm py-2 border-b border-white/5">
+                            <span className="text-gray-400">Card Face Value</span>
+                            <span className="text-white font-bold">{(box.value / 1_000_000_000).toFixed(2)} IOTA</span>
+                        </div>
+                        <div className="flex justify-between items-center text-sm py-2 border-b border-white/5">
+                            <span className="text-gray-400">Sale Price</span>
+                            <span className="text-cyan-400 font-bold">{(box.price / 1_000_000_000).toFixed(2)} IOTA</span>
+                        </div>
+                        
+                        <div className="space-y-4 pt-2">
+                            <div className="p-4 rounded-2xl bg-black/30 space-y-3">
+                                <div className="flex justify-between items-center text-sm">
+                                    <span className="text-gray-500 italic">Protocol Maintenance Fee (1%)</span>
+                                    <span className="text-purple-400 font-mono">- {((box.price * 0.01) / 1_000_000_000).toFixed(2)} IOTA</span>
+                                </div>
+                                <div className="flex justify-between items-center text-md pt-2 border-t border-white/10">
+                                    <span className="text-white font-bold">{isSeller ? "Estimated Earnings" : "Seller Payout"}</span>
+                                    <span className="text-green-400 font-black">
+                                        {((box.price * 0.99) / 1_000_000_000).toFixed(2)} IOTA
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </motion.div>
 
                 {/* TIMERS */}
                 

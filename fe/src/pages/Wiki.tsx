@@ -14,7 +14,7 @@ const Wiki: React.FC = () => {
             id: 'trust-deposits',
             title: 'Trust Deposits',
             icon: <Shield className="w-5 h-5 text-purple-400" />,
-            content: "Both buyers and sellers lock a 'Trust Deposit' (100% of face value) into the smart contract. If the trade succeeds, deposits are returned. If a dispute occurs, they are burned."
+            content: "Both buyers and sellers lock a 'Trust Deposit' (100% of face value) into the smart contract. If the trade succeeds, deposits are returned. If a dispute occurs, they are sent to the Protocol Treasury."
         },
         {
             id: 'timeout-reveal',
@@ -26,7 +26,7 @@ const Wiki: React.FC = () => {
             id: 'reputation',
             title: 'Hacker Reputation',
             icon: <Award className="w-5 h-5 text-green-400" />,
-            content: "Your Reputation NFT tracks your trade history. Higher reputation unlocks larger trade caps (up to €1000) and reduces fees. It is Soulbound to your IOTA Identity."
+            content: "Your Reputation NFT tracks your trade history. Higher reputation unlocks larger trade caps (up to €1000). The protocol charges a minimal 1% fee on successful sales for maintenance."
         }
     ];
 
@@ -107,7 +107,7 @@ const Wiki: React.FC = () => {
                             <div>
                                 <h4 className="text-white font-bold text-sm">Seller Timeout</h4>
                                 <p className="text-xs text-gray-500">
-                                    Missed the 72h reveal window? 50% of your trust deposit is burned, and the other 50% is sent to the buyer as compensation.
+                                    Missed the 72h reveal window? 50% of your trust deposit is confiscated by the Protocol Treasury, and the other 50% is sent to the buyer as compensation.
                                 </p>
                             </div>
                         </div>
@@ -155,7 +155,7 @@ const Wiki: React.FC = () => {
                 <div className="max-w-3xl mx-auto space-y-4">
                     <h2 className="text-3xl font-bold text-white">Trust via Mutually Assured Destruction</h2>
                     <p className="text-gray-400">
-                        The "Dispute" mechanism is the ultimate deterrent. If a seller sends a fake code, the buyer can <strong>BURN</strong> both stakes. 
+                        The "Dispute" mechanism is the ultimate deterrent. If a seller sends a fake code, the buyer can <strong>CONFISCATE</strong> both stakes to the Protocol Treasury. 
                         Since the price is only 90% of the value, the seller loses more than they could ever gain by scamming.
                     </p>
                     <div className="flex flex-wrap justify-center gap-8 mt-8">

@@ -19,6 +19,7 @@ export const useGiftBlitz = () => {
     const { mutateAsync: signPersonalMessage } = useSignPersonalMessage();
 
     const PACKAGE_ID = contracts.PACKAGE_ID;
+    const TREASURY_ID = (contracts as { TREASURY_ID?: string }).TREASURY_ID;
     const MODULE = "giftblitz";
 
     /**
@@ -240,37 +241,39 @@ export const useGiftBlitz = () => {
      * Finalize (Buyer) - Requires ReputationNFT
      */
     const finalizeBox = useCallback(async (boxId: string, repNftId: string) => {
-        if (!account) return;
+        if (!account || !TREASURY_ID) return;
 
         const tx = new Transaction();
         tx.moveCall({
             target: `${PACKAGE_ID}::${MODULE}::finalize`,
             arguments: [
                 tx.object(boxId),
-                tx.object(repNftId)
+                tx.object(repNftId),
+                tx.object(TREASURY_ID)
             ],
         });
 
         return signAndExecute({ transaction: tx });
-    }, [account, signAndExecute, PACKAGE_ID, MODULE]);
+    }, [account, signAndExecute, PACKAGE_ID, MODULE, TREASURY_ID]);
 
     /**
      * Dispute (Buyer) - Requires ReputationNFT
      */
     const disputeBox = useCallback(async (boxId: string, repNftId: string) => {
-        if (!account) return;
+        if (!account || !TREASURY_ID) return;
 
         const tx = new Transaction();
         tx.moveCall({
             target: `${PACKAGE_ID}::${MODULE}::dispute`,
             arguments: [
                 tx.object(boxId),
-                tx.object(repNftId)
+                tx.object(repNftId),
+                tx.object(TREASURY_ID)
             ],
         });
 
         return signAndExecute({ transaction: tx });
-    }, [account, signAndExecute, PACKAGE_ID, MODULE]);
+    }, [account, signAndExecute, PACKAGE_ID, MODULE, TREASURY_ID]);
 
 
     /**
@@ -315,37 +318,60 @@ export const useGiftBlitz = () => {
      * Claim Refund if Seller timeouts (72h)
      */
     const claimRevealTimeout = useCallback(async (boxId: string) => {
-        if (!account) return;
+        if (!account || !TREASURY_ID) return;
 
         const tx = new Transaction();
         tx.moveCall({
             target: `${PACKAGE_ID}::${MODULE}::claim_reveal_timeout`,
             arguments: [
                 tx.object(boxId),
+                tx.object(TREASURY_ID),
                 tx.object('0x6'),
             ],
         });
 
         return signAndExecute({ transaction: tx });
-    }, [account, signAndExecute, PACKAGE_ID, MODULE]);
+    }, [account, signAndExecute, PACKAGE_ID, MODULE, TREASURY_ID]);
 
     /**
      * Claim Auto-Finalize (72h after reveal)
      */
     const claimAutoFinalize = useCallback(async (boxId: string) => {
-        if (!account) return;
+        if (!account || !TREASURY_ID) return;
 
         const tx = new Transaction();
         tx.moveCall({
             target: `${PACKAGE_ID}::${MODULE}::claim_auto_finalize`,
             arguments: [
                 tx.object(boxId),
+                tx.object(TREASURY_ID),
                 tx.object('0x6'),
             ],
         });
 
         return signAndExecute({ transaction: tx });
-    }, [account, signAndExecute, PACKAGE_ID, MODULE]);
+    }, [account, signAndExecute, PACKAGE_ID, MODULE, TREASURY_ID]);
+
+
+    /**
+     * Withdraw fees from Treasury (Admin only)
+     */
+    const withdrawFees = useCallback(async (adminCapId: string, amount?: number) => {
+        if (!account || !TREASURY_ID) return;
+
+        const tx = new Transaction();
+        tx.moveCall({
+            target: `${PACKAGE_ID}::${MODULE}::withdraw_fees`,
+            arguments: [
+                tx.object(adminCapId),
+                tx.object(TREASURY_ID),
+                tx.pure.option('u64', amount ? amount : null),
+            ],
+        });
+
+        return signAndExecute({ transaction: tx });
+    }, [account, signAndExecute, PACKAGE_ID, MODULE, TREASURY_ID]);
+
 
 
     /**
@@ -479,6 +505,7 @@ export const useGiftBlitz = () => {
         cancelBox,
         claimRevealTimeout,
         claimAutoFinalize,
+        withdrawFees,
         mintProfile,
         getReputationNFT,
         fetchAllBoxes
