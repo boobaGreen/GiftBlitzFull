@@ -10,34 +10,12 @@ import Avatar from 'boring-avatars';
 
 
 const Profile: React.FC = () => {
-    const { user, boxes, repNftId, syncIdentity, updateVaultIdentity, refreshUserStats } = useMarket();
+    const { user, boxes, repNftId, syncIdentity, updateVaultIdentity, refreshUserStats, keyMatch } = useMarket();
     const tierConfig = getTierConfig(user.tradeCount);
     const navigate = useNavigate();
     const [isSyncing, setIsSyncing] = useState(false);
     const [isUpdatingVault, setIsUpdatingVault] = useState(false);
-    const [keyMatch, setKeyMatch] = useState<boolean | null>(null);
 
-    // Check if local key matches on-chain key
-    React.useEffect(() => {
-        const checkKeys = async () => {
-            if (!user.address || !user.publicKey) {
-                setKeyMatch(null);
-                return;
-            }
-            try {
-                const { getEncryptionKeyPair } = await import('../utils/security');
-                const localKeys = await getEncryptionKeyPair(user.address);
-                const onChainPub = new Uint8Array(JSON.parse(user.publicKey));
-                const match = localKeys.publicKey.length === onChainPub.length && 
-                             localKeys.publicKey.every((b, i) => b === onChainPub[i]);
-                setKeyMatch(match);
-            } catch (e) {
-                console.error("Key check failed", e);
-                setKeyMatch(false);
-            }
-        };
-        checkKeys();
-    }, [user.address, user.publicKey]);
 
     const handleSyncIdentity = async () => {
         if (!user.vault) return;
@@ -45,7 +23,7 @@ const Profile: React.FC = () => {
         try {
             const success = await syncIdentity(user.vault);
             if (success) {
-                setKeyMatch(true);
+                await refreshUserStats();
             }
         } catch (error) {
             console.error("Sync failed:", error);

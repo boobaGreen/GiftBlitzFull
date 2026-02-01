@@ -3,7 +3,7 @@ import { useMarket } from '../hooks/useMarket';
 import SyncIdentityModal from './SyncIdentityModal';
 
 const GlobalModals: React.FC = () => {
-    const { isSyncModalOpen, setIsSyncModalOpen, syncIdentity, user } = useMarket();
+    const { isSyncModalOpen, setIsSyncModalOpen, setIsSyncDismissed, syncIdentity, refreshUserStats, user } = useMarket();
     const [isSyncing, setIsSyncing] = useState(false);
 
     const handleSync = async () => {
@@ -16,6 +16,7 @@ const GlobalModals: React.FC = () => {
         try {
             const success = await syncIdentity(user.vault);
             if (success) {
+                await refreshUserStats();
                 setIsSyncModalOpen(false);
             }
         } catch (error) {
@@ -31,7 +32,10 @@ const GlobalModals: React.FC = () => {
                 isOpen={isSyncModalOpen}
                 isSyncing={isSyncing}
                 onSync={handleSync}
-                onClose={() => setIsSyncModalOpen(false)}
+                onClose={() => {
+                    setIsSyncDismissed(true);
+                    setIsSyncModalOpen(false);
+                }}
             />
             {/* Future global modals can go here */}
         </>

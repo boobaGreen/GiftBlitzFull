@@ -23,6 +23,8 @@ export const MarketProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     const [sellersRep, setSellersRep] = useState<Record<string, { trades: number, volume: number, disputes: number }>>({});
     const [repNftId, setRepNftId] = useState<string | null>(null);
     const [isSyncModalOpen, setIsSyncModalOpen] = useState(false);
+    const [isSyncDismissed, setIsSyncDismissed] = useState(false);
+    const [keyMatch, setKeyMatch] = useState<boolean | null>(null);
     const [lastActionTime, setLastActionTime] = useState(0);
     const [user, setUser] = useState<User>({
         ...MOCK_USER,
@@ -98,16 +100,23 @@ export const MarketProvider: React.FC<{ children: ReactNode }> = ({ children }) 
                     const match = localKeys.publicKey.length === onChainPub.length && 
                                  localKeys.publicKey.every((b, i) => b === onChainPub[i]);
                     
-                    if (!match) {
+                    setKeyMatch(match);
+
+                    if (!match && !isSyncModalOpen && !isSyncDismissed) {
                         console.log("Proactive Sync: Identity mismatch detected, opening modal...");
                         setIsSyncModalOpen(true);
                     }
+                } else {
+                    setKeyMatch(null);
                 }
+            } else {
+                setKeyMatch(null);
             }
         } catch (err) {
             console.error("Failed to refresh stats:", err);
+            setKeyMatch(null);
         }
-    }, [account, iotaClient, getReputationNFT]);
+    }, [account, iotaClient, getReputationNFT, isSyncModalOpen, isSyncDismissed]);
 
     // Initial sync and periodic refresh
     React.useEffect(() => {
@@ -129,6 +138,8 @@ export const MarketProvider: React.FC<{ children: ReactNode }> = ({ children }) 
             refreshUserStats();
         } else {
             setRepNftId(null);
+            setKeyMatch(null);
+            setIsSyncDismissed(false);
             setUser(prev => ({ ...prev, balance: 0, tradeCount: 0 }));
         }
     }, [account?.address, refreshUserStats]);
@@ -225,11 +236,14 @@ export const MarketProvider: React.FC<{ children: ReactNode }> = ({ children }) 
             mintProfile, 
             refreshUserStats,
             syncIdentity,
-            updateVaultIdentity,
-            isSyncModalOpen,
-            setIsSyncModalOpen,
-            sellersRep
-        }}>
+                updateVaultIdentity,
+                isSyncModalOpen,
+                setIsSyncModalOpen,
+                isSyncDismissed,
+                setIsSyncDismissed,
+                keyMatch,
+                sellersRep
+            }}>
             {children}
         </MarketContext.Provider>
     );
