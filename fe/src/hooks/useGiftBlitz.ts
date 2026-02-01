@@ -350,14 +350,17 @@ export const useGiftBlitz = () => {
 
             if (!result) return [];
 
-            type MoveOption<T> = T | { fields: { contents: T } } | { fields: { some: T } } | null | undefined;
-
-            const getByteArrayValue = (opt: unknown): number[] | null => {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const getByteArrayValue = (opt: any): number[] | null => {
                 if (!opt) return null;
                 if (Array.isArray(opt)) return opt;
-                if (typeof opt === 'object' && opt !== null && 'fields' in opt) {
-                    const fields = (opt as { fields: { contents: number[] } }).fields;
-                    if (fields && fields.contents) return fields.contents;
+                if (typeof opt === 'object' && opt.fields) {
+                    // Standard Move Option<vector<u8>> uses fields.vec
+                    if (Array.isArray(opt.fields.vec) && opt.fields.vec.length > 0) {
+                        return opt.fields.vec[0];
+                    }
+                    // Compatibility for some RPCs using contents
+                    if (Array.isArray(opt.fields.contents)) return opt.fields.contents;
                 }
                 return null;
             };
@@ -369,27 +372,33 @@ export const useGiftBlitz = () => {
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     const fields = content.fields as Record<string, any>;
                     
-                    const getOptionValue = (opt: MoveOption<string>): string | null => {
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    const getOptionValue = (opt: any): string | null => {
                         if (!opt) return null;
                         if (typeof opt === 'string') return opt.toLowerCase();
-                        if (typeof opt === 'object' && opt !== null && 'fields' in opt) {
-                            const optFields = opt as { fields: { contents?: string; some?: string } };
-                            const val = optFields.fields.contents || optFields.fields.some || null;
-                            return val ? val.toLowerCase() : null;
+                        if (typeof opt === 'object' && opt.fields) {
+                           if (Array.isArray(opt.fields.vec)) {
+                               return opt.fields.vec[0]?.toLowerCase() || null;
+                           }
+                           const val = opt.fields.contents || opt.fields.some || null;
+                           return val ? val.toLowerCase() : null;
                         }
                         return null;
                     };
 
                     const buyer = getOptionValue(fields.buyer);
                     
-                    const getOptionNumberValue = (opt: unknown): number | null => {
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    const getOptionNumberValue = (opt: any): number | null => {
                         if (opt === null || opt === undefined) return null;
                         if (typeof opt === 'number') return opt;
                         if (typeof opt === 'string') return Number(opt);
-                        if (typeof opt === 'object' && 'fields' in opt) {
-                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                            const f = (opt as any).fields;
-                            const val = f.contents || f.some || null;
+                        if (typeof opt === 'object' && opt.fields) {
+                            if (Array.isArray(opt.fields.vec)) {
+                                const val = opt.fields.vec[0];
+                                return val !== undefined ? Number(val) : null;
+                            }
+                            const val = opt.fields.contents || opt.fields.some || null;
                             return val ? Number(val) : null;
                         }
                         return null;
@@ -406,6 +415,9 @@ export const useGiftBlitz = () => {
 
                     const encCodeBytes = getByteArrayValue(fields.encrypted_code);
                     const encKeyBytes = getByteArrayValue(fields.encrypted_key);
+                    
+                    // Ensure state is treated as a number
+                    const stateNum = Number(fields.state);
 
                     return {
                         id: data.objectId,
@@ -414,7 +426,7 @@ export const useGiftBlitz = () => {
                         brand: fields.card_brand as BoxType,
                         value: Number(fields.face_value),
                         price: Number(fields.price),
-                        status: (stateMap[fields.state] || 'OPEN') as BoxStatus,
+                        status: (stateMap[stateNum] || 'OPEN') as BoxStatus,
                         encryptedCodeOnChain: encCodeBytes ? JSON.stringify(Array.from(encCodeBytes)) : null,
                         encryptedKeyOnChain: encKeyBytes ? JSON.stringify(Array.from(encKeyBytes)) : null,
                         createdAt: new Date(Number(fields.created_at)).toISOString(),
