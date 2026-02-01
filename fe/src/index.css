@@ -6,13 +6,20 @@
   body {
     @apply bg-[#050505] text-white font-sans antialiased overflow-x-hidden;
     background-image:
-      radial-gradient(circle at 50% 0%, rgba(0, 243, 255, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 80% 80%, rgba(217, 70, 239, 0.05) 0%, transparent 40%);
+      radial-gradient(
+        circle at 50% 0%,
+        rgba(0, 243, 255, 0.1) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 80% 80%,
+        rgba(217, 70, 239, 0.05) 0%,
+        transparent 40%
+      );
   }
 }
 
 @layer components {
-
   /* Premium Glass Effect */
   .glass {
     @apply bg-[#151a23]/60 backdrop-blur-xl border border-white/5 shadow-glass;
@@ -28,8 +35,10 @@
   }
 
   .border-gradient {
-    background: linear-gradient(#151a23, #151a23) padding-box,
-      linear-gradient(135deg, rgba(0, 243, 255, 0.5), rgba(217, 70, 239, 0.5)) border-box;
+    background:
+      linear-gradient(#151a23, #151a23) padding-box,
+      linear-gradient(135deg, rgba(0, 243, 255, 0.5), rgba(217, 70, 239, 0.5))
+        border-box;
     border: 1px solid transparent;
   }
 
@@ -49,7 +58,6 @@
 }
 
 @layer utilities {
-
   /* Custom scrollbar */
   .scrollbar-thin::-webkit-scrollbar {
     width: 6px;
@@ -65,5 +73,17 @@
 
   .text-glow {
     text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+  }
+
+  /* Hide number input spinners */
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
   }
 }

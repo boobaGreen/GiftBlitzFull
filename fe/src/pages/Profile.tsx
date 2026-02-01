@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useMarket } from '../hooks/useMarket';
+import { useGiftBlitz } from '../hooks/useGiftBlitz';
+import { useIotaClient } from '@iota/dapp-kit';
+import contracts from '../data/contracts.json';
 import BoxCard from '../components/BoxCard';
 import { TrendingUp, Package, Shield, Clock, AlertTriangle } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -7,14 +10,48 @@ import { getTierConfig, type Box } from '../types';
 import { useNavigate } from 'react-router-dom';
 import Avatar from 'boring-avatars';
 
-
-
 const Profile: React.FC = () => {
     const { user, boxes, repNftId, syncIdentity, updateVaultIdentity, refreshUserStats, keyMatch } = useMarket();
+    const { mintProfile } = useGiftBlitz();
+    const iotaClient = useIotaClient();
     const tierConfig = getTierConfig(user.tradeCount);
     const navigate = useNavigate();
     const [isSyncing, setIsSyncing] = useState(false);
     const [isUpdatingVault, setIsUpdatingVault] = useState(false);
+    const [isMinting, setIsMinting] = useState(false);
+    const [hasAdminCap, setHasAdminCap] = useState(false);
+
+    // Check for Admin Cap
+    useEffect(() => {
+        const checkAdmin = async () => {
+            if (!user.address) return;
+            try {
+                const objects = await iotaClient.getOwnedObjects({
+                    owner: user.address,
+                    filter: { StructType: `${contracts.PACKAGE_ID}::giftblitz::AdminCap` }
+                });
+                setHasAdminCap(objects.data.length > 0);
+            } catch (err) {
+                console.error("Failed to check admin cap:", err);
+            }
+        };
+        checkAdmin();
+    }, [user.address, iotaClient]);
+
+    const handleMintProfile = async () => {
+        setIsMinting(true);
+        try {
+            await mintProfile();
+            // Refresh logic handled by context/events usually, or manual reload
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
+        } catch (error) {
+            console.error("Mint failed:", error);
+        } finally {
+            setIsMinting(false);
+        }
+    };
 
 
     const handleSyncIdentity = async () => {
@@ -181,7 +218,7 @@ const Profile: React.FC = () => {
                                 <div className="text-[10px] text-gray-500 text-center md:text-right">
                                     NFT: {repNftId.slice(0, 6)}...{repNftId.slice(-4)}
                                 </div>
-                                {(user.address.toLowerCase() === "0x724d1c6cbba57d4b5b68a60ce5bef7f660a7d28f5c68ab096991bbe904a49afa" || user.address.toLowerCase() === "0x0000000000000000000000000000000000000000000000000000000000000000") && (
+                                {hasAdminCap && (
                                     <button
                                         onClick={() => navigate('/admin')}
                                         className="w-full py-2 rounded-xl bg-slate-900 border border-cyan-500/30 text-cyan-400 font-bold text-xs hover:bg-slate-800 transition-all flex items-center justify-center gap-2"
@@ -190,6 +227,15 @@ const Profile: React.FC = () => {
                                     </button>
                                 )}
                             </div>
+                        )}
+                        {!repNftId && (
+                             <button
+                                onClick={handleMintProfile}
+                                disabled={isMinting}
+                                className="w-full py-2 rounded-xl bg-purple-500/20 border border-purple-500/30 text-purple-400 font-bold text-xs hover:bg-purple-500/30 transition-all flex items-center justify-center gap-2"
+                            >
+                                {isMinting ? "Initializing..." : "🚀 Initialize Profile"}
+                            </button>
                         )}
                     </div>
                 </div>
