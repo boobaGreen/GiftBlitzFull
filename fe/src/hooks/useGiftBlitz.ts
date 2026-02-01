@@ -96,6 +96,27 @@ export const useGiftBlitz = () => {
             const encryptedCodeHash = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', fullEncryptedPaylod as any)));
 
             const tx = new Transaction();
+
+            // ATOMIC MINT: If seller doesn't have a profile, mint it now
+            const myNft = await getReputationNFT(account.address);
+            if (!myNft) {
+                console.log("Atomic Profile Minting (Seller): User has no profile, adding mint_profile to transaction...");
+                const myKeys = await getEncryptionKeyPair(account.address);
+                const vaultMessage = "Authorize Identity Vault Creation\nThis allows you to recover your encrypted trades on any device/domain.";
+                const { signature: vaultSignature } = await signPersonalMessage({
+                    message: new TextEncoder().encode(vaultMessage)
+                });
+                const vault = await encryptVault(myKeys.privateKey, vaultSignature);
+                
+                tx.moveCall({
+                    target: `${PACKAGE_ID}::reputation::mint_profile`,
+                    arguments: [
+                        tx.pure.vector('u8', Array.from(myKeys.publicKey)),
+                        tx.pure.vector('u8', Array.from(vault)),
+                    ],
+                });
+            }
+
             const [stakeCoin] = tx.splitCoins(tx.gas, [tx.pure.u64(price)]);
 
             tx.moveCall({
@@ -120,7 +141,7 @@ export const useGiftBlitz = () => {
             console.error("Failed to create box:", err);
             throw err;
         }
-    }, [account, signPersonalMessage, signAndExecute, PACKAGE_ID, MODULE]);
+    }, [account, signPersonalMessage, signAndExecute, PACKAGE_ID, MODULE, getReputationNFT]);
 
     /**
      * Join/Purchase an existing GiftBox
