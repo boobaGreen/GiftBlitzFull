@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useMarket } from '../context/MarketContext';
+import { useMarket } from '../hooks/useMarket';
 import BoxCard from '../components/BoxCard';
 import { TrendingUp, Package, Shield, Clock, AlertTriangle } from 'lucide-react';
 import { motion } from 'framer-motion';

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useMarket } from '../context/MarketContext';
-import { Lock, CheckCircle, ArrowRight, Flame, Trash2, Clock, AlertTriangle } from 'lucide-react';
+import { useMarket } from '../hooks/useMarket';
+import { Lock, CheckCircle, ArrowRight, Flame, Trash2, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useGiftBlitz } from '../hooks/useGiftBlitz';
-import { getEncryptionKeyPair, decryptKeyForMe, decryptCode } from '../utils/security';
+import { getEncryptionKeyPair, decryptKeyForMe, decryptCode, unpackCiphertextWithSalt } from '../utils/security';
 import CountdownTimer from '../components/CountdownTimer';
 
 const TradeDetail: React.FC = () => {
@@ -25,7 +25,7 @@ const TradeDetail: React.FC = () => {
     const [decryptedCode, setDecryptedCode] = useState<string | null>(null);
     const [isProcessing, setIsProcessing] = useState(false);
     const [showDisputeModal, setShowDisputeModal] = useState(false);
-    const [forceUpdate, setForceUpdate] = useState(0); // Trigger re-render on timeout
+    const [, setForceUpdate] = useState(0); // Trigger re-render on timeout
 
     const TIMEOUT_MS = 259200000; // 72 hours
 
@@ -83,11 +83,26 @@ const TradeDetail: React.FC = () => {
             
             const symmetricKey = await decryptKeyForMe(encKeyBytes, myKeys.privateKey, sellerPubBytes);
 
-            // 4. Decrypt Code
-            const ciphertext = new Uint8Array(JSON.parse(box.encryptedCodeOnChain));
-            const clearCode = await decryptCode(ciphertext, symmetricKey);
+            // 5. Decrypt the Gift Code
+            console.log("5. Decrypting code with retrieved symmetric key...");
+            const encryptedCodeBytes = new Uint8Array(JSON.parse(box.encryptedCodeOnChain!));
+            
+            // Handle Salt+Ciphertext format
+            let ciphertextToDecrypt = encryptedCodeBytes;
+            try {
+                // If it's the new format (Salt + IV + Ciphertext), length should be > 32 + 12
+                if (encryptedCodeBytes.length > 44) {
+                    const { ciphertext } = unpackCiphertextWithSalt(encryptedCodeBytes);
+                    ciphertextToDecrypt = ciphertext;
+                    console.log("Detected Salted Ciphertext, unpacking...");
+                }
+            } catch (e) {
+                console.warn("Failed to unpack salt, assuming legacy format or raw ciphertext", e);
+            }
 
-            setDecryptedCode(clearCode);
+            const code = await decryptCode(ciphertextToDecrypt, symmetricKey);
+            console.log("6. Decryption successful!");
+            setDecryptedCode(code);
             setIsRevealed(true);
             setIsProcessing(false);
         } catch (error: unknown) {

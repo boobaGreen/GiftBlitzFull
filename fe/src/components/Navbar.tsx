@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Wallet, ChevronRight, LogOut } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useMarket } from '../context/MarketContext';
+import { useMarket } from '../hooks/useMarket';
 import { getMaxBuyValue } from '../types';
 import { ConnectButton, useCurrentAccount } from '@iota/dapp-kit';
 

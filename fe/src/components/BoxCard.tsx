@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import type { Box } from '../types';
 import { Lock, CheckCircle, Clock, X, TrendingUp, Package, Shield } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useMarket } from '../context/MarketContext';
+import { useMarket } from '../hooks/useMarket';
 import { getBrand } from '../data/giftCards';
 import { getMaxBuyValue } from '../types';
 import Avatar from 'boring-avatars';

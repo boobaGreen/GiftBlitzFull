@@ -10,7 +10,8 @@ L'obiettivo è ottenere la **"Instant UX"**: il compratore vede il codice nel mo
 
 - **Privacy Totale**: Il codice gift rimane protetto crittograficamente in ogni fase.
 - **Disponibilità Istantanea**: Eliminazione della dipendenza dal "reveal" manuale del venditore.
-- **Sicurezza Matematica**: Nessun intermediario (nemmeno il server di GiftBlitz) può leggere i codici.
+- **Sicurezza Matematica**: Nessun intermediario può leggere i codici.
+- **Key Management Stateless**: Le chiavi vengono derivate deterministicamente dalla firma del wallet, eliminando rischi di Local Storage.
 
 ---
 
@@ -29,10 +30,11 @@ L'obiettivo è ottenere la **"Instant UX"**: il compratore vede il codice nel mo
 ### 🔵 Frontend (FE)
 
 - **Installazione**: Aggiunta di `@nucypher/umbral-js` (WASM).
-- **Fase di Creazione (Seller)**:
-  1.  Cripta il codice per se stesso (genera un `Capsule`).
-  2.  Genera dei **Key Fragments (KFrags)** delegando il potere di decrittazione ai Proxy.
-  3.  Invia il `Capsule` e i metadati dei `KFrags` alla blockchain.
+- **Fase di Creazione (Seller - Stateless)**:
+  1.  Genera un **Salt** casuale.
+  2.  Firma `Salt` con Wallet → Deriva **Symmetric Key**.
+  3.  Cripta il codice → `Ciphertext`.
+  4.  Concatena `Ciphertext + Salt` e invia on-chain come `encrypted_code`.
 - **Fase di Acquisto (Buyer)**:
   1.  Riconosce l'evento di acquisto.
   2.  Scarica il materiale re-criptato dal Proxy (o tramite la chain).

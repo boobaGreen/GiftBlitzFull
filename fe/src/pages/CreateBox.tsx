@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useMarket } from '../context/MarketContext';
+import { useMarket } from '../hooks/useMarket';
 import type { Box, BoxType } from '../types';
 import { Lock, ChevronDown, DollarSign, Hash, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';

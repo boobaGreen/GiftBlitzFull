@@ -114,14 +114,15 @@ Dopo la ricerca, ecco le uniche 3 opzioni veramente implementabili:
    - Mostra chiaramente "Waiting for seller to reveal key..."
    - Timer stimato (es. "Usually takes 5-10 minutes")
    - Notifica email/push quando chiave è disponibile
-3. **Auto-refresh** del frontend per rilevare chiave
-4. **Incentivo seller**: Mostra "You can reveal the key now and get paid!"
+3. **Key Management**:
+   - Creazione: Firma `Salt` con wallet → Deriva Key (Stateless).
+   - Rivelazione: Firma stesso `Salt` (recuperato da chain) → Recupera Key.
 
 **Timeline**: 1-2 giorni (solo frontend)
 
 **Costi**: $0
 
-**Sicurezza**: ✅ Matematicamente sicura (ECDH)
+**Sicurezza**: ✅ Matematicamente sicura (ECDH + Deterministic Wallet Signatures) - No Local Storage Risk.
 
 **Trade-off**: UX asincrona (buyer aspetta seller)
 

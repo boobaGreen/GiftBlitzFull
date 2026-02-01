@@ -58,29 +58,62 @@ export async function getEncryptionKeyPair(address: string): Promise<EncryptionK
 }
 
 /**
- * Encrypts data using a randomly generated symmetric key.
+ * Derives a deterministic Symmetric Key (AES-GCM) from a Wallet Signature.
+ * This makes the encryption "Stateless" - as long as you can sign the same message
+ * (which contains the salt), you can recover the key.
  */
-export async function encryptCode(clearText: string): Promise<{ ciphertext: Uint8Array; key: CryptoKey }> {
-    const data = new TextEncoder().encode(clearText);
+export async function deriveKeyFromSignature(signature: string): Promise<CryptoKey> {
+    // 1. Hash the signature to get uniform entropy
+    const sigBytes = new TextEncoder().encode(signature);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', sigBytes);
 
-    const key = await crypto.subtle.generateKey(
+    // 2. Import the hash as a raw key material
+    const keyMaterial = await crypto.subtle.importKey(
+        'raw', 
+        hashBuffer, 
+        { name: 'HKDF' }, 
+        false, 
+        ['deriveKey']
+    );
+
+    // 3. Derive the actual AES-GCM key
+    // We use a fixed info string because the uniqueness comes from the signature (which contains the salt)
+    const derivedKey = await crypto.subtle.deriveKey(
+        {
+            name: 'HKDF',
+            hash: 'SHA-256',
+            salt: new Uint8Array(), // Salt is already in the signature
+            info: new TextEncoder().encode('GiftBlitz-Symmetric-Key'),
+        },
+        keyMaterial,
         { name: 'AES-GCM', length: 256 },
         true,
         ['encrypt', 'decrypt']
     );
 
+    return derivedKey;
+}
+
+/**
+ * Encrypts data using a provided symmetric key.
+ */
+export async function encryptCodeWithKey(clearText: string, key: CryptoKey): Promise<Uint8Array> {
+    const data = new TextEncoder().encode(clearText);
     const iv = crypto.getRandomValues(new Uint8Array(12));
+    
     const encrypted = await crypto.subtle.encrypt(
         { name: 'AES-GCM', iv },
         key,
-        data
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        data as any
     );
 
+    // Format: IV (12 bytes) || Ciphertext
     const result = new Uint8Array(iv.length + encrypted.byteLength);
     result.set(iv);
     result.set(new Uint8Array(encrypted), iv.length);
 
-    return { ciphertext: result, key };
+    return result;
 }
 
 /**
@@ -93,11 +126,38 @@ export async function decryptCode(ciphertextWithIv: Uint8Array, key: CryptoKey):
     const decrypted = await crypto.subtle.decrypt(
         { name: 'AES-GCM', iv },
         key,
-        data
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        data as any
     );
 
     return new TextDecoder().decode(decrypted);
 }
+
+/**
+ * HELPER: Pack Ciphertext + Salt into a single byte array
+ * Format: Salt (32 bytes) || IV || Ciphertext
+ * Note: We put Salt first or last? Let's put it LAST for easier slicing if needed, 
+ * or FIRST for fixed offset. 
+ * Decision: SALT (32 bytes) || EncryptedData
+ */
+export function packCiphertextWithSalt(ciphertext: Uint8Array, salt: Uint8Array): Uint8Array {
+    // Salt should be 32 bytes (SHA-256 hash or similar length recommended)
+    if (salt.length !== 32) throw new Error("Salt must be 32 bytes");
+    
+    const packed = new Uint8Array(salt.length + ciphertext.length);
+    packed.set(salt, 0);
+    packed.set(ciphertext, salt.length);
+    return packed;
+}
+
+export function unpackCiphertextWithSalt(packedData: Uint8Array): { ciphertext: Uint8Array, salt: Uint8Array } {
+    if (packedData.length < 32) throw new Error("Invalid packed data length");
+    
+    const salt = packedData.slice(0, 32);
+    const ciphertext = packedData.slice(32);
+    return { ciphertext, salt };
+}
+
 
 /**
  * Encrypts a symmetric key for a specific buyer.
@@ -109,7 +169,8 @@ export async function encryptKeyForBuyer(
 ): Promise<Uint8Array> {
     const buyerPubKey = await crypto.subtle.importKey(
         'raw',
-        buyerPubKeyBytes,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        buyerPubKeyBytes as any,
         { name: 'ECDH', namedCurve: 'P-256' },
         true,
         []
@@ -128,7 +189,8 @@ export async function encryptKeyForBuyer(
     const encrypted = await crypto.subtle.encrypt(
         { name: 'AES-GCM', iv },
         sharedSecret,
-        keyBytes
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        keyBytes as any
     );
 
     const result = new Uint8Array(iv.length + encrypted.byteLength);
@@ -148,7 +210,8 @@ export async function decryptKeyForMe(
 ): Promise<CryptoKey> {
     const peerPubKey = await crypto.subtle.importKey(
         'raw',
-        peerPubKeyBytes,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        peerPubKeyBytes as any,
         { name: 'ECDH', namedCurve: 'P-256' },
         true,
         []
@@ -168,7 +231,8 @@ export async function decryptKeyForMe(
     const decrypted = await crypto.subtle.decrypt(
         { name: 'AES-GCM', iv },
         sharedSecret,
-        data
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        data as any
     );
 
     return crypto.subtle.importKey(
@@ -180,20 +244,4 @@ export async function decryptKeyForMe(
     );
 }
 
-export async function storeSymmetricKey(boxId: string, key: CryptoKey) {
-    const exported = await crypto.subtle.exportKey('jwk', key);
-    localStorage.setItem(`${STORAGE_PREFIX}sym_${boxId}`, JSON.stringify(exported));
-}
-
-export async function getSymmetricKey(boxId: string): Promise<CryptoKey | null> {
-    const stored = localStorage.getItem(`${STORAGE_PREFIX}sym_${boxId}`);
-    if (!stored) return null;
-
-    return crypto.subtle.importKey(
-        'jwk',
-        JSON.parse(stored),
-        { name: 'AES-GCM', length: 256 },
-        true,
-        ['encrypt', 'decrypt']
-    );
-}
+// STORAGE FUNCTIONS REMOVED - STATELESS ARCHITECTURE

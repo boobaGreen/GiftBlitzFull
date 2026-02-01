@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useMarket } from '../context/MarketContext';
+import { useMarket } from '../hooks/useMarket';
 import { Shield, Lock, AlertTriangle, CheckCircle, ArrowRight, DollarSign } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { getMaxBuyValue } from '../types';

@@ -1,24 +1,29 @@
 import { useCallback } from 'react';
 import { Transaction } from '@iota/iota-sdk/transactions';
-import { useIotaClient, useSignAndExecuteTransaction, useCurrentAccount } from '@iota/dapp-kit';
+import { useIotaClient, useSignAndExecuteTransaction, useCurrentAccount, useSignPersonalMessage } from '@iota/dapp-kit';
 import contracts from '../data/contracts.json';
 import type { Box, BoxType, BoxStatus } from '../types';
 import { 
     getEncryptionKeyPair, 
-    encryptCode, 
-    encryptKeyForBuyer, 
-    storeSymmetricKey, 
-    getSymmetricKey 
+    encryptCodeWithKey,
+    deriveKeyFromSignature,
+    packCiphertextWithSalt,
+    unpackCiphertextWithSalt,
+    encryptKeyForBuyer
 } from '../utils/security';
 
 export const useGiftBlitz = () => {
     const iotaClient = useIotaClient();
     const account = useCurrentAccount();
     const { mutateAsync: signAndExecute } = useSignAndExecuteTransaction();
+    const { mutateAsync: signPersonalMessage } = useSignPersonalMessage();
 
     const PACKAGE_ID = contracts.PACKAGE_ID;
     const MODULE = "giftblitz";
 
+    /**
+     * Helper to fetch Reputation NFT
+     */
     const getReputationNFT = useCallback(async (ownerAddress: string) => {
         const objects = await iotaClient.getOwnedObjects({
             owner: ownerAddress,
@@ -46,8 +51,10 @@ export const useGiftBlitz = () => {
         return null;
     }, [iotaClient, PACKAGE_ID]);
 
+
     /**
      * Create a new GiftBox
+     * SALT + SIGNATURE STRATEGY (Stateless)
      */
     const createBox = useCallback(async (
         cardBrand: string, 
@@ -57,43 +64,59 @@ export const useGiftBlitz = () => {
     ) => {
         if (!account) return;
 
-        // 1. Local Encryption (Asymmetric Setup)
-        const { ciphertext, key: symKey } = await encryptCode(clearCode);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const encryptedCodeHash = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', ciphertext as any)));
+        try {
+            // 1. Generate Salt (32 bytes)
+            const salt = crypto.getRandomValues(new Uint8Array(32));
+            const saltHex = Array.from(salt).map(b => b.toString(16).padStart(2, '0')).join('');
+            
+            // 2. Sign Salt with Wallet to derive Deterministic Key
+            // We sign a human readable message containing the hex salt
+            const message = `GiftBlitz Key Generation\nSalt: ${saltHex}`;
+            console.log("Requesting signature for key derivation...");
+            
+            const { signature } = await signPersonalMessage({
+                 message: new TextEncoder().encode(message) 
+            });
 
-        const tx = new Transaction();
-        const [stakeCoin] = tx.splitCoins(tx.gas, [tx.pure.u64(price)]);
+            // 3. Derive Key
+            const symKey = await deriveKeyFromSignature(signature);
 
-        tx.moveCall({
-            target: `${PACKAGE_ID}::${MODULE}::create_box`,
-            arguments: [
-                tx.pure.string(cardBrand),
-                tx.pure.u64(faceValue),
-                tx.pure.u64(price),
-                tx.pure.vector('u8', encryptedCodeHash),
-                tx.pure.vector('u8', Array.from(ciphertext)),
-                stakeCoin,
-                tx.object('0x6'),
-            ],
-        });
+            // 4. Encrypt Code
+            const ciphertextOnly = await encryptCodeWithKey(clearCode, symKey);
+            
+            // 5. Pack Salt + Ciphertext
+            const fullEncryptedPaylod = packCiphertextWithSalt(ciphertextOnly, salt);
 
-        const result = await signAndExecute({ transaction: tx });
-        
-        // 4. If successful, link symmetric key to the new object ID
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const txResponse = result as any;
-        if (txResponse && txResponse.effects?.created) {
-            const created = txResponse.effects.created;
+            // 6. Calculate Hash 
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const boxObj = created.find((c: any) => c.owner && typeof c.owner === 'object' && 'AddressOwner' in c.owner);
-            if (boxObj && boxObj.reference?.objectId) {
-                await storeSymmetricKey(boxObj.reference.objectId, symKey);
-            }
-        }
+            const encryptedCodeHash = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', fullEncryptedPaylod as any)));
 
-        return { result, symKey };
-    }, [account, signAndExecute, PACKAGE_ID, MODULE]);
+            const tx = new Transaction();
+            const [stakeCoin] = tx.splitCoins(tx.gas, [tx.pure.u64(price)]);
+
+            tx.moveCall({
+                target: `${PACKAGE_ID}::${MODULE}::create_box`,
+                arguments: [
+                    tx.pure.string(cardBrand),
+                    tx.pure.u64(faceValue),
+                    tx.pure.u64(price),
+                    tx.pure.vector('u8', encryptedCodeHash),
+                    tx.pure.vector('u8', Array.from(fullEncryptedPaylod)), // Contains Salt!
+                    stakeCoin,
+                    tx.object('0x6'),
+                ],
+            });
+
+            const result = await signAndExecute({ transaction: tx });
+            
+            console.log("Box created successfully with stateless key derivation.");
+
+            return { result, symKey };
+        } catch (err) {
+            console.error("Failed to create box:", err);
+            throw err;
+        }
+    }, [account, signPersonalMessage, signAndExecute, PACKAGE_ID, MODULE]);
 
     /**
      * Join/Purchase an existing GiftBox
@@ -122,24 +145,57 @@ export const useGiftBlitz = () => {
 
     /**
      * Reveal Key (Seller)
+     * SALT + SIGNATURE STRATEGY (Stateless)
      */
     const revealKey = useCallback(async (boxId: string, buyerAddress: string) => {
         if (!account) return;
 
-        // 1. Fetch Buyer's Public Key from their Reputation NFT
+        // 1. Get Salt from on-chain box
+        const boxResult = await iotaClient.getObject({
+            id: boxId,
+            options: { showContent: true }
+        });
+        
+        let salt: Uint8Array | null = null;
+        if (boxResult.data?.content && 'fields' in boxResult.data.content) {
+             // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const fields = (boxResult.data.content.fields as any);
+            const encCodeBytes = fields.encrypted_code?.fields?.contents || fields.encrypted_code; 
+            if (encCodeBytes) {
+                // Determine if it's array or object-wrapped array (Move craziness)
+                const bytes = Array.isArray(encCodeBytes) ? encCodeBytes : (encCodeBytes.fields?.contents ?? []);
+                const packed = new Uint8Array(bytes);
+                // Unpack to get Salt
+                if (packed.length >= 32) {
+                     const unpacked = unpackCiphertextWithSalt(packed);
+                     salt = unpacked.salt;
+                }
+            }
+        }
+
+        if (!salt) {
+             throw new Error("Could not retrieve Salt from on-chain box. Is the box data correct?");
+        }
+
+        // 2. Fetch Buyer's Public Key
         const buyerNft = await getReputationNFT(buyerAddress);
         if (!buyerNft || !buyerNft.publicKey) {
             throw new Error("Buyer profile or encryption public key not found. Buyer must initialize profile.");
         }
 
-        // 2. Fetch my encryption keys
-        const myKeys = await getEncryptionKeyPair(account.address);
+        // 3. Derive Symmetric Key from Salt + Signature (Stateless)
+        const saltHex = Array.from(salt).map(b => b.toString(16).padStart(2, '0')).join('');
+        const message = `GiftBlitz Key Generation\nSalt: ${saltHex}`;
+        
+        console.log("Requesting signature for Key Recovery...");
+        const { signature } = await signPersonalMessage({
+             message: new TextEncoder().encode(message) 
+        });
 
-        // 3. Fetch the symmetric key for this box from localStorage
-        const symKey = await getSymmetricKey(boxId);
-        if (!symKey) throw new Error("Local symmetric key not found for this listing. Did you create it on this device?");
+        const symKey = await deriveKeyFromSignature(signature);
 
         // 4. Encrypt symmetric key specifically for buyer
+        const myKeys = await getEncryptionKeyPair(account.address);
         const buyerPubKeyBytes = new Uint8Array(JSON.parse(buyerNft.publicKey));
         const encryptedKeyForBuyer = await encryptKeyForBuyer(symKey, myKeys.privateKey, buyerPubKeyBytes);
 
@@ -154,7 +210,7 @@ export const useGiftBlitz = () => {
         });
 
         return signAndExecute({ transaction: tx });
-    }, [account, signAndExecute, PACKAGE_ID, MODULE, getReputationNFT]);
+    }, [account, signAndExecute, PACKAGE_ID, MODULE, getReputationNFT, iotaClient, signPersonalMessage]);
 
     /**
      * Finalize (Buyer) - Requires ReputationNFT
@@ -295,7 +351,6 @@ export const useGiftBlitz = () => {
             if (!result) return [];
 
             type MoveOption<T> = T | { fields: { contents: T } } | { fields: { some: T } } | null | undefined;
-
 
             const getByteArrayValue = (opt: unknown): number[] | null => {
                 if (!opt) return null;
