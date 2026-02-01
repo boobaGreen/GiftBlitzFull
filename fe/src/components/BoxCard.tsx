@@ -75,7 +75,13 @@ const BoxCard: React.FC<BoxCardProps> = ({ box, onClick }) => {
         }
 
         if (isBuyer) {
-            if (box.status === 'LOCKED') return { text: 'Validate Code', bg: 'bg-green-500 text-black font-bold animate-pulse', icon: CheckCircle };
+            if (box.status === 'LOCKED') {
+                // Check if seller has encrypted the code for the buyer
+                if (!box.encryptedCodeOnChain || !box.encryptedKeyOnChain) {
+                    return { text: 'Waiting for Seller', bg: 'bg-yellow-500/20 text-yellow-400', icon: Clock };
+                }
+                return { text: 'Validate Code', bg: 'bg-green-500 text-black font-bold animate-pulse', icon: CheckCircle };
+            }
         }
 
         // Default visitor / potential buyer
