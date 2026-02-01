@@ -339,7 +339,7 @@ export const useGiftBlitz = () => {
     const syncIdentity = useCallback(async (vault: number[]) => {
         if (!account) return;
         
-        const message = "Authorize Identity Vault Recovery\nThis will restore your encryption keys from the blockchain.";
+        const message = "Authorize Identity Vault Access\nThis will secure your encryption keys on the blockchain.";
         const { signature } = await signPersonalMessage({
              message: new TextEncoder().encode(message) 
         });
@@ -381,7 +381,7 @@ export const useGiftBlitz = () => {
         if (!account) return;
 
         const myKeys = await getEncryptionKeyPair(account.address);
-        const message = "Authorize Identity Vault Update\nThis will update your on-chain encryption keys.";
+        const message = "Authorize Identity Vault Access\nThis will secure your encryption keys on the blockchain.";
         const { signature } = await signPersonalMessage({
              message: new TextEncoder().encode(message) 
         });
