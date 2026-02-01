@@ -82,27 +82,38 @@ const TradeDetail: React.FC = () => {
             const sellerPubBytes = new Uint8Array(JSON.parse(sellerNft.publicKey));
             
             const symmetricKey = await decryptKeyForMe(encKeyBytes, myKeys.privateKey, sellerPubBytes);
+            console.log("Symmetric Key decrypted successfully for buyer.");
 
             const encryptedCodeBytes = new Uint8Array(JSON.parse(box.encryptedCodeOnChain!));
+            console.log("Raw encrypted code from chain (length):", encryptedCodeBytes.length);
             
             let ciphertextToDecrypt = encryptedCodeBytes;
             try {
                 if (encryptedCodeBytes.length > 44) {
-                    const { ciphertext } = unpackCiphertextWithSalt(encryptedCodeBytes);
+                    const { ciphertext, salt } = unpackCiphertextWithSalt(encryptedCodeBytes);
                     ciphertextToDecrypt = ciphertext;
+                    console.log("Unpacked salt from on-chain payload:", Array.from(salt).slice(0, 8), "...");
+                } else {
+                    console.log("Payload length <= 44, assuming legacy format (no salt).");
                 }
             } catch (e) {
-                console.warn("Failed to unpack salt, assuming legacy", e);
+                console.warn("Failed to unpack salt, falling back to full payload", e);
             }
 
+            console.log("Attempting AES-GCM decryption of code...");
             const code = await decryptCode(ciphertextToDecrypt, symmetricKey);
+            console.log("Decryption successful!");
             setDecryptedCode(code);
             setIsRevealed(true);
             setIsProcessing(false);
         } catch (error: unknown) {
             const err = error as Error;
-            console.error("Action failed:", err);
-            showToast(err.message || "Action failed", "error");
+            console.error("Decryption Diagnostic Failure:", {
+                message: err.message,
+                name: err.name,
+                stack: err.stack
+            });
+            showToast(`Decryption failed: ${err.name}`, "error");
             setIsProcessing(false);
         }
     };

@@ -218,11 +218,17 @@ export const useGiftBlitz = () => {
         });
 
         const symKey = await deriveKeyFromSignature(signature);
+        console.log("Symmetric Key recovered from signature in revealKey.");
 
         // 4. Encrypt symmetric key specifically for buyer
         const myKeys = await getEncryptionKeyPair(account.address);
+        console.log("Seller public key from local storage:", Array.from(myKeys.publicKey).slice(0, 8), "...");
+        
         const buyerPubKeyBytes = new Uint8Array(JSON.parse(buyerNft.publicKey));
+        console.log("Buyer public key from on-chain NFT:", Array.from(buyerPubKeyBytes).slice(0, 8), "...");
+        
         const encryptedKeyForBuyer = await encryptKeyForBuyer(symKey, myKeys.privateKey, buyerPubKeyBytes);
+        console.log("Symmetric key encrypted for buyer successfully.");
 
         const tx = new Transaction();
         tx.moveCall({
