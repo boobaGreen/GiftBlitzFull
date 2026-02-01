@@ -11,6 +11,7 @@ import PurchaseBox from './pages/PurchaseBox';
 import TradeDetail from './pages/TradeDetail';
 import Wiki from './pages/Wiki';
 import AdminDashboard from './pages/AdminDashboard';
+import GlobalModals from './components/GlobalModals';
 
 import { NotificationProvider } from './context/NotificationContext';
 
@@ -18,6 +19,7 @@ function App() {
   return (
     <NotificationProvider>
       <MarketProvider>
+        <GlobalModals />
         <Router>
           <Routes>
             <Route element={<Layout />}>

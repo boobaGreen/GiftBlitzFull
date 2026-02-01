@@ -21,6 +21,7 @@ export const MarketProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     
     const [boxes, setBoxes] = useState<Box[]>([]);
     const [repNftId, setRepNftId] = useState<string | null>(null);
+    const [isSyncModalOpen, setIsSyncModalOpen] = useState(false);
     const [lastActionTime, setLastActionTime] = useState(0);
     const [user, setUser] = useState<User>({
         ...MOCK_USER,
@@ -62,6 +63,21 @@ export const MarketProvider: React.FC<{ children: ReactNode }> = ({ children }) 
             
             if (repData) {
                 setRepNftId(repData.id);
+                
+                // PROACTIVE SYNC CHECK: 
+                // If we have a vault on chain, check if local keys match
+                if (repData.vault && repData.publicKey) {
+                    const { getEncryptionKeyPair } = await import('../utils/security');
+                    const localKeys = await getEncryptionKeyPair(account.address);
+                    const onChainPub = new Uint8Array(JSON.parse(repData.publicKey));
+                    const match = localKeys.publicKey.length === onChainPub.length && 
+                                 localKeys.publicKey.every((b, i) => b === onChainPub[i]);
+                    
+                    if (!match) {
+                        console.log("Proactive Sync: Identity mismatch detected, opening modal...");
+                        setIsSyncModalOpen(true);
+                    }
+                }
             }
         } catch (err) {
             console.error("Failed to refresh stats:", err);
@@ -184,7 +200,9 @@ export const MarketProvider: React.FC<{ children: ReactNode }> = ({ children }) 
             mintProfile, 
             refreshUserStats,
             syncIdentity,
-            updateVaultIdentity
+            updateVaultIdentity,
+            isSyncModalOpen,
+            setIsSyncModalOpen
         }}>
             {children}
         </MarketContext.Provider>
