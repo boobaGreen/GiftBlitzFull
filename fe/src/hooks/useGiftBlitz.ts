@@ -579,6 +579,8 @@ export const useGiftBlitz = () => {
         withdrawFees,
         fetchAllBoxes,
         syncIdentity,
-        updateVaultIdentity
+        updateVaultIdentity,
+        mintProfile,
+        getReputationNFT
     };
 };
