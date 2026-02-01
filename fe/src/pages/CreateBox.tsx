@@ -6,11 +6,13 @@ import { Lock, ChevronDown, DollarSign, Hash, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { CATEGORIES, GIFT_CARDS_DATA } from '../data/giftCards';
 import { useGiftBlitz } from '../hooks/useGiftBlitz';
+import { useNotifications } from '../context/NotificationContext';
 
 const CreateBox: React.FC = () => {
     const navigate = useNavigate();
     const { addBox, user, repNftId, mintProfile } = useMarket();
     const { createBox } = useGiftBlitz();
+    const { showToast } = useNotifications();
 
     const [cardType, setCardType] = useState<BoxType>('AMAZON');
     const [code, setCode] = useState('');
@@ -91,7 +93,9 @@ const CreateBox: React.FC = () => {
             const errMsg = error instanceof Error ? error.message : String(error);
             // If it's a permission error, we should probably warn the user
             if (errMsg.includes('permissions')) {
-                alert("Wallet Connection Error: Please disconnect and reconnect your wallet.");
+                showToast("Wallet Connection Error: Please disconnect and reconnect your wallet.", "error");
+            } else {
+                showToast(errMsg, "error");
             }
         } finally {
             setIsSubmitting(false);

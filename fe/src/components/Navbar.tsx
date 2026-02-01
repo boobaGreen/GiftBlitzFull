@@ -33,6 +33,7 @@ const Navbar: React.FC = () => {
         { name: 'Market', path: '/market' },
         { name: 'Sell Card', path: '/create' },
         { name: 'My Profile', path: '/profile' },
+        { name: 'Protocol Wiki', path: '/wiki' },
     ];
 
     const isActive = (path: string) => location.pathname === path;

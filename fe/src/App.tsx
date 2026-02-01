@@ -9,23 +9,29 @@ import Home from './pages/Home';
 import PurchaseBox from './pages/PurchaseBox';
 
 import TradeDetail from './pages/TradeDetail';
+import Wiki from './pages/Wiki';
+
+import { NotificationProvider } from './context/NotificationContext';
 
 function App() {
   return (
-    <MarketProvider>
-      <Router>
-        <Routes>
-          <Route element={<Layout />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/market" element={<Market />} />
-            <Route path="/create" element={<CreateBox />} />
-            <Route path="/buy/:id" element={<PurchaseBox />} />
-            <Route path="/trade/:id" element={<TradeDetail />} />
-            <Route path="/profile" element={<Profile />} />
-          </Route>
-        </Routes>
-      </Router>
-    </MarketProvider>
+    <NotificationProvider>
+      <MarketProvider>
+        <Router>
+          <Routes>
+            <Route element={<Layout />}>
+              <Route path="/" element={<Home />} />
+              <Route path="/market" element={<Market />} />
+              <Route path="/create" element={<CreateBox />} />
+              <Route path="/buy/:id" element={<PurchaseBox />} />
+              <Route path="/trade/:id" element={<TradeDetail />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/wiki" element={<Wiki />} />
+            </Route>
+          </Routes>
+        </Router>
+      </MarketProvider>
+    </NotificationProvider>
   );
 }
 

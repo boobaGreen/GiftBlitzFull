@@ -5,12 +5,14 @@ import { Shield, Lock, AlertTriangle, CheckCircle, ArrowRight, DollarSign } from
 import { motion } from 'framer-motion';
 import { getMaxBuyValue } from '../types';
 import { useGiftBlitz } from '../hooks/useGiftBlitz';
+import { useNotifications } from '../context/NotificationContext';
 
 const PurchaseBox: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const { boxes, user, repNftId, mintProfile, joinBox: localJoinBox } = useMarket();
     const { joinBox } = useGiftBlitz();
+    const { showToast } = useNotifications();
     const [isProcessing, setIsProcessing] = useState(false);
 
     const box = boxes.find(b => b.id === id);
@@ -50,7 +52,7 @@ const PurchaseBox: React.FC = () => {
         setIsProcessing(true);
         try {
             if (!repNftId) {
-                console.log("No profile found. Minting Reputation NFT first...");
+                showToast("Initializing Profile...", "info");
                 await mintProfile();
                 await new Promise(resolve => setTimeout(resolve, 3000));
             }
@@ -60,11 +62,12 @@ const PurchaseBox: React.FC = () => {
             // Local state update
             localJoinBox(box.id, user.address);
             
+            showToast("Purchase Successful!", "success");
             setIsProcessing(false);
             navigate('/profile'); 
         } catch (error: any) {
             console.error("Purchase failed:", error);
-            alert("Purchase FAILED!\n\nReason: " + (error.message || "Unknown error. Check console for details."));
+            showToast(error.message || "Purchase failed. Check console.", "error");
             setIsProcessing(false);
         }
     };
