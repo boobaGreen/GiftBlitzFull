@@ -88,16 +88,14 @@ const Profile: React.FC = () => {
     );
 
     // Filter Logic
-    const [filter, setFilter] = useState<'ALL' | 'ACTIVE' | 'COMPLETED' | 'DISPUTED'>('ALL');
+    const [filter, setFilter] = useState<'ALL' | 'ACTIVE' | 'COMPLETED' | 'DISPUTED' | 'CANCELED'>('ALL');
 
     const filteredBoxes = allMyRelatedBoxes.filter(box => {
-        // Always hide Canceled boxes from the main history as per user request
-        // if (box.status === 'CANCELED') return false; 
-
-        if (filter === 'ALL') return true;
+        if (filter === 'ALL') return box.status !== 'CANCELED';
         if (filter === 'ACTIVE') return box.status === 'OPEN' || box.status === 'LOCKED' || box.status === 'REVEALED';
         if (filter === 'COMPLETED') return box.status === 'COMPLETED';
         if (filter === 'DISPUTED') return box.status === 'DISPUTED';
+        if (filter === 'CANCELED') return box.status === 'CANCELED';
         return true;
     });
 
@@ -313,14 +311,15 @@ const Profile: React.FC = () => {
                     {/* Filter Tabs */}
                     <div className="flex p-1 rounded-xl bg-slate-800/50 border border-white/5 overflow-x-auto">
                         {[
-                            { id: 'ALL', label: 'All', icon: null },
+                            { id: 'ALL', label: 'Recent', icon: '📋' },
                             { id: 'ACTIVE', label: 'Active', icon: '⚡' },
                             { id: 'COMPLETED', label: 'Success', icon: '✅' },
                             { id: 'DISPUTED', label: 'Burned', icon: '🔥' },
+                            { id: 'CANCELED', label: 'Canceled', icon: '⭕' },
                         ].map((tab) => (
                             <button
                                 key={tab.id}
-                                onClick={() => setFilter(tab.id as 'ALL' | 'ACTIVE' | 'COMPLETED' | 'DISPUTED')}
+                                onClick={() => setFilter(tab.id as 'ALL' | 'ACTIVE' | 'COMPLETED' | 'DISPUTED' | 'CANCELED')}
                                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap flex items-center gap-2
                                     ${filter === tab.id
                                         ? 'bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-white border border-cyan-500/30 shadow-lg shadow-cyan-500/10'
