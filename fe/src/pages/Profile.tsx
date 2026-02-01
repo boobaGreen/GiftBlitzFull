@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useMarket } from '../hooks/useMarket';
-import { useGiftBlitz } from '../hooks/useGiftBlitz';
 import { useIotaClient } from '@iota/dapp-kit';
 import contracts from '../data/contracts.json';
 import BoxCard from '../components/BoxCard';
@@ -12,13 +11,11 @@ import Avatar from 'boring-avatars';
 
 const Profile: React.FC = () => {
     const { user, boxes, repNftId, syncIdentity, updateVaultIdentity, refreshUserStats, keyMatch } = useMarket();
-    const { mintProfile } = useGiftBlitz();
     const iotaClient = useIotaClient();
     const tierConfig = getTierConfig(user.tradeCount);
     const navigate = useNavigate();
     const [isSyncing, setIsSyncing] = useState(false);
     const [isUpdatingVault, setIsUpdatingVault] = useState(false);
-    const [isMinting, setIsMinting] = useState(false);
     const [hasAdminCap, setHasAdminCap] = useState(false);
 
     // Check for Admin Cap
@@ -37,21 +34,6 @@ const Profile: React.FC = () => {
         };
         checkAdmin();
     }, [user.address, iotaClient]);
-
-    const handleMintProfile = async () => {
-        setIsMinting(true);
-        try {
-            await mintProfile();
-            // Refresh logic handled by context/events usually, or manual reload
-            setTimeout(() => {
-                window.location.reload();
-            }, 1000);
-        } catch (error) {
-            console.error("Mint failed:", error);
-        } finally {
-            setIsMinting(false);
-        }
-    };
 
 
     const handleSyncIdentity = async () => {
