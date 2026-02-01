@@ -9,7 +9,7 @@ const Layout: React.FC = () => {
 
             <Navbar />
 
-            <main className="container mx-auto px-4 pt-24 pb-12">
+            <main className="container mx-auto px-4 pt-32 pb-12">
                 <Outlet />
             </main>
 

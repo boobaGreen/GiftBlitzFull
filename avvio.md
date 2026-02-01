@@ -33,3 +33,5 @@ bash
 bash
 cd contracts
 ../iota-service/iota client publish --gas-budget 1000000000
+
+./publish.sh
