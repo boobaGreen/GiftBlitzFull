@@ -3,62 +3,11 @@ import { useMarket } from '../hooks/useMarket';
 import BoxCard from '../components/BoxCard';
 import { TrendingUp, Package, Shield, Clock, AlertTriangle } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { getMaxBuyValue, type Box } from '../types';
+import { getTierConfig, type Box } from '../types';
 import { useNavigate } from 'react-router-dom';
 import Avatar from 'boring-avatars';
 
-// Trade count based tiers (no more Newbie/Pro levels)
-const TIER_CONFIG = {
-    30: {
-        name: 'Newcomer',
-        color: 'text-blue-400',
-        bg: 'bg-blue-500/20',
-        border: 'border-blue-500/30',
-        icon: '🔵',
-        maxBuy: 30,
-        nextTier: 'Member',
-        nextMaxBuy: 50,
-        tradesNeeded: 3,
-    },
-    50: {
-        name: 'Member',
-        color: 'text-green-400',
-        bg: 'bg-green-500/20',
-        border: 'border-green-500/30',
-        icon: '🟢',
-        maxBuy: 50,
-        nextTier: 'Trusted',
-        nextMaxBuy: 100,
-        tradesNeeded: 7,
-    },
-    100: {
-        name: 'Trusted',
-        color: 'text-purple-400',
-        bg: 'bg-purple-500/20',
-        border: 'border-purple-500/30',
-        icon: '🟣',
-        maxBuy: 100,
-        nextTier: 'Veteran',
-        nextMaxBuy: 200,
-        tradesNeeded: 15,
-    },
-    200: {
-        name: 'Veteran',
-        color: 'text-yellow-400',
-        bg: 'bg-yellow-500/20',
-        border: 'border-yellow-500/30',
-        icon: '🟡',
-        maxBuy: 200,
-        nextTier: null,
-        nextMaxBuy: null,
-        tradesNeeded: 999,
-    },
-};
 
-function getTierConfig(tradeCount: number) {
-    const maxBuy = getMaxBuyValue(tradeCount);
-    return TIER_CONFIG[maxBuy as keyof typeof TIER_CONFIG] || TIER_CONFIG[30];
-}
 
 const Profile: React.FC = () => {
     const { user, boxes, repNftId, syncIdentity, updateVaultIdentity, refreshUserStats } = useMarket();

@@ -96,3 +96,56 @@ export function getMaxBuyValue(tradeCount: number): number {
     if (tradeCount >= 3) return 50;
     return 30;
 }
+
+// Trade count based tiers
+export const TIER_CONFIG = {
+    30: {
+        name: 'Newcomer',
+        color: 'text-blue-400',
+        bg: 'bg-blue-500/20',
+        border: 'border-blue-500/30',
+        icon: '🔵',
+        maxBuy: 30,
+        nextTier: 'Member',
+        nextMaxBuy: 50,
+        tradesNeeded: 3,
+    },
+    50: {
+        name: 'Member',
+        color: 'text-green-400',
+        bg: 'bg-green-500/20',
+        border: 'border-green-500/30',
+        icon: '🟢',
+        maxBuy: 50,
+        nextTier: 'Trusted',
+        nextMaxBuy: 100,
+        tradesNeeded: 7,
+    },
+    100: {
+        name: 'Trusted',
+        color: 'text-purple-400',
+        bg: 'bg-purple-500/20',
+        border: 'border-purple-500/30',
+        icon: '🟣',
+        maxBuy: 100,
+        nextTier: 'Veteran',
+        nextMaxBuy: 200,
+        tradesNeeded: 15,
+    },
+    200: {
+        name: 'Veteran',
+        color: 'text-yellow-400',
+        bg: 'bg-yellow-500/20',
+        border: 'border-yellow-500/30',
+        icon: '🟡',
+        maxBuy: 200,
+        nextTier: null,
+        nextMaxBuy: null,
+        tradesNeeded: 999,
+    },
+};
+
+export function getTierConfig(tradeCount: number) {
+    const maxBuy = getMaxBuyValue(tradeCount);
+    return TIER_CONFIG[maxBuy as keyof typeof TIER_CONFIG] || TIER_CONFIG[30];
+}

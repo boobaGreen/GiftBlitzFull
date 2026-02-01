@@ -1,14 +1,28 @@
 import React, { useState } from 'react';
-import type { Box } from '../types';
 import { Lock, CheckCircle, Clock, X, TrendingUp, Package, Shield } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMarket } from '../hooks/useMarket';
 import { getBrand } from '../data/giftCards';
-import { getMaxBuyValue } from '../types';
+import { getTierConfig, getMaxBuyValue, type Box } from '../types';
+import { useGiftBlitz } from '../hooks/useGiftBlitz';
 import Avatar from 'boring-avatars';
 
+interface TierInfo {
+    name: string;
+    color: string;
+    icon: string;
+}
+
+interface SellerStats {
+    trades: number;
+    volume: number;
+    disputes: number;
+    tier: TierInfo;
+    maxBuy: number;
+}
+
 // Simulated seller data (in production would come from blockchain/API)
-const getSellerData = (address: string) => {
+const getSellerData = (address: string): SellerStats => {
     // Generate consistent mock data based on address hash
     const hash = address.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
     const trades = (hash % 20) + 3;
@@ -33,15 +47,29 @@ interface BoxCardProps {
     onClick?: () => void;
 }
 
+
+
 const BoxCard: React.FC<BoxCardProps> = ({ box, onClick }) => {
     const { user } = useMarket();
     const discount = Math.round(((box.value - box.price) / box.value) * 100);
     const brand = getBrand(box.brand);
+    const { getReputationNFT } = useGiftBlitz();
     const [showProfile, setShowProfile] = useState(false);
+    const [realSellerStats, setRealSellerStats] = useState<SellerStats | null>(null);
+    const [isLoadingStats, setIsLoadingStats] = useState(false);
 
     const isSeller = user.address === box.seller;
     const isBuyer = user.address === box.buyer;
+    
+    // Mock data for initial display (tier badge)
     const sellerData = getSellerData(box.seller);
+    // Real stats comparison for modal
+    const displayStats = realSellerStats || {
+        trades: 0,
+        volume: 0,
+        disputes: 0,
+        tier: getTierConfig(0)
+    };
 
     // Dynamic Button Logic
     const getButtonConfig = () => {
@@ -69,9 +97,37 @@ const BoxCard: React.FC<BoxCardProps> = ({ box, onClick }) => {
     const btnConfig = getButtonConfig();
     const BtnIcon = btnConfig.icon;
 
-    const handleProfileClick = (e: React.MouseEvent) => {
+    const handleProfileClick = async (e: React.MouseEvent) => {
         e.stopPropagation();
         setShowProfile(true);
+        if (!realSellerStats) {
+            setIsLoadingStats(true);
+            try {
+                const nft = await getReputationNFT(box.seller);
+                if (nft) {
+                    setRealSellerStats({
+                        trades: nft.tradeCount,
+                        volume: nft.volume,
+                        disputes: nft.disputes,
+                        maxBuy: getMaxBuyValue(nft.tradeCount),
+                        tier: getTierConfig(nft.tradeCount)
+                    });
+                } else {
+                    // No profile yet
+                    setRealSellerStats({
+                        trades: 0,
+                        volume: 0,
+                        disputes: 0,
+                        maxBuy: getMaxBuyValue(0),
+                        tier: getTierConfig(0)
+                    });
+                }
+            } catch (err) {
+                console.error("Failed to fetch seller stats:", err);
+            } finally {
+                setIsLoadingStats(false);
+            }
+        }
     };
 
     return (
@@ -218,19 +274,22 @@ const BoxCard: React.FC<BoxCardProps> = ({ box, onClick }) => {
 
                                 {/* Stats Grid */}
                                 <div className="grid grid-cols-3 gap-3 mt-4">
-                                    <div className="p-3 rounded-xl bg-black/30 border border-white/5">
+                                    <div className="p-3 rounded-xl bg-black/30 border border-white/5 relative">
+                                        {isLoadingStats && <div className="absolute inset-x-0 bottom-1 flex justify-center"><div className="w-1 h-3 bg-cyan-500 animate-pulse rounded-full"/></div>}
                                         <TrendingUp className="w-4 h-4 text-cyan-400 mx-auto mb-1" />
-                                        <p className="text-lg font-bold text-white">{sellerData.trades}</p>
+                                        <p className="text-lg font-bold text-white">{displayStats.trades}</p>
                                         <p className="text-[10px] text-gray-500">Trades</p>
                                     </div>
-                                    <div className="p-3 rounded-xl bg-black/30 border border-white/5">
+                                    <div className="p-3 rounded-xl bg-black/30 border border-white/5 relative">
+                                        {isLoadingStats && <div className="absolute inset-x-0 bottom-1 flex justify-center"><div className="w-1 h-3 bg-purple-500 animate-pulse rounded-full"/></div>}
                                         <Package className="w-4 h-4 text-purple-400 mx-auto mb-1" />
-                                        <p className="text-lg font-bold text-white">{(sellerData.volume / 1000000000).toFixed(0)}</p>
+                                        <p className="text-lg font-bold text-white">{(displayStats.volume / 1000000000).toFixed(0)}</p>
                                         <p className="text-[10px] text-gray-500">IOTA Vol</p>
                                     </div>
-                                    <div className="p-3 rounded-xl bg-black/30 border border-white/5">
+                                    <div className="p-3 rounded-xl bg-black/30 border border-white/5 relative">
+                                        {isLoadingStats && <div className="absolute inset-x-0 bottom-1 flex justify-center"><div className="w-1 h-3 bg-green-500 animate-pulse rounded-full"/></div>}
                                         <Shield className="w-4 h-4 text-green-400 mx-auto mb-1" />
-                                        <p className="text-lg font-bold text-white">{sellerData.disputes}</p>
+                                        <p className="text-lg font-bold text-white">{displayStats.disputes}</p>
                                         <p className="text-[10px] text-gray-500">Disputes</p>
                                     </div>
                                 </div>
