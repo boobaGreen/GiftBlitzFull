@@ -10,6 +10,7 @@ module giftblitz::reputation {
         id: UID,
         owner: address,
         public_key: vector<u8>, // Encryption Public Key
+        vault: vector<u8>,      // NEW: Encrypted Hub Private Key
         total_trades: u64,
         total_volume: u64,
         disputes: u64,
@@ -31,16 +32,14 @@ module giftblitz::reputation {
     /// Create a new Reputation NFT for a user if they don't have one (Conceptually).
     /// In Move, we usually create it and transfer to user.
     /// This function would be called by the user to initialize their profile.
-    public entry fun mint_profile(public_key: vector<u8>, ctx: &mut TxContext) {
+    public entry fun mint_profile(public_key: vector<u8>, vault: vector<u8>, ctx: &mut TxContext) {
         let sender = tx_context::sender(ctx);
-        // Check if already has one? Move doesn't enforce uniqueness easily without a central registry.
-        // We will assume UI checks or we use a shared map in Registry to enforce 1-per-user.
-        // For MVP, we just mint.
         
         let nft = ReputationNFT {
             id: object::new(ctx),
             owner: sender,
             public_key,
+            vault,
             total_trades: 0,
             total_volume: 0,
             disputes: 0,
@@ -65,6 +64,13 @@ module giftblitz::reputation {
         nft.total_trades = 0;
         // Optional: reduce volume or increase dispute count
         nft.disputes = nft.disputes + 1;
+    }
+
+    /// Update vault (used for security reset or cross-domain recovery)
+    public entry fun update_vault(nft: &mut ReputationNFT, new_public_key: vector<u8>, new_vault: vector<u8>, ctx: &TxContext) {
+        assert!(nft.owner == tx_context::sender(ctx), 0);
+        nft.public_key = new_public_key;
+        nft.vault = new_vault;
     }
 
     /// Get Max Buy Value based on trades

@@ -8,6 +8,7 @@ const STORAGE_PREFIX = 'gb_sec_';
 export interface EncryptionKeyPair {
     publicKey: Uint8Array;
     privateKey: CryptoKey;
+    vault?: Uint8Array; // New: optional vault if we just created it
 }
 
 /**
@@ -238,6 +239,89 @@ export async function decryptKeyForMe(
     return crypto.subtle.importKey(
         'raw',
         decrypted,
+        { name: 'AES-GCM', length: 256 },
+        true,
+        ['encrypt', 'decrypt']
+    );
+}
+
+/**
+ * NEW: Encrypts the local Hub Private Key into a Vault using a wallet signature.
+ * This makes the Identity recoverable across devices/domains.
+ */
+export async function encryptVault(privateKey: CryptoKey, signature: string): Promise<Uint8Array> {
+    // 1. Export Private Key to JWK
+    const privJwk = await crypto.subtle.exportKey('jwk', privateKey);
+    const privString = JSON.stringify(privJwk);
+    
+    // 2. Derive Vault Protective Key from Signature
+    const vaultKey = await deriveVaultKeyFromSignature(signature);
+    
+    // 3. Encrypt JWK
+    const data = new TextEncoder().encode(privString);
+    const iv = crypto.getRandomValues(new Uint8Array(12));
+    const encrypted = await crypto.subtle.encrypt(
+        { name: 'AES-GCM', iv },
+        vaultKey,
+        data
+    );
+
+    // Format: IV || Ciphertext
+    const result = new Uint8Array(iv.length + encrypted.byteLength);
+    result.set(iv);
+    result.set(new Uint8Array(encrypted), iv.length);
+
+    return result;
+}
+
+/**
+ * NEW: Decrypts the Hub Private Key from a cross-domain Vault.
+ */
+export async function decryptVault(vaultBytes: Uint8Array, signature: string): Promise<CryptoKey> {
+    // 1. Derive Vault Protective Key
+    const vaultKey = await deriveVaultKeyFromSignature(signature);
+
+    // 2. Decrypt JWK
+    const iv = vaultBytes.slice(0, 12);
+    const data = vaultBytes.slice(12);
+    const decrypted = await crypto.subtle.decrypt(
+        { name: 'AES-GCM', iv },
+        vaultKey,
+        data
+    );
+
+    const privString = new TextDecoder().decode(decrypted);
+    const privJwk = JSON.parse(privString);
+
+    // 3. Import back
+    return crypto.subtle.importKey(
+        'jwk',
+        privJwk,
+        { name: 'ECDH', namedCurve: 'P-256' },
+        true,
+        ['deriveKey', 'deriveBits']
+    );
+}
+
+/**
+ * Internal helper to derive a key specifically for the vault.
+ * Different info string than the transaction-specific keys.
+ */
+async function deriveVaultKeyFromSignature(signature: string): Promise<CryptoKey> {
+    const sigBytes = new TextEncoder().encode(signature);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', sigBytes);
+    const keyMaterial = await crypto.subtle.importKey(
+        'raw', hashBuffer, { name: 'HKDF' }, false, ['deriveKey']
+    );
+
+    return crypto.subtle.deriveKey(
+        {
+            name: 'HKDF',
+            hash: 'SHA-256',
+            salt: new Uint8Array(),
+            info: new TextEncoder().encode('GiftBlitz-Identity-Vault-Key'),
+        },
+        keyMaterial,
         { name: 'AES-GCM', length: 256 },
         true,
         ['encrypt', 'decrypt']

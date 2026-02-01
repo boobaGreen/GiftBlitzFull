@@ -78,11 +78,31 @@ const TradeDetail: React.FC = () => {
             }
 
             const myKeys = await getEncryptionKeyPair(user.address);
+            console.log("1. Local Hub Key retrieved for:", user.address);
+
+            // DIAGNOSTIC: Check if local key matches on-chain profile
+            const myNft = await getReputationNFT(user.address);
+            if (myNft && myNft.publicKey) {
+                const onChainPub = new Uint8Array(JSON.parse(myNft.publicKey));
+                const localPub = myKeys.publicKey;
+                const match = onChainPub.length === localPub.length && onChainPub.every((b, i) => b === localPub[i]);
+                if (!match) {
+                    console.error("⚠️ IDENTITY MISMATCH DETECTED!");
+                    console.log("Local Key (first 8 bytes):", Array.from(localPub).slice(0, 8));
+                    console.log("On-Chain Key (first 8 bytes):", Array.from(onChainPub).slice(0, 8));
+                    throw new Error("Your browser's encryption key doesn't match your on-chain profile. This happens if you switch browsers, domains (e.g. localhost -> Vercel) or clear cache. You need to reset your Identity in Profile.");
+                } else {
+                    console.log("✅ Local Hub Key matches On-Chain profile.");
+                }
+            }
+
             const encKeyBytes = new Uint8Array(JSON.parse(box.encryptedKeyOnChain));
             const sellerPubBytes = new Uint8Array(JSON.parse(sellerNft.publicKey));
-            
+            console.log("2. Derived Peer PubKey (Seller) recovered from chain.");
+
+            console.log("3. Attempting ECDH shared secret derivation...");
             const symmetricKey = await decryptKeyForMe(encKeyBytes, myKeys.privateKey, sellerPubBytes);
-            console.log("Symmetric Key decrypted successfully for buyer.");
+            console.log("✅ Symmetric Key decrypted successfully for buyer.");
 
             const encryptedCodeBytes = new Uint8Array(JSON.parse(box.encryptedCodeOnChain!));
             console.log("Raw encrypted code from chain (length):", encryptedCodeBytes.length);
