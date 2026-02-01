@@ -67,7 +67,11 @@ const BoxCard: React.FC<BoxCardProps> = ({ box, onClick }) => {
             if (isBuyer) return { text: 'Purchased', bg: 'bg-green-500/20 text-green-400', icon: CheckCircle };
             return { text: 'Sold', bg: 'bg-green-500/20 text-green-400', icon: null };
         }
-        if (box.status === 'DISPUTED') return { text: 'Burned', bg: 'bg-red-500/20 text-red-400', icon: null };
+        if (box.status === 'DISPUTED') {
+            if (isSeller) return { text: 'Burned (Seller)', bg: 'bg-red-500/20 text-red-400', icon: null };
+            if (isBuyer) return { text: 'Burned (Buyer)', bg: 'bg-red-500/20 text-red-400', icon: null };
+            return { text: 'Burned', bg: 'bg-red-500/20 text-red-400', icon: null };
+        }
 
         if (isSeller) {
             if (box.status === 'OPEN') return { text: 'My Listing', bg: 'bg-slate-700 text-gray-300', icon: null };

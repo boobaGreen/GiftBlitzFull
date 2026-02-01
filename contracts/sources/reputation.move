@@ -59,10 +59,15 @@ module giftblitz::reputation {
         nft.total_volume = nft.total_volume + volume;
     }
 
-    /// Reset reputation on dispute
+    /// Reset reputation on dispute (for the party who initiated the dispute)
     public(package) fun reset_on_dispute(nft: &mut ReputationNFT) {
-        nft.total_trades = 0;
-        // Optional: reduce volume or increase dispute count
+        nft.total_trades = nft.total_trades + 1; // Count the disputed trade
+        nft.disputes = nft.disputes + 1;
+    }
+
+    /// Record dispute for the other party (seller when buyer disputes)
+    public(package) fun record_dispute_counterparty(nft: &mut ReputationNFT) {
+        nft.total_trades = nft.total_trades + 1; // Count the disputed trade
         nft.disputes = nft.disputes + 1;
     }
 

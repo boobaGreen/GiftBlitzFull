@@ -266,7 +266,8 @@ module giftblitz::giftblitz {
     /// Buyer raises a dispute (e.g. key invalid) -> Confiscate to Treasury
     public entry fun dispute(
         box: &mut GiftBox,
-        rep_nft: &mut ReputationNFT,
+        buyer_rep_nft: &mut ReputationNFT,
+        seller_rep_nft: &mut ReputationNFT,
         treasury: &mut Treasury,
         ctx: &mut TxContext
     ) {
@@ -289,8 +290,9 @@ module giftblitz::giftblitz {
         let b_stake = balance::split(&mut box.buyer_stake, b_val);
         balance::join(&mut treasury.balance, b_stake);
 
-        // Reset Reputation
-        reputation::reset_on_dispute(rep_nft);
+        // Update Reputation for BOTH parties
+        reputation::reset_on_dispute(buyer_rep_nft);
+        reputation::record_dispute_counterparty(seller_rep_nft);
 
         box.state = STATE_BURNED;
     }

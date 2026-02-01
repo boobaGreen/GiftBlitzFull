@@ -164,7 +164,7 @@ const TradeDetail: React.FC = () => {
         
         setIsProcessing(true);
         try {
-            await disputeBox(box.id, repNftId);
+            await disputeBox(box.id, repNftId, box.seller);
             localDispute(box.id);
             showToast("Dispute initiated. Stakes burned.", "warning");
             setIsProcessing(false);

@@ -283,23 +283,30 @@ export const useGiftBlitz = () => {
     }, [account, signAndExecute, PACKAGE_ID, MODULE, TREASURY_ID]);
 
     /**
-     * Dispute (Buyer) - Requires ReputationNFT
+     * Dispute (Buyer) - Requires both Buyer and Seller ReputationNFTs
      */
-    const disputeBox = useCallback(async (boxId: string, repNftId: string) => {
+    const disputeBox = useCallback(async (boxId: string, buyerRepNftId: string, sellerAddress: string) => {
         if (!account || !TREASURY_ID) return;
+
+        // Fetch seller's ReputationNFT
+        const sellerNft = await getReputationNFT(sellerAddress);
+        if (!sellerNft) {
+            throw new Error("Seller profile not found. Cannot update seller dispute stats.");
+        }
 
         const tx = new Transaction();
         tx.moveCall({
             target: `${PACKAGE_ID}::${MODULE}::dispute`,
             arguments: [
                 tx.object(boxId),
-                tx.object(repNftId),
+                tx.object(buyerRepNftId),
+                tx.object(sellerNft.id),
                 tx.object(TREASURY_ID)
             ],
         });
 
         return signAndExecute({ transaction: tx });
-    }, [account, signAndExecute, PACKAGE_ID, MODULE, TREASURY_ID]);
+    }, [account, signAndExecute, PACKAGE_ID, MODULE, TREASURY_ID, getReputationNFT]);
 
 
     /**
