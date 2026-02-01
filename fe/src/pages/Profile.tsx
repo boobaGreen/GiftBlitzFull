@@ -228,15 +228,6 @@ const Profile: React.FC = () => {
                                 )}
                             </div>
                         )}
-                        {!repNftId && (
-                             <button
-                                onClick={handleMintProfile}
-                                disabled={isMinting}
-                                className="w-full py-2 rounded-xl bg-purple-500/20 border border-purple-500/30 text-purple-400 font-bold text-xs hover:bg-purple-500/30 transition-all flex items-center justify-center gap-2"
-                            >
-                                {isMinting ? "Initializing..." : "🚀 Initialize Profile"}
-                            </button>
-                        )}
                     </div>
                 </div>
             </motion.div>
