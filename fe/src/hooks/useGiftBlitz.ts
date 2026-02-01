@@ -125,13 +125,30 @@ export const useGiftBlitz = () => {
     /**
      * Join/Purchase an existing GiftBox
      */
-    const joinBox = useCallback(async (boxId: string, price: number, faceValue: number) => {
+    const joinBox = useCallback(async (boxId: string, totalRequired: number) => {
         if (!account) return;
 
         const tx = new Transaction();
-        
-        // Contract expects Price + 110% FaceValue as a single Coin
-        const totalRequired = BigInt(price) + (BigInt(faceValue) * 110n / 100n);
+
+        // ATOMIC MINT: If user doesn't have a profile, mint it now
+        const myNft = await getReputationNFT(account.address);
+        if (!myNft) {
+            console.log("Atomic Profile Minting: User has no profile, adding mint_profile to transaction...");
+            const myKeys = await getEncryptionKeyPair(account.address);
+            const vaultMessage = "Authorize Identity Vault Creation\nThis allows you to recover your encrypted trades on any device/domain.";
+            const { signature: vaultSignature } = await signPersonalMessage({
+                message: new TextEncoder().encode(vaultMessage)
+            });
+            const vault = await encryptVault(myKeys.privateKey, vaultSignature);
+            
+            tx.moveCall({
+                target: `${PACKAGE_ID}::reputation::mint_profile`,
+                arguments: [
+                    tx.pure.vector('u8', Array.from(myKeys.publicKey)),
+                    tx.pure.vector('u8', Array.from(vault)),
+                ],
+            });
+        }
         
         const [paymentAndStakeCoin] = tx.splitCoins(tx.gas, [tx.pure.u64(totalRequired)]);
 
@@ -169,7 +186,7 @@ export const useGiftBlitz = () => {
             console.error("Join transaction failed:", err);
             throw err;
         }
-    }, [account, signAndExecute, iotaClient, PACKAGE_ID, MODULE]);
+    }, [account, signAndExecute, iotaClient, PACKAGE_ID, MODULE, getReputationNFT, signPersonalMessage]);
 
     /**
      * Reveal Key (Seller)

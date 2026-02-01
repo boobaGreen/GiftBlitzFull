@@ -10,7 +10,7 @@ import { useNotifications } from '../context/NotificationContext';
 
 const CreateBox: React.FC = () => {
     const navigate = useNavigate();
-    const { addBox, user, repNftId, mintProfile } = useMarket();
+    const { addBox, user } = useMarket();
     const { createBox } = useGiftBlitz();
     const { showToast } = useNotifications();
 
@@ -43,12 +43,7 @@ const CreateBox: React.FC = () => {
         isSubmittingRef.current = true;
         setIsSubmitting(true);
         try {
-            // 1. Check if profile exists, if not, mint it first
-            if (!repNftId) {
-                console.log("No profile found. Minting Reputation NFT first...");
-                await mintProfile();
-                await new Promise(resolve => setTimeout(resolve, 3000));
-            }
+            // Atomic Profile Minting is now handled inside the createBox hook
 
             // 2. Call SDK (Encryption happens inside createBox)
             const result = await createBox(
@@ -319,7 +314,7 @@ const CreateBox: React.FC = () => {
                         ) : (
                             <>
                                 <Lock className="w-5 h-5" />
-                                {!repNftId ? 'Create Profile & Sell' : 'Lock & Publish'}
+                                Lock & Publish
                             </>
                         )}
                     </button>

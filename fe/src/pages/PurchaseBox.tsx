@@ -10,12 +10,12 @@ import { useNotifications } from '../context/NotificationContext';
 const PurchaseBox: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    const { boxes, user, repNftId, mintProfile, joinBox: localJoinBox } = useMarket();
+    const { boxes, user, joinBox: localJoinBox } = useMarket();
     const { joinBox } = useGiftBlitz();
     const { showToast } = useNotifications();
     const [isProcessing, setIsProcessing] = useState(false);
 
-    const box = boxes.find(b => b.id === id);
+    const box = boxes.find((b: { id: string; seller: string; brand: string; value: number; price: number }) => b.id === id);
 
     // Redirect seller to trade management page
     React.useEffect(() => {
@@ -44,20 +44,15 @@ const PurchaseBox: React.FC = () => {
     const buyerStake = (box.value * 110) / 100; 
     const totalToPay = box.price + buyerStake;
 
-    const nanoPrice = box.price;
+    // nanoPrice is no longer used here as joinBox takes totalToPay
 
     const handlePurchase = async () => {
         if (!canBuy || isProcessing) return;
 
         setIsProcessing(true);
         try {
-            if (!repNftId) {
-                showToast("Initializing Profile...", "info");
-                await mintProfile();
-                await new Promise(resolve => setTimeout(resolve, 3000));
-            }
-
-            await joinBox(box.id, nanoPrice, box.value);
+            // Atomic Profile Minting is now handled inside the joinBox hook
+            await joinBox(box.id, totalToPay);
             
             // Local state update
             localJoinBox(box.id, user.address);
@@ -65,9 +60,10 @@ const PurchaseBox: React.FC = () => {
             showToast("Purchase Successful!", "success");
             setIsProcessing(false);
             navigate('/profile'); 
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error("Purchase failed:", error);
-            showToast(error.message || "Purchase failed. Check console.", "error");
+            const errMsg = error instanceof Error ? error.message : String(error);
+            showToast(errMsg, "error");
             setIsProcessing(false);
         }
     };
@@ -211,9 +207,7 @@ const PurchaseBox: React.FC = () => {
                                         ? `Requires Higher Trade Count`
                                         : user.balance < (totalToPay / 1_000_000_000)
                                             ? `Insufficient Balance`
-                                            : !repNftId 
-                                                ? `Create Profile & Buy`
-                                                : `Confirm & Lock ${(totalToPay / 1_000_000_000).toFixed(2)} IOTA`
+                                            : `Confirm & Lock ${(totalToPay / 1_000_000_000).toFixed(2)} IOTA`
                                     }
                                 </>
                             )}
