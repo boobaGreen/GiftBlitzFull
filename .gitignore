@@ -1,0 +1,27 @@
+# Move
+contracts/build/
+*.lock
+# Keep Move.lock? Usually it's fine. If we want reproducible builds, we might keep it. But wait, user has Move.lock in root. No.
+
+# IOTA Binaries (Avoid > 100MB files in repo)
+iota-service/
+iota-service/*
+**/*.log
+
+# Frontend (Node/Next.js)
+node_modules/
+fe/node_modules/
+fe/.next/
+fe/build/
+fe/out/
+*.env
+*.env.local
+
+# System/IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Temp files
+troubleshoot_path.txt

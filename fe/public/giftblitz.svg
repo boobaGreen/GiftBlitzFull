@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="boxGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06b6d4"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+    <linearGradient id="ribbonGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ec4899"/>
+      <stop offset="100%" stop-color="#f43f5e"/>
+    </linearGradient>
+  </defs>
+  <!-- Gift Box Base -->
+  <rect x="8" y="24" width="48" height="36" rx="4" fill="url(#boxGrad)"/>
+  <!-- Gift Box Lid -->
+  <rect x="4" y="16" width="56" height="12" rx="3" fill="url(#boxGrad)" opacity="0.9"/>
+  <!-- Vertical Ribbon -->
+  <rect x="28" y="16" width="8" height="44" fill="url(#ribbonGrad)"/>
+  <!-- Horizontal Ribbon -->
+  <rect x="8" y="28" width="48" height="8" fill="url(#ribbonGrad)"/>
+  <!-- Bow Left -->
+  <ellipse cx="24" cy="12" rx="8" ry="6" fill="url(#ribbonGrad)"/>
+  <!-- Bow Right -->
+  <ellipse cx="40" cy="12" rx="8" ry="6" fill="url(#ribbonGrad)"/>
+  <!-- Bow Center -->
+  <circle cx="32" cy="14" r="5" fill="#ec4899"/>
+  <!-- Lightning Bolt (Blitz) -->
+  <path d="M32 2 L28 10 L34 10 L30 20 L38 8 L32 8 Z" fill="#fbbf24" stroke="#f59e0b" stroke-width="0.5"/>
+</svg>

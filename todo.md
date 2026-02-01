@@ -1,0 +1,25 @@
+# GiftBlitz Development Tasks
+
+- [x] **Backend: Move Smart Contracts**
+  - [x] Configure IOTA CLI (WSL)
+  - [x] Create Project Structure (`contracts/Move.toml`)
+  - [x] Implement `giftblitz.move` (Core Logic)
+  - [x] Implement `reputation.move` (Soulbound NFT)
+  - [x] Implement `registry.move` (On-chain Indexing)
+  - [x] Verify Compilation (WSL)
+- [x] **Backend: Testing**
+  - [x] Write Move Unit Tests (`giftblitz_tests.move`)
+  - [x] Run Tests (`iota move test`)
+- [x] **Backend: Local Testing (Mock Data)**
+  - [x] Start Local Network (`iota start`)
+  - [x] Configure Local Env
+  - [x] Deploy Contracts to Local
+  - [x] Create Mock Boxes via CLI
+- [ ] **Frontend: Setup**
+  - [ ] Initialize Next.js Project
+  - [ ] Install IOTA SDK (`@iota/sdk`)
+  - [ ] Setup Wallets (Mainnet/Testnet)
+- [ ] **Frontend: Core Features**
+  - [ ] Implement `CreateBox` UI
+  - [ ] Implement `JoinBox` UI
+  - [ ] Implement `Reveal/Finalize` UI
