@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Wallet, ChevronRight, LogOut } from 'lucide-react';
+import { Menu, X, Wallet, ChevronRight, LogOut, Eye, EyeOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMarket } from '../hooks/useMarket';
 import { getMaxBuyValue } from '../types';
@@ -22,6 +22,7 @@ function getTierBadge(tradeCount: number) {
 const Navbar: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [showUserMenu, setShowUserMenu] = useState(false);
+    const [showBalance, setShowBalance] = useState(false);
     const location = useLocation();
     const { user } = useMarket();
     const account = useCurrentAccount();
@@ -77,6 +78,21 @@ const Navbar: React.FC = () => {
 
                 {/* User / Wallet Section */}
                 <div className="hidden md:flex items-center gap-3">
+                    {isConnected && (
+                        <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/5 border border-white/5 mr-1 group/balance">
+                            <span className="text-xs font-bold text-gray-500 uppercase tracking-tight">Balance</span>
+                            <span className="text-sm font-mono font-bold text-cyan-400 min-w-[80px] text-right">
+                                {showBalance ? `${user.balance.toFixed(2)} IOTA` : '•••• IOTA'}
+                            </span>
+                            <button 
+                                onClick={() => setShowBalance(!showBalance)}
+                                className="p-1 hover:bg-white/10 rounded-lg transition-colors text-gray-500 hover:text-cyan-400"
+                                title={showBalance ? "Hide Balance" : "Show Balance"}
+                            >
+                                {showBalance ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                            </button>
+                        </div>
+                    )}
                     <ConnectButton />
                     {isConnected && (
                         <div className="relative">
@@ -141,7 +157,17 @@ const Navbar: React.FC = () => {
                                     </span>
                                     <span className="text-white text-sm">{user.address.slice(0, 6)}...</span>
                                 </div>
-                                <span className="text-cyan-400 text-sm font-bold">{user.balance} USDC</span>
+                                <div className="flex items-center gap-2">
+                                    <span className="text-cyan-400 text-sm font-bold">
+                                        {showBalance ? `${user.balance.toFixed(2)} IOTA` : '•••• IOTA'}
+                                    </span>
+                                    <button 
+                                        onClick={() => setShowBalance(!showBalance)}
+                                        className="p-1.5 bg-white/5 rounded-lg text-gray-400"
+                                    >
+                                        {showBalance ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                    </button>
+                                </div>
                             </div>
                         )}
 
