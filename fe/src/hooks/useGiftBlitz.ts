@@ -9,7 +9,9 @@ import {
     deriveKeyFromSignature,
     packCiphertextWithSalt,
     unpackCiphertextWithSalt,
-    encryptKeyForBuyer
+    encryptKeyForBuyer,
+    encryptVault,
+    decryptVault
 } from '../utils/security';
 
 export const useGiftBlitz = () => {
@@ -44,7 +46,8 @@ export const useGiftBlitz = () => {
                         volume: Number(fields.total_volume),
                         disputes: Number(fields.disputes),
                         memberEpoch: Number(fields.first_trade_time),
-                        publicKey: fields.public_key ? JSON.stringify(fields.public_key) : null
+                        publicKey: fields.public_key ? JSON.stringify(fields.public_key) : null,
+                        vault: fields.vault ? (fields.vault as number[]) : null
                     };
                 }
             }
@@ -288,20 +291,82 @@ export const useGiftBlitz = () => {
     const mintProfile = useCallback(async () => {
         if (!account) return;
 
-        // Generate/Retrieve Encryption Hub Keys
-        const { publicKey } = await getEncryptionKeyPair(account.address);
-        const pubKeyArray = Array.from(publicKey);
+        // 1. Generate/Retrieve Encryption Hub Keys
+        const myKeys = await getEncryptionKeyPair(account.address);
+        
+        // 2. Encrypt Hub Private Key into a Vault using a Signature
+        const message = "Authorize Identity Vault Creation\nThis allows you to recover your encrypted trades on any device/domain.";
+        const { signature } = await signPersonalMessage({
+             message: new TextEncoder().encode(message) 
+        });
+
+        const vaultBytes = await encryptVault(myKeys.privateKey, signature);
+        const pubKeyArray = Array.from(myKeys.publicKey);
+        const vaultArray = Array.from(vaultBytes);
 
         const tx = new Transaction();
         tx.moveCall({
             target: `${PACKAGE_ID}::reputation::mint_profile`,
             arguments: [
-                tx.pure.vector('u8', pubKeyArray)
+                tx.pure.vector('u8', pubKeyArray),
+                tx.pure.vector('u8', vaultArray)
             ],
         });
 
         return signAndExecute({ transaction: tx });
-    }, [account, signAndExecute, PACKAGE_ID]);
+    }, [account, signAndExecute, PACKAGE_ID, signPersonalMessage]);
+
+    /**
+     * Recovery Flow: Re-links the local browser to the on-chain vault
+     */
+    const syncIdentity = useCallback(async (vault: number[]) => {
+        if (!account) return;
+        
+        const message = "Authorize Identity Vault Recovery\nThis will restore your encryption keys from the blockchain.";
+        const { signature } = await signPersonalMessage({
+             message: new TextEncoder().encode(message) 
+        });
+
+        const privateKey = await decryptVault(new Uint8Array(vault), signature);
+        
+        // Save to local storage for future use
+        const privKeyPath = `gb_sec_priv_${account.address.toLowerCase()}`;
+        
+        // Let's re-save to local storage
+        const privJwk = await crypto.subtle.exportKey('jwk', privateKey);
+        localStorage.setItem(privKeyPath, JSON.stringify(privJwk));
+        
+        return true;
+    }, [account, signPersonalMessage]);
+
+    /**
+     * Update Vault (Security Reset)
+     */
+    const updateVaultIdentity = useCallback(async (repNftId: string) => {
+        if (!account) return;
+
+        const myKeys = await getEncryptionKeyPair(account.address);
+        const message = "Authorize Identity Vault Update\nThis will update your on-chain encryption keys.";
+        const { signature } = await signPersonalMessage({
+             message: new TextEncoder().encode(message) 
+        });
+
+        const vaultBytes = await encryptVault(myKeys.privateKey, signature);
+        const pubKeyArray = Array.from(myKeys.publicKey);
+        const vaultArray = Array.from(vaultBytes);
+
+        const tx = new Transaction();
+        tx.moveCall({
+            target: `${PACKAGE_ID}::reputation::update_vault`,
+            arguments: [
+                tx.object(repNftId),
+                tx.pure.vector('u8', pubKeyArray),
+                tx.pure.vector('u8', vaultArray)
+            ],
+        });
+
+        return signAndExecute({ transaction: tx });
+    }, [account, signAndExecute, PACKAGE_ID, signPersonalMessage]);
 
     /**
      * Cancel Box (Seller) - Only if OPEN
@@ -512,8 +577,8 @@ export const useGiftBlitz = () => {
         claimRevealTimeout,
         claimAutoFinalize,
         withdrawFees,
-        mintProfile,
-        getReputationNFT,
-        fetchAllBoxes
+        fetchAllBoxes,
+        syncIdentity,
+        updateVaultIdentity
     };
 };
