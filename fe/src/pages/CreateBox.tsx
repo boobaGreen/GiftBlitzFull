@@ -139,7 +139,7 @@ const CreateBox: React.FC = () => {
 
                 <form onSubmit={handleSubmit} className="p-6 space-y-5">
                     {/* Select Brand (Custom Dropdown) */}
-                    <div className="relative z-50">
+                    <div className="relative z-40">
                         <label className="block text-xs text-gray-500 uppercase tracking-wider mb-2">Select Brand</label>
 
                         {/* Selector Trigger */}

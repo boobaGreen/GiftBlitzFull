@@ -39,7 +39,7 @@ const Navbar: React.FC = () => {
     const isActive = (path: string) => location.pathname === path;
 
     return (
-        <nav className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-4 px-4 sm:px-8">
+        <nav className="fixed top-0 left-0 right-0 z-[100] transition-all duration-300 py-4 px-4 sm:px-8">
             <div className="max-w-7xl mx-auto glass rounded-2xl px-6 py-3 flex items-center justify-between">
 
                 {/* Logo */}
@@ -130,7 +130,7 @@ const Navbar: React.FC = () => {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -20, scale: 0.95 }}
                         transition={{ duration: 0.2 }}
-                        className="absolute top-24 left-4 right-4 glass rounded-3xl p-4 md:hidden flex flex-col gap-2 origin-top shadow-2xl z-50 border border-white/10"
+                        className="absolute top-24 left-4 right-4 glass rounded-3xl p-4 md:hidden flex flex-col gap-2 origin-top shadow-2xl z-[110] border border-white/10"
                     >
                         {/* Mobile User Info */}
                         {isConnected && (
