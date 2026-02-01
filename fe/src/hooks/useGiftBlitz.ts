@@ -140,7 +140,15 @@ export const useGiftBlitz = () => {
             ],
         });
 
-        return signAndExecute({ transaction: tx });
+        console.log(`Joining box ${boxId} with total payment ${totalRequired}...`);
+        try {
+            const result = await signAndExecute({ transaction: tx });
+            console.log("Join transaction successful:", result);
+            return result;
+        } catch (err) {
+            console.error("Join transaction failed:", err);
+            throw err;
+        }
     }, [account, signAndExecute, PACKAGE_ID, MODULE]);
 
     /**
@@ -342,13 +350,17 @@ export const useGiftBlitz = () => {
 
             if (boxIds.length === 0) return [];
 
-            // 2. Fetch current state of all discovered boxes
+            console.log(`Fetching state for ${boxIds.length} unique boxes...`);
             const result = await iotaClient.multiGetObjects({
                 ids: [...new Set(boxIds)], 
                 options: { showContent: true, showOwner: true }
             });
 
-            if (!result) return [];
+            if (!result) {
+                console.warn("multiGetObjects returned NO results");
+                return [];
+            }
+            console.log("RPC raw objects sample:", JSON.stringify(result.slice(0, 2), null, 2));
 
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const getByteArrayValue = (opt: any): number[] | null => {
