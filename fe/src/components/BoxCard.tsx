@@ -21,26 +21,7 @@ interface SellerStats {
     maxBuy: number;
 }
 
-// Simulated seller data (in production would come from blockchain/API)
-const getSellerData = (address: string): SellerStats => {
-    // Generate consistent mock data based on address hash
-    const hash = address.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
-    const trades = (hash % 20) + 3;
-    const maxBuy = getMaxBuyValue(trades);
-    const tierNames: Record<number, { name: string; color: string; icon: string }> = {
-        30: { name: 'Newcomer', color: 'text-blue-400', icon: '🔵' },
-        50: { name: 'Member', color: 'text-green-400', icon: '🟢' },
-        100: { name: 'Trusted', color: 'text-purple-400', icon: '🟣' },
-        200: { name: 'Veteran', color: 'text-yellow-400', icon: '🟡' },
-    };
-    return {
-        trades,
-        disputes: hash % 5 === 0 ? 1 : 0,
-        volume: (hash % 10) * 100 + 150,
-        tier: tierNames[maxBuy] || tierNames[30],
-        maxBuy
-    };
-};
+
 
 interface BoxCardProps {
     box: Box;
@@ -65,19 +46,18 @@ const BoxCard: React.FC<BoxCardProps> = ({ box, onClick }) => {
     const contextRep = sellersRep[box.seller.toLowerCase()];
     const currentTier = contextRep ? getTierConfig(contextRep.trades) : getTierConfig(0);
 
-    // Mock data for initial display (legacy fallback, but we prefer currentTier)
-    const sellerData = getSellerData(box.seller);
-    
     // Real stats comparison for modal
-    const displayStats = realSellerStats || (contextRep ? {
+    const displayStats: SellerStats = realSellerStats || (contextRep ? {
         trades: contextRep.trades,
         volume: contextRep.volume,
         disputes: contextRep.disputes,
+        maxBuy: getMaxBuyValue(contextRep.trades),
         tier: currentTier
     } : {
         trades: 0,
         volume: 0,
         disputes: 0,
+        maxBuy: getMaxBuyValue(0),
         tier: getTierConfig(0)
     });
 
@@ -272,8 +252,8 @@ const BoxCard: React.FC<BoxCardProps> = ({ box, onClick }) => {
                             {/* Content */}
                             <div className="p-6 pt-4 text-center">
                                 <h3 className="text-lg font-bold text-white mb-1">{box.seller.slice(0, 10)}...{box.seller.slice(-4)}</h3>
-                                <div className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-bold ${sellerData.tier.color} bg-white/5 border border-white/10`}>
-                                    {sellerData.tier.icon} {sellerData.tier.name}
+                                <div className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-bold ${displayStats.tier.color} bg-white/5 border border-white/10`}>
+                                    {displayStats.tier.icon} {displayStats.tier.name}
                                 </div>
 
                                 {/* Soulbound NFT Badge */}
@@ -308,7 +288,7 @@ const BoxCard: React.FC<BoxCardProps> = ({ box, onClick }) => {
                                 <div className="mt-4 p-3 rounded-xl bg-black/30 border border-white/5">
                                     <div className="flex items-center justify-between">
                                         <span className="text-gray-400 text-sm">Max Buy Limit</span>
-                                        <span className="text-cyan-400 font-bold">{sellerData.maxBuy} IOTA</span>
+                                        <span className="text-cyan-400 font-bold">{displayStats.maxBuy} IOTA</span>
                                     </div>
                                 </div>
                             </div>
