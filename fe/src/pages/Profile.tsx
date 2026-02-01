@@ -363,7 +363,7 @@ const Profile: React.FC = () => {
                     {/* Filter Tabs */}
                     <div className="flex p-1 rounded-xl bg-slate-800/50 border border-white/5 overflow-x-auto">
                         {[
-                            { id: 'ALL', label: 'Activity', icon: '📋' },
+                            { id: 'ALL', label: 'History', icon: '📋' },
                             { id: 'ACTIVE', label: 'Active', icon: '⚡' },
                             { id: 'COMPLETED', label: 'Success', icon: '✅' },
                             { id: 'DISPUTED', label: 'Burned', icon: '🔥' },
