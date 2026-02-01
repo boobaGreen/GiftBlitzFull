@@ -19,16 +19,18 @@
 
 **Cos'è il trust deposit?** Un deposito cauzionale che blocchi durante il trade. Lo riprendi se tutto va bene.
 
-| Chi | Cosa Deposita | Esempio (carta €100, prezzo €80) |
-|-----|---------------|----------------------------------|
-| **Seller** | 100% del prezzo | €80 |
-| **Buyer** | Prezzo + 110% Valore | €80 + €110 (110% di €100) = €190 |
+| Chi        | Cosa Deposita        | Esempio (carta €100, prezzo €80) |
+| ---------- | -------------------- | -------------------------------- |
+| **Seller** | 100% del prezzo      | €80                              |
+| **Buyer**  | Prezzo + 110% Valore | €80 + €110 (110% di €100) = €190 |
 
 ### Se tutto OK ✅
+
 - Seller riceve: trust deposit + prezzo - 1% fee = **€159.20**
 - Buyer riceve: trust deposit indietro + carta = **€80 + carta da €100**
 
 ### Se DISPUTA (BURN) 🔥
+
 - Entrambi perdono il trust deposit (bruciato)
 - Buyer recupera il prezzo pagato
 - **Nessuno vince → entrambi perdono**
@@ -39,9 +41,9 @@
 
 ### Cosa Puoi Fare
 
-| Trade Count | Max Valore Box |
-|-------------|----------------|
-| **Qualsiasi** | **€200** |
+| Trade Count   | Max Valore Box |
+| ------------- | -------------- |
+| **Qualsiasi** | **€200**       |
 
 > ✅ **Puoi vendere una gift card da €100 dal primo giorno!**
 
@@ -66,11 +68,11 @@ Non guadagni nulla → Solo perdita garantita
 ### Limiti in Base ai Trade Completati
 
 | Trade Completati | Max Acquisto |
-|------------------|--------------|
-| 0-2 | €30 |
-| 3-6 | €50 |
-| 7-14 | €100 |
-| 15+ | €200 |
+| ---------------- | ------------ |
+| 0-2              | €30          |
+| 3-6              | €50          |
+| 7-14             | €100         |
+| 15+              | €200         |
 
 > ⚠️ **I caps per buyer esistono per prevenire griefing (false dispute)**
 
@@ -96,16 +98,17 @@ Rapporto 1:1 → Non è profittevole!
 
 ## 📈 Come Cresce il Tuo Trade Count
 
-| Evento | Effetto |
-|--------|---------|
-| Trade OK come Seller | +1 |
-| Trade OK come Buyer | +1 |
-| Box cancellata | Nessuno |
-| **DISPUTA** | **RESET A 0** |
+| Evento               | Effetto       |
+| -------------------- | ------------- |
+| Trade OK come Seller | +1            |
+| Trade OK come Buyer  | +1            |
+| Box cancellata       | Nessuno       |
+| **DISPUTA**          | **RESET A 0** |
 
 > 🎯 **È UN SOLO contatore!** Cresce sia quando compri che quando vendi.
 
 **Esempio:**
+
 ```
 Mario (nuovo, tradeCount = 0)
 
@@ -116,14 +119,100 @@ Trade 3: COMPRA €30    → tradeCount = 3 → MAX BUY = €50! ✨
 
 ---
 
-## ⏱️ Auto-Confirm (24 Ore)
+## ⏱️ Timeouts e Protezioni
 
-Dopo aver rivelato il codice, se non ci sono azioni per **24 ore**, il sistema **conferma automaticamente** il trade.
+### 🔒 Regola 1: NO Cancellazione Dopo l'Acquisto
 
-**Perché?**
-- Protegge il seller se il buyer sparisce (ghosting)
-- Assicura che i fondi non restino bloccati per sempre
-- Hai 24h per verificare: più che sufficienti!
+**Una volta che un buyer compra il tuo box, NON puoi più cancellare.**
+
+- ✅ Puoi cancellare PRIMA che qualcuno compri (gratis)
+- ❌ NON puoi cancellare DOPO che qualcuno ha comprato
+- 🎯 Questo garantisce commitment e fiducia
+
+### ⏰ Regola 2: Reveal Timeout (72 Ore)
+
+**Il seller ha 72 ore (3 giorni) per rivelare il codice dopo che il buyer compra.**
+
+**Se seller NON rivela entro 72h:**
+
+- Buyer può richiedere rimborso completo
+- Buyer recupera: prezzo + trust deposit + 50% del trust deposit seller
+- Seller perde: 100% del trust deposit (50% va al buyer, 50% BURN)
+
+**Esempio:**
+
+```
+Box: Amazon €100, prezzo €80
+
+Seller NON rivela entro 72h:
+→ Buyer recupera: €80 (prezzo) + €110 (suo trust deposit) + €40 (50% trust deposit seller) = €230
+→ Seller perde: €80 (trust deposit)
+→ BURN: €40
+```
+
+**Perché 72 ore?**
+
+- Copre weekend e piccole emergenze
+- Abbastanza tempo per seller di tornare online
+- Non troppo lungo per buyer (3 giorni è accettabile)
+
+### ⏰ Regola 3: Auto-Finalize (72 Ore Dopo Reveal)
+
+**Il buyer ha 72 ore (3 giorni) per verificare il codice e confermare/disputare.**
+
+**Se buyer NON conferma né disputa entro 72h:**
+
+- Il trade si **auto-finalizza** automaticamente
+- Sistema assume: codice valido
+- Seller riceve il pagamento
+- Entrambi recuperano i trust deposit
+
+**⚠️ IMPORTANTE per Buyer:**
+
+- DEVI verificare il codice entro 72h
+- Dopo auto-finalize, NON puoi più disputare
+- Assicurati di poter testare il codice nei prossimi 3 giorni!
+
+**Esempio:**
+
+```
+T+0h:   Buyer compra box
+T+2h:   Seller rivela codice
+T+3h:   Buyer riceve codice ma NON lo verifica
+T+74h:  Auto-finalize → Seller riceve pagamento
+T+7d:   Buyer prova codice → INVALIDO
+        Troppo tardi! Non può più disputare
+```
+
+**Perché 72 ore?**
+
+- Tempo abbondante per verificare un codice gift
+- Simmetrico con reveal timeout (giusto per entrambi)
+- Protegge seller da buyer che "dimenticano" di confermare
+
+### 📊 Timeline Completa
+
+```
+T+0h:     Buyer compra box
+          ↓ [Seller ha 72h per rivelare]
+
+T+2h:     Seller rivela codice
+          ↓ [Buyer ha 72h per confermare/disputare]
+
+T+3h:     Buyer verifica codice
+
+Scenario A (Happy Path):
+T+4h:     Buyer conferma → ✅ Trade completato
+
+Scenario B (Auto-Finalize):
+T+74h:    Nessuna azione → ✅ Auto-finalize (assume valido)
+
+Scenario C (Dispute):
+T+5h:     Codice invalido → ❌ Buyer disputa → BURN
+
+Scenario D (Seller Ghosting):
+T+72h:    Seller NON ha rivelato → ⚠️ Buyer richiede rimborso + compensazione
+```
 
 ---
 
@@ -131,7 +220,7 @@ Dopo aver rivelato il codice, se non ci sono azioni per **24 ore**, il sistema *
 
 ```
                        GiftBlitz TRADE FLOW
-                       
+
     SELLER                                      BUYER
     ┌─────────┐                                ┌─────────┐
     │ Crea Box│◄─────── Matching ──────────────│ Compra  │
@@ -163,28 +252,33 @@ Dopo aver rivelato il codice, se non ci sono azioni per **24 ore**, il sistema *
 ## ❓ FAQ Rapide
 
 **Q: Posso vendere una gift card da €100 appena mi registro?**
+
 > ✅ Sì! I seller possono vendere fino a €200 dal giorno 1.
 
 **Q: Perché non posso comprare box grandi subito?**
+
 > Per prevenire griefing. Devi fare qualche trade piccolo prima.
 
 **Q: Cosa succede se disputo per errore?**
+
 > Entrambi perdete il trust deposit e il tuo trade count torna a 0. Verifica bene prima di disputare!
 
 **Q: Se l'altro disputa, perdo anche io?**
+
 > Sì, la disputa brucia i trust deposit di ENTRAMBI. Ecco perché funziona come deterrente.
 
 **Q: Quanto costa usare GiftBlitz?**
+
 > Solo 1% fee sul prezzo, detratto dal pagamento al seller.
 
 ---
 
 ## 📊 Tabella Riassuntiva Finale
 
-| Aspetto | Seller | Buyer |
-|---------|--------|-------|
-| **Trust Deposit** | 100% del prezzo | 110% del Valore Card |
-| **Max Trade (nuovo)** | €200 | €30 |
-| **Max Trade (veteran)** | €200 | €200 |
-| **Fee** | 1% sul prezzo | 0% |
-| **Rischio Principale** | BURN se codice falso | BURN se disputa falsa |
+| Aspetto                 | Seller               | Buyer                 |
+| ----------------------- | -------------------- | --------------------- |
+| **Trust Deposit**       | 100% del prezzo      | 110% del Valore Card  |
+| **Max Trade (nuovo)**   | €200                 | €30                   |
+| **Max Trade (veteran)** | €200                 | €200                  |
+| **Fee**                 | 1% sul prezzo        | 0%                    |
+| **Rischio Principale**  | BURN se codice falso | BURN se disputa falsa |

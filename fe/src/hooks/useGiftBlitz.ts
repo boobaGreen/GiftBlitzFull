@@ -74,6 +74,7 @@ export const useGiftBlitz = () => {
                 tx.pure.vector('u8', encryptedCodeHash),
                 tx.pure.vector('u8', Array.from(ciphertext)),
                 stakeCoin,
+                tx.object('0x6'),
             ],
         });
 
@@ -112,6 +113,7 @@ export const useGiftBlitz = () => {
             arguments: [
                 tx.object(boxId),
                 paymentAndStakeCoin,
+                tx.object('0x6'),
             ],
         });
 
@@ -147,6 +149,7 @@ export const useGiftBlitz = () => {
             arguments: [
                 tx.object(boxId),
                 tx.pure.vector('u8', Array.from(encryptedKeyForBuyer)),
+                tx.object('0x6'),
             ],
         });
 
@@ -228,6 +231,42 @@ export const useGiftBlitz = () => {
         return signAndExecute({ transaction: tx });
     }, [account, signAndExecute, PACKAGE_ID, MODULE]);
 
+    /**
+     * Claim Refund if Seller timeouts (72h)
+     */
+    const claimRevealTimeout = useCallback(async (boxId: string) => {
+        if (!account) return;
+
+        const tx = new Transaction();
+        tx.moveCall({
+            target: `${PACKAGE_ID}::${MODULE}::claim_reveal_timeout`,
+            arguments: [
+                tx.object(boxId),
+                tx.object('0x6'),
+            ],
+        });
+
+        return signAndExecute({ transaction: tx });
+    }, [account, signAndExecute, PACKAGE_ID, MODULE]);
+
+    /**
+     * Claim Auto-Finalize (72h after reveal)
+     */
+    const claimAutoFinalize = useCallback(async (boxId: string) => {
+        if (!account) return;
+
+        const tx = new Transaction();
+        tx.moveCall({
+            target: `${PACKAGE_ID}::${MODULE}::claim_auto_finalize`,
+            arguments: [
+                tx.object(boxId),
+                tx.object('0x6'),
+            ],
+        });
+
+        return signAndExecute({ transaction: tx });
+    }, [account, signAndExecute, PACKAGE_ID, MODULE]);
+
 
     /**
      * Fetch all GiftBox objects from the chain
@@ -288,12 +327,26 @@ export const useGiftBlitz = () => {
 
                     const buyer = getOptionValue(fields.buyer);
                     
+                    const getOptionNumberValue = (opt: unknown): number | null => {
+                        if (opt === null || opt === undefined) return null;
+                        if (typeof opt === 'number') return opt;
+                        if (typeof opt === 'string') return Number(opt);
+                        if (typeof opt === 'object' && 'fields' in opt) {
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            const f = (opt as any).fields;
+                            const val = f.contents || f.some || null;
+                            return val ? Number(val) : null;
+                        }
+                        return null;
+                    };
+
                     const stateMap: Record<number, string> = {
                         0: 'OPEN',
                         1: 'LOCKED',
                         2: 'REVEALED', 
                         3: 'COMPLETED',
-                        4: buyer ? 'DISPUTED' : 'CANCELED'
+                        4: buyer ? 'DISPUTED' : 'CANCELED',
+                        5: 'EXPIRED'
                     };
 
                     const encCodeBytes = getByteArrayValue(fields.encrypted_code);
@@ -309,7 +362,9 @@ export const useGiftBlitz = () => {
                         status: (stateMap[fields.state] || 'OPEN') as BoxStatus,
                         encryptedCodeOnChain: encCodeBytes ? JSON.stringify(Array.from(encCodeBytes)) : null,
                         encryptedKeyOnChain: encKeyBytes ? JSON.stringify(Array.from(encKeyBytes)) : null,
-                        createdAt: new Date(Number(fields.created_at) * 1000).toISOString(),
+                        createdAt: new Date(Number(fields.created_at)).toISOString(),
+                        lockedAt: getOptionNumberValue(fields.locked_at),
+                        revealTimestamp: getOptionNumberValue(fields.reveal_timestamp),
                     } as Box;
                 }
                 return null;
@@ -327,6 +382,8 @@ export const useGiftBlitz = () => {
         finalizeBox,
         disputeBox,
         cancelBox,
+        claimRevealTimeout,
+        claimAutoFinalize,
         mintProfile,
         getReputationNFT,
         fetchAllBoxes

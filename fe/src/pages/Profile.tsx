@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useMarket } from '../context/MarketContext';
 import BoxCard from '../components/BoxCard';
-import { TrendingUp, Package, Shield, Clock } from 'lucide-react';
+import { TrendingUp, Package, Shield, Clock, AlertTriangle } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { getMaxBuyValue } from '../types';
+import { getMaxBuyValue, type Box } from '../types';
 import { useNavigate } from 'react-router-dom';
 import Avatar from 'boring-avatars';
 
@@ -78,9 +78,9 @@ const Profile: React.FC = () => {
     };
 
     // User's active boxes (as seller)
-    const myBoxes = boxes.filter(b => b.seller.toLowerCase() === user.address.toLowerCase());
+    const myBoxes = boxes.filter((b: Box) => b.seller.toLowerCase() === user.address.toLowerCase());
     // User's bought boxes (as buyer)
-    const boughtBoxes = boxes.filter(b => b.buyer?.toLowerCase() === user.address.toLowerCase());
+    const boughtBoxes = boxes.filter((b: Box) => b.buyer?.toLowerCase() === user.address.toLowerCase());
 
     // Combine and deduplicate
     const allMyRelatedBoxes = [...boughtBoxes, ...myBoxes].filter((box, index, self) =>
@@ -105,6 +105,26 @@ const Profile: React.FC = () => {
     const progressToNextTier = tierConfig.nextTier
         ? Math.min(100, Math.round((user.tradeCount / tierConfig.tradesNeeded) * 100))
         : 100;
+
+    // Action Required Logic (Urgent Items)
+    const TIMEOUT_MS = 259200000; // 72h
+    const urgentActions = allMyRelatedBoxes.filter(box => {
+        const isSeller = box.seller.toLowerCase() === user.address.toLowerCase();
+        const isBuyer = box.buyer?.toLowerCase() === user.address.toLowerCase();
+        const now = Date.now();
+
+        if (box.status === 'LOCKED') {
+             if (isSeller) return true; // Seller must reveal
+             // Buyer claim refund if timeout passed
+             if (isBuyer && box.lockedAt && now > box.lockedAt + TIMEOUT_MS) return true;
+        }
+        if (box.status === 'REVEALED') {
+            if (isBuyer) return true; // Buyer must finalize
+            // Seller claim auto-finalize if timeout passed
+            if (isSeller && box.revealTimestamp && now > box.revealTimestamp + TIMEOUT_MS) return true;
+        }
+        return false;
+    });
 
     return (
         <div className="max-w-4xl mx-auto space-y-6">
@@ -239,6 +259,54 @@ const Profile: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
             >
+             {/* Action Center - Urgent Items */}
+             {urgentActions.length > 0 && (
+                <div className="mb-8">
+                    <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                        <AlertTriangle className="w-5 h-5 text-orange-400" />
+                        Action Required
+                    </h2>
+                    <div className="grid gap-3">
+                        {urgentActions.map(box => {
+                            const isSeller = box.seller.toLowerCase() === user.address.toLowerCase();
+                             const now = Date.now();
+                             let msg = "Action needed";
+                             if (box.status === 'LOCKED') {
+                                 if (isSeller) msg = "⚠️ Pending Reveal (72h Deadline)";
+                                 else if (now > (box.lockedAt || 0) + TIMEOUT_MS) msg = "💰 Claim Refund (Seller Timeout)";
+                                 else msg = "Waiting for reveal...";
+                             } else if (box.status === 'REVEALED') {
+                                 if (!isSeller) msg = "✅ Verify & Finalize (72h Deadline)";
+                                 else if (now > (box.revealTimestamp || 0) + TIMEOUT_MS) msg = "💰 Claim Auto-Finalize";
+                                 else msg = "Waiting for buyer...";
+                             }
+
+                            return (
+                                <div key={box.id} className="p-4 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-between">
+                                    <div className="flex items-center gap-3">
+                                        <div className="p-2 rounded-lg bg-orange-500/20">
+                                            <Clock className="w-4 h-4 text-orange-400" />
+                                        </div>
+                                        <div>
+                                            <h3 className="font-bold text-white text-sm">{box.brand} • {(box.value/1_000_000_000).toFixed(0)} IOTA</h3>
+                                            <p className="text-xs text-orange-300 font-medium">
+                                                {msg}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <button
+                                        onClick={() => navigate(`/trade/${box.id}`)}
+                                        className="px-4 py-2 rounded-lg bg-orange-500 text-black font-bold text-xs hover:bg-orange-400 transition-colors"
+                                    >
+                                        View
+                                    </button>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            )}
+            
                 <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
                     <h2 className="text-xl font-bold text-white">My Trades</h2>
 

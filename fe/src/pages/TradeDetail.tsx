@@ -1,20 +1,33 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useMarket } from '../context/MarketContext';
-import { Lock, CheckCircle, ArrowRight, Flame, Trash2 } from 'lucide-react';
+import { Lock, CheckCircle, ArrowRight, Flame, Trash2, Clock, AlertTriangle } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useGiftBlitz } from '../hooks/useGiftBlitz';
 import { getEncryptionKeyPair, decryptKeyForMe, decryptCode } from '../utils/security';
+import CountdownTimer from '../components/CountdownTimer';
 
 const TradeDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    const { boxes, user, repNftId, finalizeBox: localFinalize, disputeBox: localDispute, cancelBox: localCancel } = useMarket();
-    const { revealKey, finalizeBox, disputeBox, getReputationNFT } = useGiftBlitz();
+    const { 
+        boxes, 
+        user, 
+        repNftId, 
+        finalizeBox: localFinalize, 
+        disputeBox: localDispute, 
+        cancelBox: localCancel,
+        claimRevealTimeout: localClaimTimeout,
+        claimAutoFinalize: localClaimAutoFinalize
+    } = useMarket();
+    const { revealKey, finalizeBox, disputeBox, getReputationNFT, claimRevealTimeout, claimAutoFinalize } = useGiftBlitz();
     const [isRevealed, setIsRevealed] = useState(false);
     const [decryptedCode, setDecryptedCode] = useState<string | null>(null);
     const [isProcessing, setIsProcessing] = useState(false);
     const [showDisputeModal, setShowDisputeModal] = useState(false);
+    const [forceUpdate, setForceUpdate] = useState(0); // Trigger re-render on timeout
+
+    const TIMEOUT_MS = 259200000; // 72 hours
 
     const box = boxes.find(b => b.id === id);
 
@@ -132,6 +145,34 @@ const TradeDetail: React.FC = () => {
         }
     };
 
+    const handleClaimRevealTimeout = async () => {
+        if (isProcessing) return;
+        setIsProcessing(true);
+        try {
+            await claimRevealTimeout(box.id);
+            localClaimTimeout(box.id);
+            setIsProcessing(false);
+        } catch (error) {
+            console.error("Claim timeout failed:", error);
+            alert("Failed to claim timeout. Check console.");
+            setIsProcessing(false);
+        }
+    };
+
+    const handleClaimAutoFinalize = async () => {
+        if (isProcessing) return;
+        setIsProcessing(true);
+        try {
+            await claimAutoFinalize(box.id);
+            localClaimAutoFinalize(box.id);
+            setIsProcessing(false);
+        } catch (error) {
+            console.error("Claim auto-finalize failed:", error);
+            alert("Failed to claim auto-finalize. Check console.");
+            setIsProcessing(false);
+        }
+    };
+
     return (
         <div className="max-w-3xl mx-auto px-4 py-8">
             <motion.div
@@ -153,6 +194,7 @@ const TradeDetail: React.FC = () => {
                                         box.status === 'REVEALED' ? 'bg-purple-500/20 text-purple-400 border-purple-500/30' :
                                             box.status === 'COMPLETED' ? 'bg-green-500/20 text-green-400 border-green-500/30' :
                                                 box.status === 'CANCELED' ? 'bg-slate-500/20 text-slate-400 border-slate-500/30' :
+                                                    box.status === 'EXPIRED' ? 'bg-orange-500/20 text-orange-400 border-orange-500/30' :
                                                     'bg-red-500/20 text-red-400 border-red-500/30'}`}>
                                 {box.status}
                             </span>
@@ -208,6 +250,14 @@ const TradeDetail: React.FC = () => {
                                     <div className="p-4 rounded-xl bg-slate-800/50 border border-slate-500/30 text-slate-400 font-bold">
                                         LISTING REMOVED
                                     </div>
+                                ) : box.status === 'EXPIRED' ? (
+                                    <div className="p-4 rounded-xl bg-orange-900/20 border border-orange-500/30 text-orange-400 font-bold flex flex-col items-center">
+                                        <span>TIMED OUT - FUNDS REFUNDED</span>
+                                        <span className="text-xs font-normal opacity-70 mt-1">
+                                            Seller failed to reveal key in 72h.
+                                            Buyer compensated.
+                                        </span>
+                                    </div>
                                 ) : (
                                     <div className="p-4 rounded-xl bg-red-900/20 border border-red-500/30 text-red-400 font-bold">
                                         CODE BURNED / UNAVAILABLE
@@ -227,6 +277,63 @@ const TradeDetail: React.FC = () => {
                                 </p>
                     </div>
                 </div>
+
+                {/* TIMERS & TIMEOUT ACTIONS */}
+                
+                {/* 1. Reveal Timeout (Buyer) - LOCKED state */}
+                {box.status === 'LOCKED' && box.lockedAt && (
+                    <div className="p-6 rounded-3xl bg-slate-800/50 border border-white/5 flex flex-col items-center gap-4">
+                        <h3 className="text-white font-bold flex items-center gap-2">
+                             <Clock className="w-5 h-5 text-cyan-400" /> Reveal Deadline
+                        </h3>
+                        <CountdownTimer 
+                            targetTime={box.lockedAt + TIMEOUT_MS} 
+                            onExpire={() => setForceUpdate(n => n + 1)}
+                            label="Seller has"
+                        />
+                        {isBuyer && (Date.now() > box.lockedAt + TIMEOUT_MS) && (
+                            <div className="w-full text-center space-y-2">
+                                <p className="text-red-400 text-sm">Seller missed the deadline.</p>
+                                <button
+                                    onClick={handleClaimRevealTimeout}
+                                    disabled={isProcessing}
+                                    className="w-full py-3 rounded-xl bg-orange-500/20 text-orange-400 font-bold border border-orange-500/30 hover:bg-orange-500/30 transition-all"
+                                >
+                                    {isProcessing ? "Processing..." : "💰 Claim Refund & Compensation"}
+                                </button>
+                            </div>
+                        )}
+                        {!isBuyer && (Date.now() > box.lockedAt + TIMEOUT_MS) && isSeller && (
+                            <p className="text-red-400 text-sm">You missed the reveal deadline. Buyer can claim refund.</p>
+                        )}
+                    </div>
+                )}
+
+                {/* 2. Auto-Finalize Timeout (Seller) - REVEALED state */}
+                {box.status === 'REVEALED' && box.revealTimestamp && (
+                    <div className="p-6 rounded-3xl bg-slate-800/50 border border-white/5 flex flex-col items-center gap-4">
+                        <h3 className="text-white font-bold flex items-center gap-2">
+                             <Clock className="w-5 h-5 text-green-400" /> Auto-Finalize Deadline
+                        </h3>
+                        <CountdownTimer 
+                            targetTime={box.revealTimestamp + TIMEOUT_MS} 
+                            onExpire={() => setForceUpdate(n => n + 1)}
+                            label="Buyer has"
+                        />
+                         {(Date.now() > box.revealTimestamp + TIMEOUT_MS) && (
+                            <div className="w-full text-center space-y-2">
+                                <p className="text-green-400 text-sm">Buyer silence period ended.</p>
+                                <button
+                                    onClick={handleClaimAutoFinalize}
+                                    disabled={isProcessing}
+                                    className="w-full py-3 rounded-xl bg-green-500/20 text-green-400 font-bold border border-green-500/30 hover:bg-green-500/30 transition-all"
+                                >
+                                    {isProcessing ? "Processing..." : "✅ Claim Auto-Finalize Funds"}
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                )}
 
                 {/* Action Zone (Only for Buyer when LOCKED) */}
                 {isSeller && box.status === 'OPEN' && (
@@ -351,6 +458,12 @@ const TradeDetail: React.FC = () => {
                     <div className="p-6 rounded-3xl bg-slate-800/50 border border-white/5 text-center">
                         <h3 className="text-2xl font-bold text-gray-400 mb-2">Listing Canceled</h3>
                         <p className="text-gray-500">The card was removed from the market and the trust deposit was refunded to the seller.</p>
+                    </div>
+                )}
+                {box.status === 'EXPIRED' && (
+                    <div className="p-6 rounded-3xl bg-orange-500/10 border border-orange-500/20 text-center">
+                        <h3 className="text-2xl font-bold text-orange-400 mb-2">Trade Expired ⌛</h3>
+                        <p className="text-orange-300">Seller failed to reveal time. Funds refunded to buyer with compensation.</p>
                     </div>
                 )}
                 {box.status === 'DISPUTED' && (

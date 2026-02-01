@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMarket } from '../context/MarketContext';
 import type { Box, BoxType } from '../types';
-import { Lock, ChevronDown, DollarSign, Hash } from 'lucide-react';
+import { Lock, ChevronDown, DollarSign, Hash, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { CATEGORIES, GIFT_CARDS_DATA } from '../data/giftCards';
 import { useGiftBlitz } from '../hooks/useGiftBlitz';
@@ -285,6 +285,19 @@ const CreateBox: React.FC = () => {
                         <p className="text-[10px] text-gray-500">
                             Seller Trust Deposit: 100% Price. (Buyer deposits 100% Price for safety).
                         </p>
+                    </div>
+
+                    {/* Timeouts Info */}
+                    <div className="p-4 rounded-xl bg-orange-500/10 border border-orange-500/20 text-orange-400 text-xs">
+                        <div className="flex items-center gap-2 mb-2 font-bold">
+                            <Clock className="w-4 h-4" />
+                            <span>Strict 72-Hour Rule</span>
+                        </div>
+                        <ul className="list-disc pl-4 space-y-1 opacity-80">
+                            <li>Once a buyer joins, you MUST reveal the key within <strong>72 hours</strong>.</li>
+                            <li>Failure to reveal results in <strong>loss of 50% of your stake</strong>.</li>
+                            <li>Trade cannot be cancelled once a buyer joins.</li>
+                        </ul>
                     </div>
 
                     {/* Submit Button */}

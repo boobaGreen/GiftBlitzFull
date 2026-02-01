@@ -142,6 +142,21 @@ const PurchaseBox: React.FC = () => {
                             </div>
                         </div>
 
+
+                        {/* Rules Info */}
+                        <div className="bg-slate-800/50 p-4 rounded-xl mb-8 space-y-2">
+                             <h4 className="text-sm font-bold text-gray-300 flex items-center gap-2">
+                                <AlertTriangle className="w-4 h-4 text-orange-400" /> 
+                                Important Rules
+                            </h4>
+                            <ul className="text-xs text-gray-400 space-y-1 list-disc pl-4">
+                                <li>Seller has <strong className="text-orange-300">72 hours</strong> to reveal the code after purchase.</li>
+                                <li>If they fail, you can claim a <strong className="text-orange-300">full refund + compensation</strong>.</li>
+                                <li>Once revealed, you have <strong className="text-green-300">72 hours</strong> to verify.</li>
+                                <li>If you don't act in time, the trade <strong className="text-green-300">auto-finalizes</strong>.</li>
+                            </ul>
+                        </div>
+
                         {/* Verification Section */}
                         <div className={`p-4 rounded-xl border mb-8 ${canBuy ? 'bg-green-500/10 border-green-500/20' : 'bg-red-500/10 border-red-500/20'}`}>
                             {canBuy ? (

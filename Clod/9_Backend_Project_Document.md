@@ -73,7 +73,9 @@ graph TB
 │   ├── face_value, price
 │   ├── seller_stake, buyer_stake
 │   ├── encrypted_code_hash, encrypted_key
-│   ├── state (OPEN/LOCKED/REVEALED/COMPLETED/BURNED)
+│   ├── state (OPEN/LOCKED/REVEALED/COMPLETED/BURNED/EXPIRED)
+│   ├── created_at
+│   ├── locked_at (NEW: timestamp acquisto)
 │   └── reveal_timestamp
 │
 ├── entry fun create_box(...)
@@ -81,7 +83,8 @@ graph TB
 ├── entry fun reveal_key(box, encrypted_key)
 ├── entry fun finalize(box)
 ├── entry fun dispute(box) → BURN
-├── entry fun claim_auto_finalize(box) → seller chiama dopo 24h
+├── entry fun claim_auto_finalize(box) → 72h dopo reveal
+├── entry fun claim_reveal_timeout(box) → 72h dopo lock (se no reveal)
 └── entry fun cancel_box(box) → solo se OPEN
 ```
 
@@ -112,16 +115,32 @@ graph TB
 
 ## 5. Design Decisions
 
-### 5.1 Auto-Finalize (24h Timeout)
+### 5.1 Timeouts & Auto-Finalize (Doppio Timeout)
 
-Dopo che il seller rivela la chiave, il buyer ha 24h per confermare o disputare.
+Per proteggere sia buyer che seller da ghosting, utilizziamo due timeout simmetrici di **72 ore**.
 
-| Opzione              | Descrizione                                    | Scelta         |
-| -------------------- | ---------------------------------------------- | -------------- |
-| **A) Seller chiama** | Seller chiama `claim_auto_finalize()` dopo 24h | ✅ **MVP**     |
-| **B) Bounty System** | Chiunque può chiamare e prende 0.1%            | ⏳ Scalabilità |
+#### A) Reveal Timeout (72h dopo acquisto)
 
-**Rationale:** Il seller ha incentivo naturale (vuole i soldi). La UI mostra notifica "Puoi ritirare i fondi!".
+Se il seller non rivela la chiave entro 72h dal lock (acquisto):
+
+- Buyer chiama `claim_reveal_timeout()`
+- Buyer recupera tutto (payment + stake)
+- **Compensazione**: Buyer riceve 50% dello stake del seller
+- **BURN**: Il restante 50% dello stake del seller viene bruciato
+
+#### B) Auto-Finalize (72h dopo reveal)
+
+Se il buyer non conferma né disputa entro 72h dalla rivelazione della chiave:
+
+- Chiunque (di solito il seller) può chiamare `claim_auto_finalize()`
+- Il sistema assume che la transazione sia valida (silenzio-assenso)
+- Seller riceve il pagamento e gli stake vengono sbloccati
+
+**Rationale:**
+
+- **Simmetria**: Entrambi hanno 3 giorni di tempo.
+- **Protezione Buyer**: Compensato se il seller sparisce.
+- **Protezione Seller**: Pagato se il buyer dimentica di confermare.
 
 ---
 
@@ -232,7 +251,7 @@ Test cases:
 - `test_create_box_success`
 - `test_finalize_happy_path`
 - `test_dispute_burns_both_stakes`
-- `test_claim_auto_finalize_after_24h`
+- `test_claim_auto_finalize_after_72h`
 - `test_buyer_caps_enforced`
 - `test_reputation_reset_on_dispute`
 
@@ -240,7 +259,7 @@ Test cases:
 
 1. **Happy Path**: Create → Join → Reveal → Finalize
 2. **Dispute Path**: Create → Join → Reveal → Dispute → BURN
-3. **Timeout Path**: Create → Join → Reveal → (24h) → Seller claims
+3. **Timeout Path**: Create → Join → Reveal → (72h) → Seller claims
 
 ---
 

@@ -3,6 +3,7 @@ module giftblitz::giftblitz {
     use iota::balance::{Self, Balance};
     use iota::coin::{Self, Coin};
     use iota::iota::IOTA;
+    use iota::clock::{Self, Clock};
     use std::string::String;
     // option, Option provided by default
     use giftblitz::reputation::{Self, ReputationNFT};
@@ -12,6 +13,7 @@ module giftblitz::giftblitz {
     const EInvalidState: u64 = 1;
     const ENotAuthorized: u64 = 2;
     const ETimeNotReached: u64 = 3;
+    const EKeyAlreadyRevealed: u64 = 4;
 
     // States
     const STATE_OPEN: u8 = 0;
@@ -19,6 +21,11 @@ module giftblitz::giftblitz {
     const STATE_REVEALED: u8 = 2;
     const STATE_COMPLETED: u8 = 3;
     const STATE_BURNED: u8 = 4;
+    const STATE_EXPIRED: u8 = 5;
+
+    // Timeouts
+    const REVEAL_TIMEOUT_MS: u64 = 259200000; // 72 hours
+    const FINALIZE_TIMEOUT_MS: u64 = 259200000; // 72 hours
 
     /// Admin Capability for emergency actions
     public struct AdminCap has key { id: UID }
@@ -44,6 +51,7 @@ module giftblitz::giftblitz {
         state: u8,
         reveal_timestamp: Option<u64>,
         created_at: u64,
+        locked_at: Option<u64>,
     }
 
     /// Events
@@ -71,6 +79,12 @@ module giftblitz::giftblitz {
         final_price: u64
     }
 
+    public struct BoxExpired has copy, drop {
+        id: address,
+        buyer: address,
+        refund_amount: u64
+    }
+
     fun init(ctx: &mut TxContext) {
         transfer::transfer(AdminCap { id: object::new(ctx) }, tx_context::sender(ctx));
     }
@@ -85,6 +99,7 @@ module giftblitz::giftblitz {
         encrypted_code_hash: vector<u8>,
         encrypted_code: vector<u8>,
         stake_coin: Coin<IOTA>,
+        clock: &Clock,
         ctx: &mut TxContext
     ) {
         // Validation
@@ -113,7 +128,8 @@ module giftblitz::giftblitz {
             encrypted_key: option::none(),
             state: STATE_OPEN,
             reveal_timestamp: option::none(),
-            created_at: tx_context::epoch(ctx),
+            created_at: clock::timestamp_ms(clock),
+            locked_at: option::none(),
         };
 
         // Emit event
@@ -132,6 +148,7 @@ module giftblitz::giftblitz {
     public entry fun join_box(
         box: &mut GiftBox,
         payment_and_stake: Coin<IOTA>,
+        clock: &Clock,
         ctx: &mut TxContext
     ) {
         // Validation
@@ -154,6 +171,7 @@ module giftblitz::giftblitz {
         box.state = STATE_LOCKED;
         balance::join(&mut box.payment, payment_balance);
         balance::join(&mut box.buyer_stake, balance);
+        box.locked_at = option::some(clock::timestamp_ms(clock));
 
         iota::event::emit(BoxLocked {
             id: object::id_address(box),
@@ -165,6 +183,7 @@ module giftblitz::giftblitz {
     public entry fun reveal_key(
         box: &mut GiftBox,
         encrypted_key: vector<u8>,
+        clock: &Clock,
         ctx: &mut TxContext
     ) {
         let sender = tx_context::sender(ctx);
@@ -175,7 +194,7 @@ module giftblitz::giftblitz {
 
         box.encrypted_key = option::some(encrypted_key);
         box.state = STATE_REVEALED;
-        box.reveal_timestamp = option::some(tx_context::epoch(ctx));
+        box.reveal_timestamp = option::some(clock::timestamp_ms(clock));
 
         iota::event::emit(KeyRevealed {
             id: object::id_address(box),
@@ -256,34 +275,106 @@ module giftblitz::giftblitz {
         box.state = STATE_BURNED;
     }
 
-    /// Seller claims funds if buyer disappears after 24h
+    /// Auto-finalize if buyer doesn't confirm/dispute within 72h after reveal
     public entry fun claim_auto_finalize(
         box: &mut GiftBox,
+        clock: &Clock,
         ctx: &mut TxContext
     ) {
-        let sender = tx_context::sender(ctx);
-        // Only seller
-        assert!(box.seller == sender, ENotAuthorized);
         // Must be REVEALED and waiting
         assert!(box.state == STATE_REVEALED, EInvalidState);
 
         let reveal_time = *option::borrow(&box.reveal_timestamp);
-        let now = tx_context::epoch(ctx);
-        // 24 hours in ms = 86400000
-        assert!(now > reveal_time + 86400000, ETimeNotReached);
+        let now = clock::timestamp_ms(clock);
+        
+        assert!(now > reveal_time + FINALIZE_TIMEOUT_MS, ETimeNotReached);
 
         // Release everything to Seller
+        let seller = box.seller;
+        
         let payment_val = balance::value(&box.payment);
         let payment = balance::split(&mut box.payment, payment_val);
-        transfer::public_transfer(coin::from_balance(payment, ctx), sender);
+        transfer::public_transfer(coin::from_balance(payment, ctx), seller);
 
         let s_val = balance::value(&box.seller_stake);
         let s_stake = balance::split(&mut box.seller_stake, s_val);
-        transfer::public_transfer(coin::from_balance(s_stake, ctx), sender);
+        transfer::public_transfer(coin::from_balance(s_stake, ctx), seller);
 
+        // Return Buyer Stake to Buyer (since they essentially "accepted" by silence)
         let b_val = balance::value(&box.buyer_stake);
         let b_stake = balance::split(&mut box.buyer_stake, b_val);
-        transfer::public_transfer(coin::from_balance(b_stake, ctx), sender);
+        let buyer_addr = *option::borrow(&box.buyer);
+        
+        transfer::public_transfer(coin::from_balance(b_stake, ctx), buyer_addr);
+
+        box.state = STATE_COMPLETED;
+    }
+
+    /// Buyer can claim refund if seller doesn't reveal within 72h
+    public entry fun claim_reveal_timeout(
+        box: &mut GiftBox,
+        clock: &Clock,
+        ctx: &mut TxContext
+    ) {
+        let sender = tx_context::sender(ctx);
+        
+        // Verify caller is buyer
+        assert!(box.buyer == option::some(sender), ENotAuthorized);
+        
+        // Verify box is in LOCKED state (not yet revealed)
+        assert!(box.state == STATE_LOCKED, EInvalidState);
+        
+        // Verify seller hasn't revealed yet
+        assert!(option::is_none(&box.encrypted_key), EKeyAlreadyRevealed);
+        
+        // Verify timeout has passed
+        let locked_at = *option::borrow(&box.locked_at);
+        let now = clock::timestamp_ms(clock);
+        assert!(now >= locked_at + REVEAL_TIMEOUT_MS, ETimeNotReached);
+        
+        // Refund buyer: payment + buyer_stake + 50% seller_stake
+        let payment_val = balance::value(&box.payment);
+        let payment_coin = coin::from_balance(
+            balance::split(&mut box.payment, payment_val),
+            ctx
+        );
+        transfer::public_transfer(payment_coin, sender);
+        
+        let buyer_stake_val = balance::value(&box.buyer_stake);
+        let buyer_stake_coin = coin::from_balance(
+            balance::split(&mut box.buyer_stake, buyer_stake_val),
+            ctx
+        );
+        transfer::public_transfer(buyer_stake_coin, sender);
+        
+        // Give 50% of seller stake to buyer as compensation
+        let seller_stake_val = balance::value(&box.seller_stake);
+        let compensation = seller_stake_val / 2;
+        let compensation_coin = coin::from_balance(
+            balance::split(&mut box.seller_stake, compensation),
+            ctx
+        );
+        transfer::public_transfer(compensation_coin, sender);
+        
+        // Send remaining 50% to PROTOCOL (Treasury)
+        // For MVP we use 0x0 (burn) or a specific address. 
+        // Using 0x0 as placeholder for protocol treasury.
+        let protocol_fee = balance::value(&box.seller_stake);
+        let fee_coin = coin::from_balance(
+            balance::split(&mut box.seller_stake, protocol_fee),
+            ctx
+        );
+        transfer::public_transfer(fee_coin, @0x0); // REPLACE WITH TREASURY ADDRESS
+        
+        // Update state
+        box.state = STATE_EXPIRED;
+        
+        // Emit event
+        iota::event::emit(BoxExpired {
+            id: object::uid_to_address(&box.id),
+            buyer: sender,
+            refund_amount: payment_val + buyer_stake_val + compensation,
+        });
     }
 
     /// Cancel box if no one joined

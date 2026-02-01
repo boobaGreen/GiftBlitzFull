@@ -1,4 +1,4 @@
-export type BoxStatus = 'OPEN' | 'LOCKED' | 'REVEALED' | 'COMPLETED' | 'CANCELED' | 'DISPUTED';
+export type BoxStatus = 'OPEN' | 'LOCKED' | 'REVEALED' | 'COMPLETED' | 'CANCELED' | 'DISPUTED' | 'EXPIRED';
 
 export type BoxType =
     // Shopping / E-Commerce
@@ -54,6 +54,8 @@ export interface Box {
     // Metadata
     createdAt: string;
     status: BoxStatus;
+    lockedAt?: number | null; // Timestamp in ms
+    revealTimestamp?: number | null; // Timestamp in ms
 
     // Security
     encryptedCodeOnChain?: string | null; // The code encrypted with symmetric key (on-chain)

@@ -13,6 +13,8 @@ interface MarketContextType {
     finalizeBox: (boxId: string) => void;
     disputeBox: (boxId: string) => void;
     cancelBox: (boxId: string) => void;
+    claimRevealTimeout: (boxId: string) => void;
+    claimAutoFinalize: (boxId: string) => void;
     mintProfile: () => Promise<void>;
     refreshUserStats: () => Promise<void>;
 }
@@ -22,7 +24,14 @@ const MarketContext = createContext<MarketContextType | undefined>(undefined);
 export const MarketProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const account = useCurrentAccount();
     const iotaClient = useIotaClient();
-    const { getReputationNFT, mintProfile: callMintProfile, fetchAllBoxes, cancelBox: callCancelBox } = useGiftBlitz();
+    const { 
+        getReputationNFT, 
+        mintProfile: callMintProfile, 
+        fetchAllBoxes, 
+        cancelBox: callCancelBox,
+        claimRevealTimeout: callClaimRevealTimeout,
+        claimAutoFinalize: callClaimAutoFinalize
+    } = useGiftBlitz();
     
     const [boxes, setBoxes] = useState<Box[]>([]);
     const [repNftId, setRepNftId] = useState<string | null>(null);
@@ -98,6 +107,30 @@ export const MarketProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         }
     };
 
+    const claimRevealTimeout = async (boxId: string) => {
+        try {
+            await callClaimRevealTimeout(boxId);
+            setBoxes(prev => prev.map(box =>
+                box.id === boxId ? { ...box, status: 'EXPIRED' } : box
+            ));
+            setTimeout(refreshUserStats, 2000);
+        } catch (err) {
+            console.error("Claim timeout failed:", err);
+        }
+    };
+
+    const claimAutoFinalize = async (boxId: string) => {
+        try {
+            await callClaimAutoFinalize(boxId);
+            setBoxes(prev => prev.map(box =>
+                box.id === boxId ? { ...box, status: 'COMPLETED' } : box
+            ));
+            setTimeout(refreshUserStats, 2000);
+        } catch (err) {
+            console.error("Claim auto-finalize failed:", err);
+        }
+    };
+
     const mintProfile = async () => {
         await callMintProfile();
         // Delay slightly for indexing and then refresh
@@ -141,6 +174,8 @@ export const MarketProvider: React.FC<{ children: ReactNode }> = ({ children }) 
             finalizeBox, 
             disputeBox, 
             cancelBox,
+            claimRevealTimeout,
+            claimAutoFinalize,
             mintProfile, 
             refreshUserStats 
         }}>
