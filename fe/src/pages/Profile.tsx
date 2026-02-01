@@ -61,10 +61,64 @@ function getTierConfig(tradeCount: number) {
 }
 
 const Profile: React.FC = () => {
-    const { user, boxes, repNftId, mintProfile } = useMarket();
+    const { user, boxes, repNftId, mintProfile, syncIdentity, updateVaultIdentity, refreshUserStats } = useMarket();
     const tierConfig = getTierConfig(user.tradeCount);
     const navigate = useNavigate();
     const [isMinting, setIsMinting] = useState(false);
+
+    const [isSyncing, setIsSyncing] = useState(false);
+    const [isUpdatingVault, setIsUpdatingVault] = useState(false);
+    const [keyMatch, setKeyMatch] = useState<boolean | null>(null);
+
+    // Check if local key matches on-chain key
+    React.useEffect(() => {
+        const checkKeys = async () => {
+            if (!user.address || !user.publicKey) {
+                setKeyMatch(null);
+                return;
+            }
+            try {
+                const { getEncryptionKeyPair } = await import('../utils/security');
+                const localKeys = await getEncryptionKeyPair(user.address);
+                const onChainPub = new Uint8Array(JSON.parse(user.publicKey));
+                const match = localKeys.publicKey.length === onChainPub.length && 
+                             localKeys.publicKey.every((b, i) => b === onChainPub[i]);
+                setKeyMatch(match);
+            } catch (e) {
+                console.error("Key check failed", e);
+                setKeyMatch(false);
+            }
+        };
+        checkKeys();
+    }, [user.address, user.publicKey]);
+
+    const handleSyncIdentity = async () => {
+        if (!user.vault) return;
+        setIsSyncing(true);
+        try {
+            const success = await syncIdentity(user.vault);
+            if (success) {
+                setKeyMatch(true);
+            }
+        } catch (error) {
+            console.error("Sync failed:", error);
+        } finally {
+            setIsSyncing(false);
+        }
+    };
+
+    const handleUpdateVault = async () => {
+        if (!repNftId) return;
+        setIsUpdatingVault(true);
+        try {
+            await updateVaultIdentity(repNftId);
+            await refreshUserStats();
+        } catch (error) {
+            console.error("Update vault failed:", error);
+        } finally {
+            setIsUpdatingVault(false);
+        }
+    };
 
     const handleMintProfile = async () => {
         setIsMinting(true);
@@ -257,6 +311,65 @@ const Profile: React.FC = () => {
                     <div className="flex justify-between mt-2 text-xs text-gray-500">
                         <span>{user.tradeCount}/{tierConfig.tradesNeeded} trades</span>
                         <span>Goal: {tierConfig.nextMaxBuy} IOTA max buy</span>
+                    </div>
+                </motion.div>
+            )}
+
+            {/* Identity Protection Status */}
+            {repNftId && (
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.15 }}
+                    className="p-5 rounded-2xl bg-slate-800/40 border border-white/5 overflow-hidden relative"
+                >
+                    <div className="absolute top-0 right-0 p-4 opacity-10">
+                        <Shield className="w-16 h-16 text-cyan-400" />
+                    </div>
+                    
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                        <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-2">
+                                <Shield className={`w-5 h-5 ${keyMatch === true ? 'text-green-400' : 'text-amber-400'}`} />
+                                <h3 className="text-lg font-bold text-white">Identity Protection</h3>
+                            </div>
+                            <p className="text-sm text-gray-400 max-w-lg">
+                                Your encryption keys are used to safely share gift codes. 
+                                {keyMatch === true 
+                                    ? " Your identity is secured and synced on the blockchain." 
+                                    : " Your browser's identity doesn't match your profile. This happens if you switch devices or clear cache."}
+                            </p>
+                        </div>
+
+                        <div className="flex flex-col gap-2 min-w-[200px]">
+                            {keyMatch === false && user.vault && (
+                                <button
+                                    onClick={handleSyncIdentity}
+                                    disabled={isSyncing}
+                                    className="w-full py-2.5 rounded-xl bg-cyan-500 text-black font-extrabold text-sm hover:bg-cyan-400 transition-all shadow-lg shadow-cyan-500/20 flex items-center justify-center gap-2 animate-pulse"
+                                >
+                                    {isSyncing ? "Syncing..." : "🔄 Sync Identity"}
+                                </button>
+                            )}
+                            
+                            {(!user.vault || keyMatch === true) && (
+                                <button
+                                    onClick={handleUpdateVault}
+                                    disabled={isUpdatingVault}
+                                    className="w-full py-2 rounded-xl bg-slate-700/50 border border-white/10 text-white font-bold text-xs hover:bg-slate-700 transition-colors flex items-center justify-center gap-2"
+                                >
+                                    <Clock className="w-3 h-3" /> {user.vault ? "Refresh Vault" : "🔐 Enable Vault"}
+                                </button>
+                            )}
+
+                            {keyMatch === false && !user.vault && (
+                                <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] text-center">
+                                    <AlertTriangle className="w-3 h-3 mx-auto mb-1" />
+                                    Legacy profile detected without a vault. <br/>
+                                    Update required to enable recovery.
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </motion.div>
             )}

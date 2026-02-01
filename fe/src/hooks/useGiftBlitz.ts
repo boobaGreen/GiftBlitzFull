@@ -329,12 +329,30 @@ export const useGiftBlitz = () => {
 
         const privateKey = await decryptVault(new Uint8Array(vault), signature);
         
-        // Save to local storage for future use
-        const privKeyPath = `gb_sec_priv_${account.address.toLowerCase()}`;
+        // 1. Export Private JWK (contains coordinates x, y)
+        const privJwk = await crypto.subtle.exportKey('jwk', privateKey) as JsonWebKey;
         
-        // Let's re-save to local storage
-        const privJwk = await crypto.subtle.exportKey('jwk', privateKey);
-        localStorage.setItem(privKeyPath, JSON.stringify(privJwk));
+        // 2. Extract public part and export as raw to match getEncryptionKeyPair expectations
+        const pubKey = await crypto.subtle.importKey(
+            'jwk',
+            {
+                kty: 'EC',
+                crv: 'P-256',
+                x: privJwk.x,
+                y: privJwk.y,
+                ext: true
+            },
+            { name: 'ECDH', namedCurve: 'P-256' },
+            true,
+            []
+        );
+        const pubBuffer = await crypto.subtle.exportKey('raw', pubKey);
+        const pubBytes = new Uint8Array(pubBuffer);
+
+        // 3. Save to local storage
+        const addr = account.address.toLowerCase();
+        localStorage.setItem(`gb_sec_pub_${addr}`, JSON.stringify(Array.from(pubBytes)));
+        localStorage.setItem(`gb_sec_priv_${addr}`, JSON.stringify(privJwk));
         
         return true;
     }, [account, signPersonalMessage]);

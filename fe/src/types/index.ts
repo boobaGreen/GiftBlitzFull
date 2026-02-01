@@ -74,6 +74,7 @@ export interface User {
     disputes: number; // Se >0, trade count resettato
     memberEpoch?: number | null;
     publicKey?: string | null; // Hex string of encryption public key
+    vault?: number[] | null;   // NEW: Encrypted Hub Private Key
 }
 
 // Caps ASIMMETRICI: Seller può vendere fino a €200 subito, Buyer ha caps progressivi

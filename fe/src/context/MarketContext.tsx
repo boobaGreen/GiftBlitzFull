@@ -14,7 +14,9 @@ export const MarketProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         fetchAllBoxes, 
         cancelBox: callCancelBox,
         claimRevealTimeout: callClaimRevealTimeout,
-        claimAutoFinalize: callClaimAutoFinalize
+        claimAutoFinalize: callClaimAutoFinalize,
+        syncIdentity,
+        updateVaultIdentity
     } = useGiftBlitz();
     
     const [boxes, setBoxes] = useState<Box[]>([]);
@@ -53,7 +55,9 @@ export const MarketProvider: React.FC<{ children: ReactNode }> = ({ children }) 
                 tradeCount: repData ? repData.tradeCount : 0,
                 volume: repData ? repData.volume : 0,
                 disputes: repData ? repData.disputes : 0,
-                memberEpoch: repData ? repData.memberEpoch : null
+                memberEpoch: repData ? repData.memberEpoch : null,
+                publicKey: repData ? repData.publicKey : null,
+                vault: repData ? repData.vault : null
             }));
             
             if (repData) {
@@ -178,7 +182,9 @@ export const MarketProvider: React.FC<{ children: ReactNode }> = ({ children }) 
             claimRevealTimeout,
             claimAutoFinalize,
             mintProfile, 
-            refreshUserStats 
+            refreshUserStats,
+            syncIdentity,
+            updateVaultIdentity
         }}>
             {children}
         </MarketContext.Provider>

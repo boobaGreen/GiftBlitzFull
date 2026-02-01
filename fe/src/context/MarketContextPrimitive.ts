@@ -14,6 +14,8 @@ export interface MarketContextType {
     claimAutoFinalize: (boxId: string) => void;
     mintProfile: () => Promise<void>;
     refreshUserStats: () => Promise<void>;
+    syncIdentity: (vault: number[]) => Promise<boolean | undefined>;
+    updateVaultIdentity: (repNftId: string) => Promise<unknown>;
 }
 
 export const MarketContext = createContext<MarketContextType | undefined>(undefined);
