@@ -273,9 +273,9 @@ const TradeDetail: React.FC = () => {
                             {box.status === 'LOCKED' || box.status === 'REVEALED' || box.status === 'COMPLETED' ? (
                                 <>
                                     <div className={`p-4 rounded-xl bg-black/50 border border-white/10 font-mono text-2xl tracking-widest
-                                        ${(isRevealed || box.status === 'COMPLETED') ? 'text-white' : 'text-gray-600 blur-sm select-none'}`}>
-                                        {(isRevealed || box.status === 'COMPLETED') 
-                                            ? (decryptedCode || "CONFIRMED") 
+                                        ${isRevealed && decryptedCode ? 'text-white' : 'text-gray-600 blur-sm select-none'}`}>
+                                        {isRevealed && decryptedCode 
+                                            ? decryptedCode 
                                             : "••••-••••-••••-••••"}
                                     </div>
                                     
@@ -289,13 +289,16 @@ const TradeDetail: React.FC = () => {
                                         </button>
                                     )}
 
-                                    {isBuyer && box.status === 'REVEALED' && (
+                                    {isBuyer && (box.status === 'REVEALED' || box.status === 'COMPLETED') && (
                                         <button
                                             onClick={handleDecryptBuyer}
                                             disabled={isProcessing}
-                                            className="w-full py-3 rounded-xl bg-purple-500/20 text-purple-400 font-bold border border-purple-500/30 hover:bg-purple-500/30 transition-all flex items-center justify-center gap-2"
+                                            className={`w-full py-3 rounded-xl font-bold border transition-all flex items-center justify-center gap-2
+                                                ${box.status === 'COMPLETED' 
+                                                    ? 'bg-green-500/20 text-green-400 border-green-500/30 hover:bg-green-500/30' 
+                                                    : 'bg-purple-500/20 text-purple-400 border-purple-500/30 hover:bg-purple-500/30'}`}
                                         >
-                                            {isProcessing ? "Decrypting..." : decryptedCode ? (isRevealed ? "🙈 Hide Code" : "👁️ Show Code") : "🔐 Decrypt with my Secret Key"}
+                                            {isProcessing ? "Decrypting..." : decryptedCode ? (isRevealed ? "🙈 Hide Code" : "👁️ Show Code") : (box.status === 'COMPLETED' ? "👁️ View My Code" : "🔐 Decrypt with my Secret Key")}
                                         </button>
                                     )}
                                 </>
@@ -340,36 +343,71 @@ const TradeDetail: React.FC = () => {
                     transition={{ delay: 0.1 }}
                     className="p-6 rounded-3xl bg-slate-800/50 border border-white/5 space-y-4"
                 >
-                    <div className="flex items-center gap-3 mb-2">
-                        <TrendingUp className="w-5 h-5 text-cyan-400" />
-                        <h3 className="text-lg font-bold text-white">Financial Breakdown</h3>
-                    </div>
-                    
-                    <div className="space-y-3">
-                        <div className="flex justify-between items-center text-sm py-2 border-b border-white/5">
-                            <span className="text-gray-400">Card Face Value</span>
-                            <span className="text-white font-bold">{(box.value / 1_000_000_000).toFixed(2)} IOTA</span>
-                        </div>
-                        <div className="flex justify-between items-center text-sm py-2 border-b border-white/5">
-                            <span className="text-gray-400">Sale Price</span>
-                            <span className="text-cyan-400 font-bold">{(box.price / 1_000_000_000).toFixed(2)} IOTA</span>
-                        </div>
-                        
-                        <div className="space-y-4 pt-2">
-                            <div className="p-4 rounded-2xl bg-black/30 space-y-3">
-                                <div className="flex justify-between items-center text-sm">
-                                    <span className="text-gray-500 italic">Protocol Maintenance Fee (1%)</span>
-                                    <span className="text-purple-400 font-mono">- {((box.price * 0.01) / 1_000_000_000).toFixed(2)} IOTA</span>
+                    {box.status === 'DISPUTED' ? (
+                        <>
+                            {/* DISPUTED - Show burned stakes */}
+                            <div className="flex items-center gap-3 mb-2">
+                                <Flame className="w-5 h-5 text-red-400" />
+                                <h3 className="text-lg font-bold text-white">Burned Stakes</h3>
+                            </div>
+                            
+                            <div className="space-y-3">
+                                <div className="p-4 rounded-2xl bg-red-900/20 border border-red-500/30 space-y-3">
+                                    <div className="flex justify-between items-center text-sm py-2 border-b border-red-500/20">
+                                        <span className="text-gray-400">Seller Trust Deposit (100% of Value)</span>
+                                        <span className="text-red-400 font-bold line-through">{(box.value / 1_000_000_000).toFixed(2)} IOTA</span>
+                                    </div>
+                                    <div className="flex justify-between items-center text-sm py-2 border-b border-red-500/20">
+                                        <span className="text-gray-400">Buyer Trust Deposit (110% of Value)</span>
+                                        <span className="text-red-400 font-bold line-through">{((box.value * 1.1) / 1_000_000_000).toFixed(2)} IOTA</span>
+                                    </div>
+                                    <div className="flex justify-between items-center text-md pt-2">
+                                        <span className="text-white font-bold">Total Burned</span>
+                                        <span className="text-red-500 font-black flex items-center gap-2">
+                                            🔥 {((box.value * 2.1) / 1_000_000_000).toFixed(2)} IOTA
+                                        </span>
+                                    </div>
                                 </div>
-                                <div className="flex justify-between items-center text-md pt-2 border-t border-white/10">
-                                    <span className="text-white font-bold">{isSeller ? "Estimated Earnings" : "Seller Payout"}</span>
-                                    <span className="text-green-400 font-black">
-                                        {((box.price * 0.99) / 1_000_000_000).toFixed(2)} IOTA
-                                    </span>
+                                <p className="text-xs text-gray-500 text-center italic">
+                                    Both parties lost their trust deposits due to the dispute.
+                                </p>
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            {/* Normal transaction breakdown */}
+                            <div className="flex items-center gap-3 mb-2">
+                                <TrendingUp className="w-5 h-5 text-cyan-400" />
+                                <h3 className="text-lg font-bold text-white">Financial Breakdown</h3>
+                            </div>
+                            
+                            <div className="space-y-3">
+                                <div className="flex justify-between items-center text-sm py-2 border-b border-white/5">
+                                    <span className="text-gray-400">Card Face Value</span>
+                                    <span className="text-white font-bold">{(box.value / 1_000_000_000).toFixed(2)} IOTA</span>
+                                </div>
+                                <div className="flex justify-between items-center text-sm py-2 border-b border-white/5">
+                                    <span className="text-gray-400">Sale Price</span>
+                                    <span className="text-cyan-400 font-bold">{(box.price / 1_000_000_000).toFixed(2)} IOTA</span>
+                                </div>
+                                
+                                <div className="space-y-4 pt-2">
+                                    <div className="p-4 rounded-2xl bg-black/30 space-y-3">
+                                        <div className="flex justify-between items-center text-sm">
+                                            <span className="text-gray-500 italic">Protocol Maintenance Fee (1%)</span>
+                                            <span className="text-purple-400 font-mono">- {((box.price * 0.01) / 1_000_000_000).toFixed(2)} IOTA</span>
+                                        </div>
+                                        <div className="flex justify-between items-center text-md pt-2 border-t border-white/10">
+                                            <span className="text-white font-bold">{isSeller ? "Estimated Earnings" : "Seller Payout"}</span>
+                                            <span className="text-green-400 font-black">
+                                                {((box.price * 0.99) / 1_000_000_000).toFixed(2)} IOTA
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                        </>
+                    )}
                 </motion.div>
 
                 {/* TIMERS */}
