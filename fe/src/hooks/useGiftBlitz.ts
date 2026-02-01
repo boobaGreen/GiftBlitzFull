@@ -143,16 +143,29 @@ export const useGiftBlitz = () => {
         console.log(`Joining box ${boxId} with total payment ${totalRequired}...`);
         try {
             const result = await signAndExecute({ transaction: tx });
-            console.log("Join transaction successful:", result);
+            console.log("Join transaction submitted:", result.digest);
             if (result.digest) {
-                console.log(`View transaction on Explorer: https://explorer.rebased.iota.org/txblock/${result.digest}?network=testnet`);
+                console.log(`Explorer link: https://explorer.rebased.iota.org/txblock/${result.digest}?network=testnet`);
+                
+                // Wait for effects to verify on-chain success
+                const txData = await iotaClient.waitForTransaction({
+                    digest: result.digest,
+                    options: { showEffects: true }
+                });
+
+                if (txData.effects?.status.status !== 'success') {
+                    const errorMsg = txData.effects?.status.error || "Execution failed";
+                    console.error("On-chain execution failed:", errorMsg);
+                    throw new Error(`Transaction failed: ${errorMsg}`);
+                }
+                console.log("On-chain execution SUCCESS.");
             }
             return result;
         } catch (err) {
             console.error("Join transaction failed:", err);
             throw err;
         }
-    }, [account, signAndExecute, PACKAGE_ID, MODULE]);
+    }, [account, signAndExecute, iotaClient, PACKAGE_ID, MODULE]);
 
     /**
      * Reveal Key (Seller)

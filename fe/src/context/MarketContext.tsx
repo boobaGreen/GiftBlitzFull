@@ -19,6 +19,7 @@ export const MarketProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     
     const [boxes, setBoxes] = useState<Box[]>([]);
     const [repNftId, setRepNftId] = useState<string | null>(null);
+    const [lastActionTime, setLastActionTime] = useState(0);
     const [user, setUser] = useState<User>({
         ...MOCK_USER,
         address: account?.address.toLowerCase() || MOCK_USER.address.toLowerCase(),
@@ -66,9 +67,16 @@ export const MarketProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     // Initial sync and periodic refresh
     React.useEffect(() => {
         refreshBoxes();
-        const interval = setInterval(refreshBoxes, 10000); // Poll every 10s
+        const interval = setInterval(() => {
+            // Skip sync if we just performed an action (wait for indexing)
+            if (Date.now() - lastActionTime < 8000) {
+                console.log("Skipping polling due to recent action (avoiding stale data)");
+                return;
+            }
+            refreshBoxes();
+        }, 10000); // Poll every 10s
         return () => clearInterval(interval);
-    }, [refreshBoxes]);
+    }, [refreshBoxes, lastActionTime]);
 
     // Sync on account change
     React.useEffect(() => {
@@ -82,6 +90,7 @@ export const MarketProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 
     const cancelBox = async (boxId: string) => {
         try {
+            setLastActionTime(Date.now());
             await callCancelBox(boxId);
             setBoxes(prev => prev.map(box =>
                 box.id === boxId ? { ...box, status: 'CANCELED' } : box
@@ -94,6 +103,7 @@ export const MarketProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 
     const claimRevealTimeout = async (boxId: string) => {
         try {
+            setLastActionTime(Date.now());
             await callClaimRevealTimeout(boxId);
             setBoxes(prev => prev.map(box =>
                 box.id === boxId ? { ...box, status: 'EXPIRED' } : box
@@ -106,6 +116,7 @@ export const MarketProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 
     const claimAutoFinalize = async (boxId: string) => {
         try {
+            setLastActionTime(Date.now());
             await callClaimAutoFinalize(boxId);
             setBoxes(prev => prev.map(box =>
                 box.id === boxId ? { ...box, status: 'COMPLETED' } : box
@@ -117,16 +128,19 @@ export const MarketProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     };
 
     const mintProfile = async () => {
+        setLastActionTime(Date.now());
         await callMintProfile();
         // Delay slightly for indexing and then refresh
         setTimeout(refreshUserStats, 2000);
     };
 
     const addBox = (newBox: Box) => {
+        setLastActionTime(Date.now());
         setBoxes((prev) => [newBox, ...prev]);
     };
 
     const joinBox = (boxId: string, buyerAddress: string) => {
+        setLastActionTime(Date.now());
         setBoxes(prev => prev.map(box => {
             if (box.id === boxId) {
                 return { ...box, status: 'LOCKED', buyer: buyerAddress };
@@ -136,6 +150,7 @@ export const MarketProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     };
 
     const finalizeBox = (boxId: string) => {
+        setLastActionTime(Date.now());
         setBoxes(prev => prev.map(box =>
             box.id === boxId ? { ...box, status: 'COMPLETED' } : box
         ));
@@ -143,6 +158,7 @@ export const MarketProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     };
 
     const disputeBox = (boxId: string) => {
+        setLastActionTime(Date.now());
         setBoxes(prev => prev.map(box =>
             box.id === boxId ? { ...box, status: 'DISPUTED' } : box
         ));

@@ -62,8 +62,9 @@ const PurchaseBox: React.FC = () => {
             
             setIsProcessing(false);
             navigate('/profile'); 
-        } catch (error) {
+        } catch (error: any) {
             console.error("Purchase failed:", error);
+            alert("Purchase FAILED!\n\nReason: " + (error.message || "Unknown error. Check console for details."));
             setIsProcessing(false);
         }
     };
