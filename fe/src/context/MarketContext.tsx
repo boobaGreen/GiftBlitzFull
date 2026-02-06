@@ -100,11 +100,18 @@ export const MarketProvider: React.FC<{ children: ReactNode }> = ({ children }) 
                     const match = localKeys.publicKey.length === onChainPub.length && 
                                  localKeys.publicKey.every((b, i) => b === onChainPub[i]);
                     
+                    
                     setKeyMatch(match);
 
-                    if (!match && !isSyncModalOpen && !isSyncDismissed) {
-                        console.log("Proactive Sync: Identity mismatch detected, opening modal...");
-                        setIsSyncModalOpen(true);
+                    if (!match) {
+                        console.warn("Identity Mismatch Details:");
+                        console.warn("Local Key:", Array.from(localKeys.publicKey));
+                        console.warn("Chain Key:", Array.from(onChainPub));
+                        
+                        if (!isSyncModalOpen && !isSyncDismissed) {
+                             console.log("Proactive Sync: Identity mismatch detected, opening modal...");
+                             setIsSyncModalOpen(true);
+                        }
                     }
                 } else {
                     setKeyMatch(null);
