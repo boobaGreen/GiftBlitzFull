@@ -26,7 +26,7 @@ GiftBlitz replaces "Trust" with "Trust Deposit". We use a **Double Trust Deposit
 
 ### 3.1 The Mechanism
 
-1.  **Seller** deposits the Gift Card (Encrypted) + **Trust Deposit** (100% of Price).
+1.  **Seller** deposits the Gift Card (Encrypted) + **Trust Deposit** (100% of Card Face Value).
 2.  **Buyer** deposits the Payment + **Trust Deposit** (>100% of Card Value, e.g., 110%).
 3.  **The Rule:** If everything goes well, everyone gets their Trust Deposit back. If there is a dispute, **BOTH** lose their Trust Deposit (Confiscated by **Protocol Treasury**).
 
@@ -106,7 +106,7 @@ sequenceDiagram
 
 ```
 ┌────────────────────────────────────────────────────────────────┐
-│  REGOLA 1: SELLER TRUST DEPOSIT = 100% PREZZO | BUYER TRUST DEPOSIT = 110% VALORE  │
+│  REGOLA 1: SELLER TRUST DEPOSIT = 100% FACE VALUE | BUYER TRUST DEPOSIT = 110% VALUE  │
 │  REGOLA 2: TRADE CAPS crescono con i trade completati         │
 │  REGOLA 3: UNA DISPUTA = RESET DEL CAP A ZERO                 │
 └────────────────────────────────────────────────────────────────┘
@@ -120,13 +120,13 @@ sequenceDiagram
 
 | Chi                  | Cosa Deposita          | Calcolo                                                |
 | -------------------- | ---------------------- | ------------------------------------------------------ |
-| **Seller**           | Trust Deposit          | 100% del Prezzo × €80 = **€80**                        |
+| **Seller**           | Trust Deposit          | 100% del Valore Carta × €100 = **€100**                |
 | **Buyer**            | Prezzo + Trust Deposit | €80 + (110% del Valore × €100) = €80 + €110 = **€190** |
-| **Totale in Escrow** |                        | **€270**                                               |
+| **Totale in Escrow** |                        | **€290**                                               |
 
 **Se tutto OK:**
 
-- Seller riceve: €80 (trust deposit) + €80 (prezzo) - €0.80 (1% fee) = **€159.20**
+- Seller riceve: €100 (trust deposit) + €80 (prezzo) - €0.80 (1% fee) = **€179.20**
 - Buyer riceve: €110 (trust deposit) + carta da €100 = **€210 di valore**
 
 **Se DISPUTA (Treasury):**
@@ -356,15 +356,16 @@ In the _Mutually Assured Destruction_ model, disputed funds are sent to a **Prot
 
 ### 8.3 The "Anatomy of a Trade" (Who Wins?)
 
-Here is the exact financial breakdown of a typical trade with **asymmetric trust deposit** (Seller 100% Price, Buyer 110% Value).
+Here is the exact financial breakdown of a typical trade with **asymmetric trust deposit** (Seller 100% Face Value, Buyer 110% Value).
 
 | Logic          | 💰 Seller (Alice)                                             | 🛍️ Buyer (Mario)                                                   | 🤖 Protocol      |
 | :------------- | :------------------------------------------------------------ | :----------------------------------------------------------------- | :--------------- |
 | **Asset**      | Amazon Card ($50)                                             | Needs Amazon Stuff                                                 | -                |
 | **Action**     | Sells for $40                                                 | Buys for $40                                                       | Facilitates      |
-| **Collateral** | Locks $40 (100% Price)                                        | Locks $55 (110% Value)                                             | Holds funds      |
-| **Result**     | +$40 (Price) <br> +$40 (Trust Deposit Back) <br> -$0.40 (Fee) | -$40 (Price) <br> +$55 (Trust Deposit Back) <br> +$50 (Card Value) | +$0.40 (Fee)     |
+| **Collateral** | Locks $50 (100% Value)                                        | Locks $55 (110% Value)                                             | Holds funds      |
+| **Result**     | +$40 (Price) <br> +$50 (Trust Deposit Back) <br> -$0.40 (Fee) | -$40 (Price) <br> +$55 (Trust Deposit Back) <br> +$50 (Card Value) | +$0.40 (Fee)     |
 | **NET**        | **+$39.60 Cash**                                              | **+$15.00 Value** (Paid $40 for $50 card + Trust Deposit Back)     | **+$0.40**       |
-| **Safety**     | Protected by Mario's Trust Deposit ($55)                      | Protected by Alice's Trust Deposit ($40)                           | Mutually Assured |
+| **Safety**     | Protected by Mario's Trust Deposit ($55)                      | Protected by Alice's Trust Deposit ($50)                           | Mutually Assured |
 
 > **Why Asymmetric Trust Deposit?** If Buyer Trust Deposit < Card Value, a scammer could profit by burning. By setting Subscriber Trust Deposit (110%) > Card Value, honesty becomes the ONLY rational choice.
+> **Why Seller 100% Face Value?** Ensures that "double-spending" results in a net loss (Alice loses $50 deposit to gain <$50 elsewhere), making fraud irrational.

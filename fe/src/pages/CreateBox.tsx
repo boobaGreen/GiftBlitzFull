@@ -30,7 +30,7 @@ const CreateBox: React.FC = () => {
     const nanoValue = Math.round(numValue * IOTA_MULTIPLIER);
 
     const stakeMultiplier = 1.0; 
-    const calculatedStake = Math.round(numPrice * stakeMultiplier);
+    const calculatedStake = Math.round(numValue * stakeMultiplier);
 
     const selectedCard = GIFT_CARDS_DATA.find(c => c.value === cardType) || GIFT_CARDS_DATA[0];
 
@@ -282,7 +282,7 @@ const CreateBox: React.FC = () => {
                             <span className="text-cyan-400/70 text-sm">IOTA</span>
                         </div>
                         <p className="text-[10px] text-gray-500">
-                            Seller Trust Deposit: 100% Price. (Buyer deposits 100% Price for safety).
+                            Seller Trust Deposit: 100% Face Value. (Safety First: prevents double-spending).
                         </p>
                     </div>
 

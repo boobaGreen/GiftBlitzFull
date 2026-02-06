@@ -7,7 +7,7 @@
 ## 🎯 Le 4 Regole Fondamentali
 
 ```
-1️⃣ TRUST DEPOSIT = Seller: 100% Prezzo | Buyer: 110% Valore Card
+1️⃣ TRUST DEPOSIT = Seller: 100% FACE VALUE | Buyer: 110% Valore Card
 2️⃣ SELLER può vendere fino a €200 dal giorno 1
 3️⃣ BUYER ha caps progressivi (anti-griefing)
 4️⃣ UNA DISPUTA = reset del trade count a 0
@@ -21,12 +21,12 @@
 
 | Chi        | Cosa Deposita        | Esempio (carta €100, prezzo €80) |
 | ---------- | -------------------- | -------------------------------- |
-| **Seller** | 100% del prezzo      | €80                              |
+| **Seller** | 100% Face Value      | €100                             |
 | **Buyer**  | Prezzo + 110% Valore | €80 + €110 (110% di €100) = €190 |
 
 ### Se tutto OK ✅
 
-- Seller riceve: trust deposit + prezzo - 1% fee = **€159.20**
+- Seller riceve: trust deposit + prezzo - 1% fee = **€179.20**
 - Buyer riceve: trust deposit indietro + carta = **€80 + carta da €100**
 
 ### Se DISPUTA (Protocol Treasury) 🏦
@@ -277,7 +277,7 @@ T+72h:    Seller NON ha rivelato → ⚠️ Buyer richiede rimborso + compensazi
 
 | Aspetto                 | Seller               | Buyer                 |
 | ----------------------- | -------------------- | --------------------- |
-| **Trust Deposit**       | 100% del prezzo      | 110% del Valore Card  |
+| **Trust Deposit**       | 100% del Face Value  | 110% del Valore Card  |
 | **Max Trade (nuovo)**   | €200                 | €30                   |
 | **Max Trade (veteran)** | €200                 | €200                  |
 | **Fee**                 | 1% sul prezzo        | 0%                    |

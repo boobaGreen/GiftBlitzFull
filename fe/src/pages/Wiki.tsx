@@ -14,7 +14,7 @@ const Wiki: React.FC = () => {
             id: 'trust-deposits',
             title: 'Trust Deposits',
             icon: <Shield className="w-5 h-5 text-purple-400" />,
-            content: "Both buyers and sellers lock a 'Trust Deposit' (100% of face value) into the smart contract. If the trade succeeds, deposits are returned. If a dispute occurs, they are sent to the Protocol Treasury."
+            content: "Both buyers and sellers lock a 'Trust Deposit' (Seller: 100% of Face Value, Buyer: 110% of Face Value) into the smart contract. If the trade succeeds, deposits are returned."
         },
         {
             id: 'timeout-reveal',
@@ -156,7 +156,7 @@ const Wiki: React.FC = () => {
                     <h2 className="text-3xl font-bold text-white">Trust via Mutually Assured Destruction</h2>
                     <p className="text-gray-400">
                         The "Dispute" mechanism is the ultimate deterrent. If a seller sends a fake code, the buyer can <strong>CONFISCATE</strong> both stakes to the Protocol Treasury. 
-                        Since the price is only 90% of the value, the seller loses more than they could ever gain by scamming.
+                        Since the seller deposits 100% of the Face Value, attempting to double-spend results in a guaranteed net loss.
                     </p>
                     <div className="flex flex-wrap justify-center gap-8 mt-8">
                         <div className="text-center">

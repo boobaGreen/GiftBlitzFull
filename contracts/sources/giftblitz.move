@@ -118,8 +118,8 @@ module giftblitz::giftblitz {
         // Validation
         assert!(price > 0 && face_value > 0, EIncorrectStake);
         
-        // Seller Stake must be 100% of Price
-        assert!(coin::value(&stake_coin) == price, EIncorrectStake);
+        // Seller Stake must be 100% of Face Value (Safety First)
+        assert!(coin::value(&stake_coin) == face_value, EIncorrectStake);
 
         let id = object::new(ctx);
         // let box_id = object::uid_to_inner(&id); // unused

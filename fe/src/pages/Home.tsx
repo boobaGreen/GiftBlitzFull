@@ -204,7 +204,7 @@ const Home: React.FC = () => {
                             </div>
                             <h3 className="text-2xl font-bold text-white mb-3">Smart Escrow</h3>
                             <p className="text-gray-400 leading-relaxed mb-4">
-                                <b>Dual-Deposit Game Theory</b>. Seller deposits 100%. Buyer deposits 110%. Cheating burns both.
+                                <b>Dual-Deposit Game Theory</b>. Seller deposits 100% Face Value. Buyer deposits 110% Value. Cheating burns both.
                             </p>
                             <span className="text-xs font-bold text-pink-500 uppercase tracking-wider">Trust Deposits</span>
                         </motion.div>

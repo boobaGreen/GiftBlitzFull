@@ -16,10 +16,9 @@
 
 ### 1.1 Trust Deposit Venditore (Seller)
 
-| Livello | Trust Deposit Richiesto | Logica                             |
-| ------- | ----------------------- | ---------------------------------- |
-| Newbie  | 200% del valore         | Alta garanzia → costruisce fiducia |
-| Pro     | 100% del valore         | Ridotto per utenti verificati      |
+| Livello | Trust Deposit Richiesto | Logica                                                              |
+| ------- | ----------------------- | ------------------------------------------------------------------- |
+| Base    | **100% del FACE VALUE** | **Safety First:** Impedisce double-spending con perdita netta certa |
 
 ### 1.2 Trust Deposit Compratore (Buyer)
 
@@ -42,63 +41,47 @@
 
 ---
 
-### ❓ Q1: È necessario il 200% di trust deposit per venditori Newbie?
+### ❓ Q1: Perché il 100% del Face Value (e non del prezzo)?
 
-#### Esempio Completo: Carta €50, Prezzo €40
+#### Esempio: Vendo Carta €100 a Prezzo €80
 
 **Setup Iniziale:**
 | Attore | Deposita | Totale Bloccato |
 |--------|----------|-----------------|
-| Seller Newbie | Trust Deposit = 200% di €40 = **€80** | €80 |
-| Buyer | Prezzo €40 + Trust Deposit 50% = €20 | **€60** |
-| **Totale in Escrow** | | **€140** |
+| Seller | Trust Deposit = 100% di €100 (Face Value) = **€100** | €100 |
+| Buyer | Prezzo €80 + Trust Deposit €110 (110% V) = €190 | **€190** |
+| **Totale in Escrow** | | **€290** |
 
 ---
 
 **🟢 SCENARIO A: Trade Onesto (Happy Path)**
 
-1. Seller rivela chiave, Buyer verifica codice → funziona!
-2. Buyer conferma → Smart Contract rilascia fondi
+1. Seller rivela chiave, Buyer verifica → conferma.
+2. Smart Contract rilascia fondi.
 
-| Attore | Riceve Indietro                           | Guadagno Netto                |
-| ------ | ----------------------------------------- | ----------------------------- |
-| Seller | €80 (trust deposit) + €40 (prezzo) = €120 | **+€40** (ha venduto carta)   |
-| Buyer  | €20 (trust deposit) + Carta (€50)         | **+€10** (pagato €40 per €50) |
-
----
-
-**🔴 SCENARIO B: Seller Froda (codice invalido, Buyer disputa)**
-
-1. Seller fornisce codice falso/usato
-2. Buyer verifica → non funziona → DISPUTA
-3. **Treasury Confiscation:** Tutti i fondi vengono inviati al Fondo di Protocollo (€140)
-
-| Attore | Perde                            | Risultato |
-| ------ | -------------------------------- | --------- |
-| Seller | **€80** (trust deposit)          | -€80      |
-| Buyer  | **€60** (prezzo + trust deposit) | -€60      |
-
-**Analisi Frode Seller:**
-
-```
-Guadagno potenziale se buyer non disputa: €40 (il prezzo)
-Perdita se buyer disputa: €80 (il trust deposit)
-Rapporto: €40 guadagno vs €80 perso → FRODE NON CONVIENE ✅
-```
+| Attore | Riceve Indietro                            | Guadagno Netto            |
+| ------ | ------------------------------------------ | ------------------------- |
+| Seller | €100 (trust deposit) + €80 (prezzo) = €180 | **+€80** (vendo carta)    |
+| Buyer  | €110 (trust deposit) + Carta (€100)        | **+€20** (valore - costo) |
 
 ---
 
-**🟡 SCENARIO C: Seller Froda e Buyer NON disputa (accetta perdita)**
+**🔴 SCENARIO B: Double Spending (Seller Froda)**
 
-Questo è il caso "migliore" per il fraudatore:
+Il Seller vende la carta qui E su un'altra piattaforma per €80.
+Qui fornisce codice invalido (o già usato). Buyer disputa.
 
-| Attore | Riceve                             | Risultato         |
-| ------ | ---------------------------------- | ----------------- |
-| Seller | €80 (trust deposit) + €40 (prezzo) | **+€40** (rubato) |
-| Buyer  | Nulla                              | **-€60**          |
+1. **Altrove:** Seller incassa €80.
+2. **Qui (GiftBlitz):** Buyer disputa → Treasury confisca il deposito del Seller (€100).
+3. **Calcolo Seller:**
+   - Guadagno Altrove: +€80
+   - Perdita Qui: -€100
+   - **NETTO: -€20 💸**
 
-**MA:** Questo richiede un buyer che NON disputa un codice falso.
-Con buyer razionale, lo scenario B è quello che accade → Frode non conviene.
+**Conclusione:**
+Con il deposito al **100% del Face Value**, il double-spending è matematicamente una **perdita certa**.
+Il truffatore non va in pari (come accadrebbe col deposito sul prezzo), ma ci rimette soldi.
+**FRODE IRRAZIONALE E COSTOSA. ✅**
 
 ---
 
