@@ -79,17 +79,16 @@ module giftblitz::reputation {
     }
 
     /// Get Max Buy Value based on trades
-    /// 0-2 trades: €30 (approx 30 * 10^6 micros if 1€ = 1M) -> logic needs exchange rate
-    /// For MVP we return raw units. let's assume 1 IOTA = 1 cent for simplicity or just raw steps
-    /// 0-2: 30
-    /// 3-6: 50
-    /// 7-14: 100
-    /// 15+: 200
+    /// Returns value in nanoIOTA (1 IOTA = 1_000_000_000 nano)
+    /// 0-2 trades: 30 IOTA
+    /// 3-6 trades: 50 IOTA
+    /// 7-14 trades: 100 IOTA
+    /// 15+ trades: 200 IOTA
     public fun get_max_buy_value(nft: &ReputationNFT): u64 {
         let t = nft.total_trades;
-        if (t <= 2) { return 30 }
-        else if (t <= 6) { return 50 }
-        else if (t <= 14) { return 100 }
-        else { return 200 }
+        if (t <= 2) { return 30_000_000_000 }
+        else if (t <= 6) { return 50_000_000_000 }
+        else if (t <= 14) { return 100_000_000_000 }
+        else { return 200_000_000_000 }
     }
 }
