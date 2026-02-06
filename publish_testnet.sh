@@ -9,7 +9,7 @@ echo "🌍 Starting Deployment to IOTA TESTNET..."
 
 # 1. Publish the package
 # We use --gas-budget 1000000000 (1.0 IOTA) which is standard for Testnet faucet coins
-PUBLISH_RES=$($IOTA_BIN client publish --gas-budget 1000000000 --json $CONTRACTS_DIR)
+PUBLISH_RES=$($IOTA_BIN client publish --gas-budget 1000000000 --json $CONTRACTS_DIR 2>&1)
 
 if [ $? -ne 0 ]; then
     echo "❌ Deployment failed!"
@@ -17,10 +17,8 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# 2. Extract IDs using grep/sed (Registry removed - using GraphQL Indexer instead)
+# 2. Extract Package ID
 PACKAGE_ID=$(echo "$PUBLISH_RES" | grep -oP '(?<="packageId": ")[^"]+' | head -n 1)
-ADMIN_CAP_ID=$(echo "$PUBLISH_RES" | grep -B 15 '::giftblitz::AdminCap' | grep -oP '(?<="objectId": ")[^"]+' | tail -n 1)
-TREASURY_ID=$(echo "$PUBLISH_RES" | grep -B 15 '::giftblitz::Treasury' | grep -oP '(?<="objectId": ")[^"]+' | tail -n 1)
 
 if [ -z "$PACKAGE_ID" ]; then
     echo "❌ Failed to extract PACKAGE_ID. Check deployment output."
@@ -28,10 +26,30 @@ if [ -z "$PACKAGE_ID" ]; then
 fi
 
 echo "✅ Package Deployed: $PACKAGE_ID"
-echo "✅ Admin Cap: $ADMIN_CAP_ID"
-echo "✅ Treasury ID: $TREASURY_ID"
 
-# 3. Update contracts.json
+# 3. Extract AdminCap ID (owned object)
+ADMIN_CAP_ID=$(echo "$PUBLISH_RES" | grep -oP '"objectType": "[^"]*::giftblitz::AdminCap"[^}]*"objectId": "[^"]+' | grep -oP '(?<="objectId": ")[^"]+' | head -n 1)
+
+if [ -z "$ADMIN_CAP_ID" ]; then
+    echo "⚠️ Could not extract AdminCap ID automatically."
+    echo "   Run: ./iota-service/iota client objects --json | grep -B 5 '::giftblitz::AdminCap'"
+else
+    echo "✅ Admin Cap: $ADMIN_CAP_ID"
+fi
+
+# 4. Extract Treasury ID (shared object)
+TREASURY_ID=$(echo "$PUBLISH_RES" | grep -oP '"objectType": "[^"]*::giftblitz::Treasury"[^}]*"objectId": "[^"]+' | grep -oP '(?<="objectId": ")[^"]+' | head -n 1)
+
+if [ -z "$TREASURY_ID" ]; then
+    echo "⚠️ Could not extract Treasury ID automatically."
+    echo "   Treasury is a SHARED object. Find it manually:"
+    echo "   1. Get deploy tx digest from above"
+    echo "   2. Run: ./iota-service/iota client tx-block <DIGEST> --json | grep -A 5 'Treasury'"
+else
+    echo "✅ Treasury ID: $TREASURY_ID"
+fi
+
+# 5. Update contracts.json
 cat <<EOF > $FRONTEND_CONFIG
 {
   "NETWORK": "testnet",
@@ -41,6 +59,14 @@ cat <<EOF > $FRONTEND_CONFIG
 }
 EOF
 
-echo "✨ Frontend configuration updated to TESTNET in $FRONTEND_CONFIG"
+echo ""
+echo "✨ Frontend configuration updated in $FRONTEND_CONFIG"
+echo ""
+echo "📋 VERIFY THESE VALUES BEFORE TESTING:"
+cat $FRONTEND_CONFIG
+echo ""
+echo "🔍 If Treasury ID is wrong, find the correct one with:"
+echo "   ./iota-service/iota client tx-block <DEPLOY_TX_DIGEST> --json | grep -A 5 'Treasury'"
+echo ""
 echo "🚀 Deployment Complete!"
 echo "View on Explorer: https://explorer.rebased.iota.org/object/$PACKAGE_ID?network=testnet"
