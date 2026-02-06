@@ -145,31 +145,18 @@ export const useGiftBlitz = () => {
 
     /**
      * Join/Purchase an existing GiftBox
+     * REQUIRES existing ReputationNFT for buyer caps enforcement
      */
     const joinBox = useCallback(async (boxId: string, totalRequired: number) => {
         if (!account) return;
 
-        const tx = new Transaction();
-
-        // ATOMIC MINT: If user doesn't have a profile, mint it now
+        // REQUIRE existing profile for buyer caps check
         const myNft = await getReputationNFT(account.address);
         if (!myNft) {
-            console.log("Atomic Profile Minting: User has no profile, adding mint_profile to transaction...");
-            const myKeys = await getEncryptionKeyPair(account.address);
-            const vaultMessage = "Authorize Identity Vault Creation\nThis allows you to recover your encrypted trades on any device/domain.";
-            const { signature: vaultSignature } = await signPersonalMessage({
-                message: new TextEncoder().encode(vaultMessage)
-            });
-            const vault = await encryptVault(myKeys.privateKey, vaultSignature);
-            
-            tx.moveCall({
-                target: `${PACKAGE_ID}::reputation::mint_profile`,
-                arguments: [
-                    tx.pure.vector('u8', Array.from(myKeys.publicKey)),
-                    tx.pure.vector('u8', Array.from(vault)),
-                ],
-            });
+            throw new Error("You must create a profile first before joining a box. Go to Profile page and click 'Create Profile'.");
         }
+
+        const tx = new Transaction();
         
         const [paymentAndStakeCoin] = tx.splitCoins(tx.gas, [tx.pure.u64(totalRequired)]);
 
@@ -178,6 +165,7 @@ export const useGiftBlitz = () => {
             arguments: [
                 tx.object(boxId),
                 paymentAndStakeCoin,
+                tx.object(myNft.id),  // Pass buyer's ReputationNFT for caps check
                 tx.object('0x6'),
             ],
         });
@@ -207,7 +195,7 @@ export const useGiftBlitz = () => {
             console.error("Join transaction failed:", err);
             throw err;
         }
-    }, [account, signAndExecute, iotaClient, PACKAGE_ID, MODULE, getReputationNFT, signPersonalMessage]);
+    }, [account, signAndExecute, iotaClient, PACKAGE_ID, MODULE, getReputationNFT]);
 
     /**
      * Reveal Key (Seller)

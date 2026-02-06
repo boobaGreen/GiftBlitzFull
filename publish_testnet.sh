@@ -17,9 +17,8 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# 2. Extract IDs using grep/sed
+# 2. Extract IDs using grep/sed (Registry removed - using GraphQL Indexer instead)
 PACKAGE_ID=$(echo "$PUBLISH_RES" | grep -oP '(?<="packageId": ")[^"]+' | head -n 1)
-REGISTRY_ID=$(echo "$PUBLISH_RES" | grep -B 15 '::registry::Registry' | grep -oP '(?<="objectId": ")[^"]+' | tail -n 1)
 ADMIN_CAP_ID=$(echo "$PUBLISH_RES" | grep -B 15 '::giftblitz::AdminCap' | grep -oP '(?<="objectId": ")[^"]+' | tail -n 1)
 TREASURY_ID=$(echo "$PUBLISH_RES" | grep -B 15 '::giftblitz::Treasury' | grep -oP '(?<="objectId": ")[^"]+' | tail -n 1)
 
@@ -29,7 +28,6 @@ if [ -z "$PACKAGE_ID" ]; then
 fi
 
 echo "✅ Package Deployed: $PACKAGE_ID"
-echo "✅ Registry ID: $REGISTRY_ID"
 echo "✅ Admin Cap: $ADMIN_CAP_ID"
 echo "✅ Treasury ID: $TREASURY_ID"
 
@@ -38,7 +36,6 @@ cat <<EOF > $FRONTEND_CONFIG
 {
   "NETWORK": "testnet",
   "PACKAGE_ID": "$PACKAGE_ID",
-  "REGISTRY_ID": "$REGISTRY_ID",
   "ADMIN_CAP_ID": "$ADMIN_CAP_ID",
   "TREASURY_ID": "$TREASURY_ID"
 }
