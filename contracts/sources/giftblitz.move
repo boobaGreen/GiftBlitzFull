@@ -14,6 +14,7 @@ module giftblitz::giftblitz {
     const ENotAuthorized: u64 = 2;
     const ETimeNotReached: u64 = 3;
     const EKeyAlreadyRevealed: u64 = 4;
+    const EBuyerCapExceeded: u64 = 5;
 
     // States
     const STATE_OPEN: u8 = 0;
@@ -160,11 +161,16 @@ module giftblitz::giftblitz {
     public entry fun join_box(
         box: &mut GiftBox,
         payment_and_stake: Coin<IOTA>,
+        buyer_rep_nft: &ReputationNFT,
         clock: &Clock,
         ctx: &mut TxContext
     ) {
         // Validation
         assert!(box.state == STATE_OPEN, EInvalidState);
+        
+        // Buyer Caps Check: verify buyer's reputation allows this purchase
+        let max_buy_value = reputation::get_max_buy_value(buyer_rep_nft);
+        assert!(box.price <= max_buy_value, EBuyerCapExceeded);
         
         // Buyer MUST pay: Price + 110% Face Value (Stake)
         let required_stake = (box.face_value * 110) / 100;
@@ -263,7 +269,7 @@ module giftblitz::giftblitz {
         });
     }
 
-    /// Buyer raises a dispute (e.g. key invalid) -> Confiscate to Treasury
+    /// Buyer raises a dispute (e.g. key invalid) -> Burn trust deposits, return price to buyer
     public entry fun dispute(
         box: &mut GiftBox,
         buyer_rep_nft: &mut ReputationNFT,
@@ -277,15 +283,17 @@ module giftblitz::giftblitz {
         // Can dispute in REVEALED state
         assert!(box.state == STATE_REVEALED, EInvalidState);
 
-        // Send all funds to Treasury
+        // 1. Return PRICE to Buyer (they only lose trust deposit, not payment)
         let payment_val = balance::value(&box.payment);
         let payment = balance::split(&mut box.payment, payment_val);
-        balance::join(&mut treasury.balance, payment);
+        transfer::public_transfer(coin::from_balance(payment, ctx), sender);
 
+        // 2. Send Seller Trust Deposit to Treasury (BURN)
         let s_val = balance::value(&box.seller_stake);
         let s_stake = balance::split(&mut box.seller_stake, s_val);
         balance::join(&mut treasury.balance, s_stake);
 
+        // 3. Send Buyer Trust Deposit to Treasury (BURN)
         let b_val = balance::value(&box.buyer_stake);
         let b_stake = balance::split(&mut box.buyer_stake, b_val);
         balance::join(&mut treasury.balance, b_stake);

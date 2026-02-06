@@ -1,66 +1,101 @@
 # GiftBlitz - IOTA Hackathon Alignment 🚀
 
-> **Alignment Check:** How GiftBlitz implements the Core Workshops
-
-| Workshop Track | GiftBlitz Feature | Status |
-| :--- | :--- | :--- |
-| **Core 1-3 (Move)** | **Smart Escrow & Shared Objects** | ✅ Ready (The "Box") |
-| **IOTA Notarization** | **Immutable Audit Trail** | ✅ Ready (Event Logs) |
-| **IOTA Identity** | **Soulbound Reputation NFT** | ✅ Ready (SBT Identity) |
+> **Alignment Check:** How GiftBlitz uses IOTA Services
+>
+> **IMPORTANTE**: Usiamo **IOTA Tokenization** (L1), NON IOTA Trust Framework (Identity/Hierarchies)
 
 ---
 
-## 1. 🆔 IDENTITY TRACK (Workshop: IOTA Identity)
+## 📋 Hackathon Requirements vs GiftBlitz
 
-**Our Solution:** Soulbound Reputation NFT (ERC-5192)
-Instead of just a "DID", we gamify Identity. The NFT *is* the user's on-chain Passport.
-
-| Requirement | GiftBlitz Implementation |
-| :--- | :--- |
-| **Verifiable Credentials** | The NFT metadata (Trades, Volume, Disputes) |
-| **Sybil Resistance** | Soulbound mechanism (Non-transferable) |
-| **Reputation History** | On-chain state tracking |
+| Requirement                    | Our Implementation                           | Status |
+| ------------------------------ | -------------------------------------------- | ------ |
+| **Real-world problem**         | P2P Gift Card Exchange (€23B/year lost)      | ✅     |
+| **Built on IOTA L1 (Move)**    | Smart Contracts: Escrow, Reputation, Dispute | ✅     |
+| **IOTA Service: Tokenization** | GiftBox + Soulbound ReputationNFT            | ✅     |
 
 ---
 
-## 2. 📜 NOTARIZATION TRACK (Workshop: TrueDoc)
-![Notarization Architecture](./notarization_infographic.png)
+## 🪙 IOTA TOKENIZATION (Primary Integration)
 
-**Our Solution:** The "Trustless Audit Trail"
-Every step of the trade is a notarized event on the Tangle.
+### What We Tokenize
 
-| Event | Data Notarized | Purpose |
-| :--- | :--- | :--- |
-| `BoxCreated` | Hash + Seller Stake | Proof of Commitment |
-| `TradeConfirmed` | Timestamps + Release | Proof of Success |
-| `TradeDisputed` | **Burn Proof** | Proof of Resolution |
+| Token/Object      | Type                               | Purpose                         |
+| ----------------- | ---------------------------------- | ------------------------------- |
+| **GiftBox**       | Shared Object                      | Escrow for gift card trades     |
+| **ReputationNFT** | Soulbound Token (Non-Transferable) | On-chain identity & trust score |
+
+### GiftBox Tokenization
+
+```
+GiftBox (Shared Object):
+├── face_value: €100 (tokenized value)
+├── price: €80 (listing price)
+├── seller_stake: Balance<IOTA> (collateral)
+├── buyer_stake: Balance<IOTA> (collateral)
+├── encrypted_code: vector<u8> (the secret)
+└── state: OPEN → LOCKED → REVEALED → COMPLETED
+```
+
+### ReputationNFT (Soulbound)
+
+```
+ReputationNFT:
+├── owner: address (permanent binding)
+├── total_trades: u64
+├── total_volume: u64
+├── disputes: u64
+└── NON TRANSFERABLE (Soulbound)
+```
+
+> ⚠️ **Chiarimento**: Il nostro ReputationNFT **NON** è "IOTA Identity" (DID/Verifiable Credentials).
+> È un **Custom Soulbound Token** che usiamo come identity proxy. Rientra in **Tokenization**.
 
 ---
 
-## 3. 🧠 CORE / MOVE TRACK (Workshops: Core 1-3)
+## 📜 NOTARIZATION (Secondary - Via Events)
 
-**Our Solution:** Smart Escrow & Shared Objects
-GiftBlitz uses advanced Move patterns strictly aligned with the "Core" workshops.
+Ogni azione genera un evento on-chain che funge da **audit trail immutabile**:
 
-*   **Shared Objects (Core 2):** The `GiftBox` is a shared object that anyone can interact with (Buy), but only under specific logic conditions.
-*   **Capabilities (Core 3):** The `AdminCap` or `SellerCap` ensures only the right person can perform actions (like "Reveal Code").
-*   **Dynamic Fields:** Used to attach the "Secret Code" securely to the Box object.
+| Event            | What It Notarizes                            |
+| ---------------- | -------------------------------------------- |
+| `BoxCreated`     | Seller committed stake + encrypted code hash |
+| `BoxLocked`      | Buyer joined with stake + payment            |
+| `KeyRevealed`    | Seller revealed decryption key               |
+| `TradeFinalized` | Successful completion                        |
+| `TradeDisputed`  | Conflict resolution (burn proof)             |
+
+> **Nota**: Questo è notarization "leggero" via eventi Move, non il servizio IOTA Notarization formale.
 
 ---
 
+## 🧠 MOVE SMART CONTRACTS (Core)
+
+| Move Pattern       | Our Usage                          |
+| ------------------ | ---------------------------------- |
+| **Shared Objects** | `GiftBox` - anyone can interact    |
+| **Owned Objects**  | `ReputationNFT` - bound to user    |
+| **Capabilities**   | `AdminCap` for treasury operations |
+| **Events**         | Audit trail for all state changes  |
+
 ---
 
-## 🏆 Hackathon Coverage Summary
+## ❌ What We Do NOT Use
 
-We are hitting **5 out of 6** key workshops perfectly:
+| IOTA Service                   | Why Not Used                                                |
+| ------------------------------ | ----------------------------------------------------------- |
+| **IOTA Identity (DID)**        | Not needed for MVP. Could add for "Verified Seller" v2      |
+| **IOTA Hierarchies**           | For trust chains (CA → SubCA). Not applicable to P2P trades |
+| **IOTA Notarization (formal)** | We use Move Events instead                                  |
 
-| Workshop | GiftBlitz Status | Note |
-| :--- | :--- | :--- |
-| **Core 1 (Intro)** | ✅ **Covered** | Base Logic |
-| **Core 2 (Shared Obj)** | ✅ **Covered** | The `GiftBox` Listing |
-| **Core 3 (Caps)** | ✅ **Covered** | Admin & Seller Permissions |
-| **Notarization** | ✅ **Covered** | Event Logging (Audit) |
-| **Identity** | ✅ **Covered** | Soulbound NFT (Custom) |
-| **Gas Station** | ⏳ *Future* | Could add "Sponsored Tx" later |
+---
 
-**Conclusion:** The project is perfectly aligned with the technical requirements. We don't need to force other services. 🚀
+## 🏆 Hackathon Eligibility Summary
+
+| Requirement        | Met? | How                          |
+| ------------------ | ---- | ---------------------------- |
+| Real-world problem | ✅   | €23B gift card waste problem |
+| IOTA L1 Move       | ✅   | All logic in Move contracts  |
+| IOTA Tokenization  | ✅   | GiftBox + ReputationNFT      |
+
+**Conclusion**: GiftBlitz is eligible via **IOTA Tokenization on L1**. We do NOT claim Trust Framework/Identity/Hierarchies. 🚀

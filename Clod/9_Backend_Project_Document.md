@@ -101,15 +101,9 @@ graph TB
 └── fun get_max_buy_value(trades) → buyer caps
 ```
 
-### 4.3 `registry.move` (On-Chain Indexing)
+````
 
-```
-📦 registry
-├── struct GlobalRegistry (Shared)
-│   └── boxes_by_seller, boxes_by_buyer
-│
-└── entry fun register_box/register_purchase
-```
+> **Note:** On-chain indexing via `registry.move` is no longer used. We use **IOTA GraphQL Indexer** for querying boxes (see section 5.3).
 
 ---
 
@@ -183,7 +177,7 @@ query GetOpenBoxes {
     }
   }
 }
-```
+````
 
 **Integrazione Frontend:**
 
@@ -213,8 +207,7 @@ contracts/
 ├── Move.toml
 ├── sources/
 │   ├── giftblitz.move
-│   ├── reputation.move
-│   └── registry.move
+│   └── reputation.move
 └── tests/
     └── giftblitz_tests.move
 ```
