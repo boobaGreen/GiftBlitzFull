@@ -117,7 +117,7 @@ export const useGiftBlitz = () => {
                 });
             }
 
-            const [stakeCoin] = tx.splitCoins(tx.gas, [tx.pure.u64(price)]);
+            const [stakeCoin] = tx.splitCoins(tx.gas, [tx.pure.u64(faceValue)]);
 
             tx.moveCall({
                 target: `${PACKAGE_ID}::${MODULE}::create_box`,
