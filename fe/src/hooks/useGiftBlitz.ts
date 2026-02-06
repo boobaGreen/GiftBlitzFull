@@ -355,17 +355,39 @@ export const useGiftBlitz = () => {
     const syncIdentity = useCallback(async (vault: number[]) => {
         if (!account) return;
         
-        const message = "Authorize Identity Vault Access\nThis will secure your encryption keys on the blockchain.";
-        const { signature } = await signPersonalMessage({
-             message: new TextEncoder().encode(message) 
-        });
-
-        const privateKey = await decryptVault(new Uint8Array(vault), signature);
+        let privateKey: CryptoKey;
         
-        // 1. Export Private JWK (contains coordinates x, y)
+        // 1. Try NEW Standard Message ("Access")
+        const messageNew = "Authorize Identity Vault Access\nThis will secure your encryption keys on the blockchain.";
+        
+        try {
+            console.log("Attempting sync with STANDARD message...");
+            const { signature } = await signPersonalMessage({
+                message: new TextEncoder().encode(messageNew) 
+            });
+            privateKey = await decryptVault(new Uint8Array(vault), signature);
+        } catch (e) {
+            console.warn("Standard sync failed, trying LEGACY message...", e);
+            
+            // 2. Fallback to LEGACY Message ("Creation") for older profiles
+            const messageLegacy = "Authorize Identity Vault Creation\nThis allows you to recover your encrypted trades on any device/domain.";
+            const { signature: sigLegacy } = await signPersonalMessage({
+                    message: new TextEncoder().encode(messageLegacy)
+            });
+            
+            try {
+                privateKey = await decryptVault(new Uint8Array(vault), sigLegacy);
+                console.log("Legacy sync SUCCESS!");
+            } catch (legacyError) {
+                console.error("All sync attempts failed.");
+                throw legacyError;
+            }
+        }
+
+        // 3. Export Private JWK (contains coordinates x, y)
         const privJwk = await crypto.subtle.exportKey('jwk', privateKey) as JsonWebKey;
         
-        // 2. Extract public part and export as raw to match getEncryptionKeyPair expectations
+        // 4. Extract public part and export as raw to match getEncryptionKeyPair expectations
         const pubKey = await crypto.subtle.importKey(
             'jwk',
             {
@@ -382,7 +404,7 @@ export const useGiftBlitz = () => {
         const pubBuffer = await crypto.subtle.exportKey('raw', pubKey);
         const pubBytes = new Uint8Array(pubBuffer);
 
-        // 3. Save to local storage
+        // 5. Save to local storage
         const addr = account.address.toLowerCase();
         localStorage.setItem(`gb_sec_pub_${addr}`, JSON.stringify(Array.from(pubBytes)));
         localStorage.setItem(`gb_sec_priv_${addr}`, JSON.stringify(privJwk));

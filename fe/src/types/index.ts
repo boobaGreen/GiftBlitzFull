@@ -75,6 +75,7 @@ export interface User {
     memberEpoch?: number | null;
     publicKey?: string | null; // Hex string of encryption public key
     vault?: number[] | null;   // NEW: Encrypted Hub Private Key
+    repNftId?: string | null;  // NEW: ID of the Reputation NFT
 }
 
 // Caps ASIMMETRICI: Seller può vendere fino a €200 subito, Buyer ha caps progressivi

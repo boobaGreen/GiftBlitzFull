@@ -7,9 +7,10 @@ interface SyncIdentityModalProps {
     onSync: () => Promise<void>;
     onClose: () => void;
     isSyncing: boolean;
+    onReset?: () => Promise<void>; // Optional reset handler
 }
 
-const SyncIdentityModal: React.FC<SyncIdentityModalProps> = ({ isOpen, onSync, onClose, isSyncing }) => {
+const SyncIdentityModal: React.FC<SyncIdentityModalProps> = ({ isOpen, onSync, onClose, isSyncing, onReset }) => {
     return (
         <AnimatePresence>
             {isOpen && (
@@ -55,14 +56,31 @@ const SyncIdentityModal: React.FC<SyncIdentityModalProps> = ({ isOpen, onSync, o
                                     )}
                                 </button>
                                 
-                                <button
-                                    onClick={onClose}
-                                    disabled={isSyncing}
-                                    className="w-full py-3 rounded-xl bg-transparent text-gray-500 font-medium text-sm hover:text-gray-300 transition-colors"
-                                >
-                                    Remind me later
-                                </button>
-                            </div>
+                                    <button
+                                        onClick={onClose}
+                                        disabled={isSyncing}
+                                        className="w-full py-3 rounded-xl bg-transparent text-gray-500 font-medium text-sm hover:text-gray-300 transition-colors"
+                                    >
+                                        Remind me later
+                                    </button>
+
+                                </div>
+
+                            {/* Reset Option - Only shows if sync fails or user clicks detailed help */}
+                            {onReset && (
+                                <div className="mt-4 pt-4 border-t border-white/5">
+                                    <p className="text-xs text-red-400 mb-3">
+                                        Sync failed? Your blockchain vault might be corrupted or encrypted with a different wallet signature.
+                                    </p>
+                                    <button
+                                        onClick={onReset}
+                                        disabled={isSyncing}
+                                        className="text-xs font-bold text-red-500 hover:text-red-400 underline decoration-red-500/30 hover:decoration-red-400"
+                                    >
+                                        Force Reset: Overwrite On-Chain Vault
+                                    </button>
+                                </div>
+                            )}
 
                             <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-center gap-4 text-[10px] text-gray-500">
                                 <span className="flex items-center gap-1"><Shield className="w-3 h-3" /> E2E Encrypted</span>
