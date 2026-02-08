@@ -300,24 +300,69 @@ const CreateBox: React.FC = () => {
                     </div>
 
                     {/* Submit Button */}
-                    <button
-                        type="submit"
-                        disabled={isSubmitting}
-                        className={`w-full py-4 rounded-xl font-bold text-black flex items-center justify-center gap-2 transition-all ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-[0_0_30px_rgba(6,182,212,0.4)]'}`}
-                        style={{
-                            background: 'linear-gradient(90deg, #06b6d4 0%, #22d3ee 50%, #06b6d4 100%)',
-                            backgroundSize: '200% 100%',
-                        }}
-                    >
-                        {isSubmitting ? (
-                            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black"></div>
-                        ) : (
+                    {/* Validation: Enable only if all conditions met */}
+                    {(() => {
+                        const hasCode = code.trim().length > 0;
+                        const hasValidValue = numValue > 0 && numValue <= 200;
+                        const hasValidPrice = numPrice > 0;
+                        const priceIsLessThanValue = numPrice < numValue; // Price must be < value
+                        const hasSufficientBalance = user.balance >= calculatedStake;
+
+                        const isFormValid = hasCode && hasValidValue && hasValidPrice && priceIsLessThanValue && hasSufficientBalance;
+
+                        return (
                             <>
-                                <Lock className="w-5 h-5" />
-                                Lock & Publish
+                                {/* Validation Warnings */}
+                                {!isFormValid && (
+                                    <div className="space-y-2 mb-4">
+                                        {!hasCode && (
+                                            <p className="text-xs text-yellow-400/80 flex items-center gap-1">
+                                                <span className="text-yellow-400">⚠</span> Gift card code is required
+                                            </p>
+                                        )}
+                                        {!hasValidValue && numValue > 0 && (
+                                            <p className="text-xs text-yellow-400/80 flex items-center gap-1">
+                                                <span className="text-yellow-400">⚠</span> Card value must be between €1 and €200
+                                            </p>
+                                        )}
+                                        {!priceIsLessThanValue && numPrice > 0 && numValue > 0 && (
+                                            <p className="text-xs text-red-400 flex items-center gap-1">
+                                                <span>❌</span> Asking price must be less than card value by at least €0.01
+                                            </p>
+                                        )}
+                                        {!hasSufficientBalance && numValue > 0 && (
+                                            <p className="text-xs text-red-400 flex items-center gap-1">
+                                                <span>❌</span> Insufficient balance: You need {calculatedStake.toFixed(2)} IOTA but only have {user.balance.toFixed(2)} IOTA
+                                            </p>
+                                        )}
+                                    </div>
+                                )}
+
+                                <button
+                                    type="submit"
+                                    disabled={isSubmitting || !isFormValid}
+                                    className={`w-full py-4 rounded-xl font-bold text-black flex items-center justify-center gap-2 transition-all ${
+                                        isSubmitting || !isFormValid
+                                            ? 'opacity-50 cursor-not-allowed grayscale'
+                                            : 'hover:shadow-[0_0_30px_rgba(6,182,212,0.4)]'
+                                    }`}
+                                    style={{
+                                        background: 'linear-gradient(90deg, #06b6d4 0%, #22d3ee 50%, #06b6d4 100%)',
+                                        backgroundSize: '200% 100%',
+                                    }}
+                                >
+                                    {isSubmitting ? (
+                                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black"></div>
+                                    ) : (
+                                        <>
+                                            <Lock className="w-5 h-5" />
+                                            {isFormValid ? 'Lock & Publish' : 'Complete Form to Publish'}
+                                        </>
+                                    )}
+                                </button>
                             </>
-                        )}
-                    </button>
+                        );
+                    })()}
                 </form>
             </motion.div>
         </div>
