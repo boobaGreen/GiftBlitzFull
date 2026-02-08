@@ -155,9 +155,37 @@ Open: http://localhost:5173
 
 ## ❓ Troubleshooting
 
+### Missing AdminCap or Treasury ID after deployment
+
+If `publish_testnet.sh` couldn't extract IDs automatically, use these commands:
+
+**Find AdminCap ID:**
+
+```bash
+./iota-service/iota client objects --json | grep -B 5 '::giftblitz::AdminCap' | grep "objectId"
+```
+
+Look for the AdminCap with the correct `PACKAGE_ID` in the type field.
+
+**Find Treasury ID:**
+
+```bash
+# First, get the transaction digest from deployment output
+# Then run:
+./iota-service/iota client tx-block <TX_DIGEST> --json | grep -A 5 'Treasury'
+```
+
+The Treasury ID is in the `objectId` field of the Treasury object.
+
+**Check deployment output:**
+
+```bash
+cat /tmp/iota_deploy_output.json | jq '.'
+```
+
 ### Error: Treasury owned by wrong address
 
-Treasury ID in `contracts.json` is wrong. Use the command above to find the correct one.
+Treasury ID in `contracts.json` is wrong. Use the Treasury command above to find the correct one.
 
 ### Error: EBuyerCapExceeded (code 5)
 
@@ -166,3 +194,28 @@ Buyer is trying to purchase beyond their limit. With 0-2 trades the limit is 30 
 ### Error: Client/Server version mismatch
 
 Normal warning, can be ignored in most cases.
+
+### Full Manual Deployment
+
+If `publish_testnet.sh` fails completely:
+
+```bash
+# 1. Build contracts
+cd contracts
+../iota-service/iota move build
+
+# 2. Publish (save output!)
+../iota-service/iota client publish --gas-budget 1000000000 --json .
+
+# 3. Extract IDs from output
+# PACKAGE_ID: Look for "packageId" field
+# TX_DIGEST: Look for "digest" field in transaction
+
+# 4. Find AdminCap
+../iota-service/iota client objects --json | grep -B 5 '<PACKAGE_ID>::giftblitz::AdminCap'
+
+# 5. Find Treasury
+../iota-service/iota client tx-block <TX_DIGEST> --json | grep -A 5 'Treasury'
+
+# 6. Update fe/src/data/contracts.json manually
+```
