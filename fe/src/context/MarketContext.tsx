@@ -1,9 +1,11 @@
-import React, { useState, type ReactNode, useCallback } from 'react';
+import React, { useState, type ReactNode, useCallback, useMemo } from 'react';
 import type { Box, User } from '../types';
 import { MOCK_USER } from '../data/mockData';
 import { useCurrentAccount, useIotaClient } from '@iota/dapp-kit';
 import { useGiftBlitz } from '../hooks/useGiftBlitz';
 import { MarketContext } from './MarketContextPrimitive';
+import { useMarketplaceBoxes, useRefreshBoxes } from '../hooks/useMarketplaceBoxes';
+import { useBatchSellerReputations } from '../hooks/useSellerReputation';
 
 export const MarketProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const account = useCurrentAccount();
@@ -11,7 +13,6 @@ export const MarketProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     const { 
         getReputationNFT, 
         mintProfile: callMintProfile, 
-        fetchAllBoxes, 
         cancelBox: callCancelBox,
         claimRevealTimeout: callClaimRevealTimeout,
         claimAutoFinalize: callClaimAutoFinalize,
@@ -19,52 +20,38 @@ export const MarketProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         updateVaultIdentity
     } = useGiftBlitz();
     
-    const [boxes, setBoxes] = useState<Box[]>([]);
-    const [sellersRep, setSellersRep] = useState<Record<string, { trades: number, volume: number, disputes: number }>>({});
+    // React Query hooks for automatic caching and polling
+    const { data: cachedBoxes } = useMarketplaceBoxes();
+    const refreshBoxesQuery = useRefreshBoxes();
+    
+    // Get unique seller addresses from boxes
+    const sellerAddresses = useMemo(() => 
+        cachedBoxes ? Array.from(new Set(cachedBoxes.map(b => b.seller))) : [],
+        [cachedBoxes]
+    );
+    
+    // Batch fetch seller reputations
+    const { data: sellersRepData } = useBatchSellerReputations(sellerAddresses);
+    
     const [repNftId, setRepNftId] = useState<string | null>(null);
     const [isSyncModalOpen, setIsSyncModalOpen] = useState(false);
     const [isSyncDismissed, setIsSyncDismissed] = useState(false);
     const [keyMatch, setKeyMatch] = useState<boolean | null>(null);
-    const [lastActionTime, setLastActionTime] = useState(0);
     const [user, setUser] = useState<User>({
         ...MOCK_USER,
         address: account?.address.toLowerCase() || MOCK_USER.address.toLowerCase(),
         balance: 0,
     });
+    
+    // Use cached boxes from React Query, fallback to empty array
+    const boxes = cachedBoxes || [];
+    const sellersRep = sellersRepData || {};
 
+    // Wrapper for refreshBoxes that invalidates React Query cache
     const refreshBoxes = useCallback(async () => {
-        try {
-            const chainBoxes = await fetchAllBoxes();
-            console.log("Updating global boxes state with data from chain:", chainBoxes.length, "boxes found");
-            setBoxes(chainBoxes as Box[]);
-
-            // Batch fetch reputations for unique sellers
-            const uniqueSellers = Array.from(new Set(chainBoxes.map(b => b.seller)));
-            const repPromises = uniqueSellers.map(address => getReputationNFT(address));
-            const repResults = await Promise.all(repPromises);
-            
-            const newRepMap: Record<string, { trades: number, volume: number, disputes: number }> = {};
-            uniqueSellers.forEach((address, index) => {
-                const rep = repResults[index];
-                if (rep) {
-                    newRepMap[address.toLowerCase()] = {
-                        trades: rep.tradeCount,
-                        volume: rep.volume,
-                        disputes: rep.disputes
-                    };
-                } else {
-                    newRepMap[address.toLowerCase()] = {
-                        trades: 0,
-                        volume: 0,
-                        disputes: 0
-                    };
-                }
-            });
-            setSellersRep(newRepMap);
-        } catch (err) {
-            console.error("Failed to fetch boxes or reps:", err);
-        }
-    }, [fetchAllBoxes, getReputationNFT]);
+        console.log("Manual refresh: invalidating React Query cache...");
+        refreshBoxesQuery();
+    }, [refreshBoxesQuery]);
 
     const refreshUserStats = useCallback(async () => {
         if (!account) return;
@@ -125,19 +112,8 @@ export const MarketProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         }
     }, [account, iotaClient, getReputationNFT, isSyncModalOpen, isSyncDismissed]);
 
-    // Initial sync and periodic refresh
-    React.useEffect(() => {
-        refreshBoxes();
-        const interval = setInterval(() => {
-            // Skip sync if we just performed an action (wait for indexing)
-            if (Date.now() - lastActionTime < 8000) {
-                console.log("Skipping polling due to recent action (avoiding stale data)");
-                return;
-            }
-            refreshBoxes();
-        }, 10000); // Poll every 10s
-        return () => clearInterval(interval);
-    }, [refreshBoxes, lastActionTime]);
+    // No need for manual polling - React Query handles this automatically!
+    // useMarketplaceBoxes already polls every 10s with 30s cache
 
     // Sync on account change
     React.useEffect(() => {
@@ -153,11 +129,7 @@ export const MarketProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 
     const cancelBox = async (boxId: string) => {
         try {
-            setLastActionTime(Date.now());
             await callCancelBox(boxId);
-            setBoxes(prev => prev.map(box =>
-                box.id === boxId ? { ...box, status: 'CANCELED' } : box
-            ));
             // Immediate refresh to remove canceled box from Market
             setTimeout(() => refreshBoxes(), 2000);
             setTimeout(refreshUserStats, 2000);
@@ -168,11 +140,8 @@ export const MarketProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 
     const claimRevealTimeout = async (boxId: string) => {
         try {
-            setLastActionTime(Date.now());
             await callClaimRevealTimeout(boxId);
-            setBoxes(prev => prev.map(box =>
-                box.id === boxId ? { ...box, status: 'EXPIRED' } : box
-            ));
+            setTimeout(() => refreshBoxes(), 2000);
             setTimeout(refreshUserStats, 2000);
         } catch (err) {
             console.error("Claim timeout failed:", err);
@@ -181,11 +150,8 @@ export const MarketProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 
     const claimAutoFinalize = async (boxId: string) => {
         try {
-            setLastActionTime(Date.now());
             await callClaimAutoFinalize(boxId);
-            setBoxes(prev => prev.map(box =>
-                box.id === boxId ? { ...box, status: 'COMPLETED' } : box
-            ));
+            setTimeout(() => refreshBoxes(), 2000);
             setTimeout(refreshUserStats, 2000);
         } catch (err) {
             console.error("Claim auto-finalize failed:", err);
@@ -193,45 +159,33 @@ export const MarketProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     };
 
     const mintProfile = async () => {
-        setLastActionTime(Date.now());
         await callMintProfile();
         // Delay slightly for indexing and then refresh
         setTimeout(refreshUserStats, 2000);
     };
 
-    const addBox = (newBox: Box) => {
-        setLastActionTime(Date.now());
-        setBoxes((prev) => [newBox, ...prev]);
-        // Immediate refresh to show new box in Market
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const addBox = (_newBox: Box) => {
+        // Immediate refresh via React Query cache invalidation
         setTimeout(() => refreshBoxes(), 2000);
     };
 
-    const joinBox = (boxId: string, buyerAddress: string) => {
-        setLastActionTime(Date.now());
-        setBoxes(prev => prev.map(box => {
-            if (box.id === boxId) {
-                return { ...box, status: 'LOCKED', buyer: buyerAddress };
-            }
-            return box;
-        }));
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const joinBox = (_boxId: string, _buyerAddress: string) => {
         // Immediate refresh to remove bought box from Market
         setTimeout(() => refreshBoxes(), 2000);
         setTimeout(refreshUserStats, 2000);
     };
 
-    const finalizeBox = (boxId: string) => {
-        setLastActionTime(Date.now());
-        setBoxes(prev => prev.map(box =>
-            box.id === boxId ? { ...box, status: 'COMPLETED' } : box
-        ));
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const finalizeBox = (_boxId: string) => {
+        setTimeout(() => refreshBoxes(), 2000);
         setTimeout(refreshUserStats, 2000);
     };
 
-    const disputeBox = (boxId: string) => {
-        setLastActionTime(Date.now());
-        setBoxes(prev => prev.map(box =>
-            box.id === boxId ? { ...box, status: 'DISPUTED' } : box
-        ));
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const disputeBox = (_boxId: string) => {
+        setTimeout(() => refreshBoxes(), 2000);
         setTimeout(refreshUserStats, 2000);
     };
 

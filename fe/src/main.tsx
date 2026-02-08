@@ -8,7 +8,17 @@ import '@iota/dapp-kit/dist/index.css'
 import './index.css'
 import App from './App.tsx'
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 30000, // Cache data for 30 seconds
+      gcTime: 5 * 60 * 1000, // Keep unused data in cache for 5 minutes (was cacheTime in v4)
+      refetchOnWindowFocus: false, // Don't refetch when user switches tabs
+      retry: 1, // Only retry failed queries once
+      refetchOnReconnect: true, // Refetch when internet reconnects
+    },
+  },
+});
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
