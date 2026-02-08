@@ -135,7 +135,7 @@ Fund a single address for testing:
 
 To fund multiple test wallets at once (useful for multi-user testing):
 
-1. Create a file `batch_faucet.sh`:
+1. Create a file `faucet.sh`:
 
 ```bash
 #!/bin/bash
@@ -162,8 +162,8 @@ echo "✅ All wallets funded!"
 2. Make it executable and run:
 
 ```bash
-chmod +x batch_faucet.sh
-./batch_faucet.sh
+chmod +x faucet.sh
+./faucet.sh
 ```
 
 **Usage:** Great for testing multi-user scenarios (marketplace, disputes, concurrent trades, etc.)
