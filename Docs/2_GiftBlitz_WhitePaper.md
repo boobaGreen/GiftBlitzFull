@@ -161,12 +161,12 @@ sequenceDiagram
 
 #### Caps for BUYER (Who Buys)
 
-| Completed Trades | Max Purchase | How to Get There  |
-| ---------------- | ------------ | ----------------- |
-| **0-2**          | €30          | First day         |
-| **3-6**          | €50          | After 3 OK trades |
-| **7-14**         | €100         | After 7 OK trades |
-| **15+**          | €200         | Veteran user      |
+| Completed Trades   | Max Purchase | How to Get There  |
+| ------------------ | ------------ | ----------------- |
+| **Newcomer (0-2)** | €30          | First day         |
+| **Verified (3-6)** | €50          | After 3 OK trades |
+| **Pro (7-14)**     | €100         | After 7 OK trades |
+| **Veteran (15+)**  | €200         | Veteran user      |
 
 **Practical Example:**
 
