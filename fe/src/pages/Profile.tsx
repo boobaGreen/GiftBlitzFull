@@ -172,7 +172,7 @@ const Profile: React.FC = () => {
                             </div>
                             <div className="p-3 rounded-xl bg-black/30 border border-white/5">
                                 <div className="flex items-center gap-2 mb-1">
-                                    <Shield className="w-4 h-4 text-green-400" />
+                                    <Shield className="w-4 h-4 text-orange-400" />
                                     <span className="text-xs text-gray-500">Dispute</span>
                                 </div>
                                 <p className="text-lg font-bold text-white">{user.disputes}</p>

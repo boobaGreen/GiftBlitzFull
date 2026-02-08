@@ -103,33 +103,23 @@ const Market: React.FC = () => {
                     <span className="text-sm font-medium">Filters</span>
                 </button>
 
-                {/* Safe Buy Toggle & Info */}
-                <div className="relative flex items-center">
+                {/* In My Range Toggle with integrated help */}
+                <div className="relative">
                     <button
                         onClick={() => setShowSafeOnly(!showSafeOnly)}
+                        onMouseEnter={() => setShowTooltip(true)}
+                        onMouseLeave={() => setShowTooltip(false)}
                         className={`flex items-center gap-3 px-5 py-3 rounded-2xl border transition-all ${showSafeOnly
                             ? 'bg-cyan-500/10 border-cyan-500/50 text-cyan-400'
                             : 'bg-slate-800/60 border-white/10 text-gray-400 hover:border-white/20'
                             }`}
                     >
                         <Shield className={`w-5 h-5 ${showSafeOnly ? 'fill-cyan-400/20' : ''}`} />
-                        <div className="text-left">
-                            <div className="text-xs font-bold uppercase tracking-wider">Unlocked</div>
-                            <div className="text-[10px] opacity-70">My Limit: €{maxBuyValue}</div>
+                        <div className="text-left flex-1">
+                            <div className="text-xs font-bold uppercase tracking-wider">In My Range</div>
+                            <div className="text-[10px] opacity-70">Limit: €{maxBuyValue}</div>
                         </div>
-                    </button>
-
-                    {/* Info Icon */}
-                    <button
-                        className="ml-2 p-2 text-gray-500 hover:text-cyan-400 transition-colors"
-                        onMouseEnter={() => setShowTooltip(true)}
-                        onMouseLeave={() => setShowTooltip(false)}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            setShowTooltip(!showTooltip);
-                        }}
-                    >
-                        <HelpCircle className="w-5 h-5" />
+                        <HelpCircle className="w-4 h-4 opacity-50" />
                     </button>
 
                     {/* Modern Tooltip */}

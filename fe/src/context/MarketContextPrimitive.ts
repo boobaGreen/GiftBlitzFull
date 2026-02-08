@@ -14,6 +14,7 @@ export interface MarketContextType {
     claimAutoFinalize: (boxId: string) => void;
     mintProfile: () => Promise<void>;
     refreshUserStats: () => Promise<void>;
+    refreshBoxes: () => Promise<void>;
     syncIdentity: (vault: number[]) => Promise<boolean | undefined>;
     updateVaultIdentity: (repNftId: string) => Promise<unknown>;
     isSyncModalOpen: boolean;

@@ -487,16 +487,6 @@ git push
    - TanglePay mobile in valutazione ma non integrato
    - **Impatto:** Limita adoption mobile-first users
 
-3. **⚠️ Dispute Resolution**
-   - Sistema attuale: BURN automatico (no arbitro)
-   - Edge case: bug software potrebbe causare BURN ingiusti
-   - **Mitigazione:** Admin può fare refund da Treasury in casi provati di bug
-
-4. **⚠️ Gas Costs**
-   - Ogni transazione (create, join, reveal, finalize) ha costo gas
-   - Su IOTA è basso ma non zero
-   - **Impatto:** Potrebbe essere barriera per trade piccoli (€5-€10)
-
 ---
 
 ## 🎯 Raccomandazioni

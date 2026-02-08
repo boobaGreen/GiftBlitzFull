@@ -19,7 +19,8 @@ const TradeDetail: React.FC = () => {
         disputeBox: localDispute, 
         cancelBox: localCancel,
         claimRevealTimeout: localClaimTimeout,
-        claimAutoFinalize: localClaimAutoFinalize
+        claimAutoFinalize: localClaimAutoFinalize,
+        refreshBoxes
     } = useMarket();
     const { revealKey, finalizeBox, disputeBox, getReputationNFT, claimRevealTimeout, claimAutoFinalize } = useGiftBlitz();
     const { showToast } = useNotifications();
@@ -31,6 +32,11 @@ const TradeDetail: React.FC = () => {
     const [, setForceUpdate] = useState(0); // Trigger re-render on timeout
 
     const TIMEOUT_MS = 259200000; // 72 hours
+
+    // Force refresh boxes when entering trade detail to prevent stale data
+    React.useEffect(() => {
+        refreshBoxes();
+    }, [id, refreshBoxes]);
 
     const box = boxes.find(b => b.id === id);
 

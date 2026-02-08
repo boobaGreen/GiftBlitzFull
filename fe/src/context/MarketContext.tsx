@@ -158,6 +158,8 @@ export const MarketProvider: React.FC<{ children: ReactNode }> = ({ children }) 
             setBoxes(prev => prev.map(box =>
                 box.id === boxId ? { ...box, status: 'CANCELED' } : box
             ));
+            // Immediate refresh to remove canceled box from Market
+            setTimeout(() => refreshBoxes(), 2000);
             setTimeout(refreshUserStats, 2000);
         } catch (err) {
             console.error("Cancel failed:", err);
@@ -200,6 +202,8 @@ export const MarketProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     const addBox = (newBox: Box) => {
         setLastActionTime(Date.now());
         setBoxes((prev) => [newBox, ...prev]);
+        // Immediate refresh to show new box in Market
+        setTimeout(() => refreshBoxes(), 2000);
     };
 
     const joinBox = (boxId: string, buyerAddress: string) => {
@@ -210,6 +214,9 @@ export const MarketProvider: React.FC<{ children: ReactNode }> = ({ children }) 
             }
             return box;
         }));
+        // Immediate refresh to remove bought box from Market
+        setTimeout(() => refreshBoxes(), 2000);
+        setTimeout(refreshUserStats, 2000);
     };
 
     const finalizeBox = (boxId: string) => {
@@ -242,6 +249,7 @@ export const MarketProvider: React.FC<{ children: ReactNode }> = ({ children }) 
             claimAutoFinalize,
             mintProfile, 
             refreshUserStats,
+            refreshBoxes,
             syncIdentity,
                 updateVaultIdentity,
                 isSyncModalOpen,

@@ -287,8 +287,8 @@ const BoxCard: React.FC<BoxCardProps> = ({ box, onClick }) => {
                                         <p className="text-[10px] text-gray-500">IOTA Vol</p>
                                     </div>
                                     <div className="p-3 rounded-xl bg-black/30 border border-white/5 relative">
-                                        {isLoadingStats && <div className="absolute inset-x-0 bottom-1 flex justify-center"><div className="w-1 h-3 bg-green-500 animate-pulse rounded-full"/></div>}
-                                        <Shield className="w-4 h-4 text-green-400 mx-auto mb-1" />
+                                        {isLoadingStats && <div className="absolute inset-x-0 bottom-1 flex justify-center"><div className="w-1 h-3 bg-orange-500 animate-pulse rounded-full"/></div>}
+                                        <Shield className="w-4 h-4 text-orange-400 mx-auto mb-1" />
                                         <p className="text-lg font-bold text-white">{displayStats.disputes}</p>
                                         <p className="text-[10px] text-gray-500">Disputes</p>
                                     </div>
