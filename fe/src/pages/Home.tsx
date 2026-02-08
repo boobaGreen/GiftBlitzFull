@@ -344,7 +344,7 @@ const Home: React.FC = () => {
               </div>
             </motion.div>
 
-            {/* TIER 2: Member Card */}
+            {/* TIER 2: Verified (Formerly Member) */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -357,22 +357,21 @@ const Home: React.FC = () => {
                 <div className="h-full bg-slate-900/50 rounded-[20px] p-6 flex flex-col overflow-hidden">
                   {/* Header */}
                   <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-xl font-black text-white">Member</h3>
-                    <div className="w-10 h-10 rounded-lg bg-cyan-900/30 flex items-center justify-center border border-cyan-500/20 text-cyan-400">
+                    <h3 className="text-lg font-black text-white">Verified</h3>
+                    <div className="w-8 h-8 rounded-lg bg-cyan-900/30 flex items-center justify-center border border-cyan-500/20 text-cyan-400 font-bold text-sm">
                       2
                     </div>
                   </div>
 
                   {/* NFT Data Block */}
-                  <div className="bg-black/40 rounded-xl p-4 border border-cyan-500/20 font-mono text-xs space-y-3 mb-6 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-20 h-20 bg-cyan-500/5 rounded-bl-full -mr-10 -mt-10" />
+                  <div className="bg-black/40 rounded-xl p-4 border border-cyan-500/20 font-mono text-[10px] space-y-3 mb-6 relative overflow-hidden">
                     <div className="flex justify-between border-b border-white/5 pb-2 relative z-10">
                       <span className="text-gray-500">status</span>
                       <span className="text-cyan-400">VERIFIED</span>
                     </div>
                     <div className="flex justify-between relative z-10">
                       <span className="text-gray-500">trades</span>
-                      <span className="text-white">3 - 14</span>
+                      <span className="text-white">3 - 6</span>
                     </div>
                     <div className="flex justify-between relative z-10">
                       <span className="text-gray-500">volume</span>
@@ -390,17 +389,72 @@ const Home: React.FC = () => {
                       Current Limit
                     </div>
                     <div className="flex items-baseline gap-2">
-                      <span className="text-3xl font-black text-white">
-                        €50 - €100
+                      <span className="text-2xl font-black text-white">
+                        €50
                       </span>
-                      <span className="text-sm text-gray-500">/ trade</span>
+                      <span className="text-xs text-gray-500">/ trade</span>
                     </div>
                   </div>
                 </div>
               </div>
             </motion.div>
 
-            {/* TIER 3: Veteran Card */}
+            {/* TIER 3: Professional (New) */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.15 }}
+              className="relative z-10 group"
+            >
+              <div className="absolute inset-0 bg-indigo-500/10 rounded-3xl blur-xl group-hover:bg-indigo-500/20 transition-colors" />
+              <div className="relative h-full bg-[#0f172a] p-1 rounded-3xl border border-indigo-500/30 shadow-[0_0_30px_rgba(99,102,241,0.1)] group-hover:shadow-[0_0_50px_rgba(99,102,241,0.2)] transition-shadow">
+                <div className="h-full bg-slate-900/50 rounded-[20px] p-6 flex flex-col overflow-hidden">
+                  {/* Header */}
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-lg font-black text-white">Pro</h3>
+                    <div className="w-8 h-8 rounded-lg bg-indigo-900/30 flex items-center justify-center border border-indigo-500/20 text-indigo-400 font-bold text-sm">
+                      3
+                    </div>
+                  </div>
+
+                  {/* NFT Data Block */}
+                  <div className="bg-black/40 rounded-xl p-4 border border-indigo-500/20 font-mono text-[10px] space-y-3 mb-6 relative overflow-hidden">
+                    <div className="flex justify-between border-b border-white/5 pb-2 relative z-10">
+                      <span className="text-gray-500">status</span>
+                      <span className="text-indigo-400">PRO</span>
+                    </div>
+                    <div className="flex justify-between relative z-10">
+                      <span className="text-gray-500">trades</span>
+                      <span className="text-white">7 - 14</span>
+                    </div>
+                    <div className="flex justify-between relative z-10">
+                      <span className="text-gray-500">volume</span>
+                      <span className="text-white">€500+</span>
+                    </div>
+                    <div className="flex justify-between relative z-10">
+                      <span className="text-gray-500">disputes</span>
+                      <span className="text-green-400">0</span>
+                    </div>
+                  </div>
+
+                  {/* Benefit */}
+                  <div className="mt-auto">
+                    <div className="text-[10px] text-indigo-300/70 uppercase tracking-widest mb-1">
+                      Current Limit
+                    </div>
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-2xl font-black text-white">
+                        €100
+                      </span>
+                      <span className="text-xs text-gray-500">/ trade</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* TIER 4: Veteran Card */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -423,16 +477,16 @@ const Home: React.FC = () => {
 
                   {/* Header */}
                   <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
+                    <h3 className="text-lg font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
                       Veteran
                     </h3>
-                    <div className="w-10 h-10 rounded-lg bg-purple-900/30 flex items-center justify-center border border-purple-500/20 text-purple-400">
-                      3
+                    <div className="w-8 h-8 rounded-lg bg-purple-900/30 flex items-center justify-center border border-purple-500/20 text-purple-400 font-bold text-sm">
+                      4
                     </div>
                   </div>
 
                   {/* NFT Data Block */}
-                  <div className="bg-black/40 rounded-xl p-4 border border-purple-500/30 font-mono text-xs space-y-3 mb-6 relative">
+                  <div className="bg-black/40 rounded-xl p-4 border border-purple-500/30 font-mono text-[10px] space-y-3 mb-6 relative">
                     <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-b from-purple-500/5 to-transparent pointer-events-none" />
                     <div className="flex justify-between border-b border-white/5 pb-2">
                       <span className="text-gray-500">status</span>
@@ -458,10 +512,10 @@ const Home: React.FC = () => {
                       Current Limit
                     </div>
                     <div className="flex items-baseline gap-2">
-                      <span className="text-3xl font-black text-white">
-                        €200+
+                      <span className="text-2xl font-black text-white">
+                        €200
                       </span>
-                      <span className="text-sm text-purple-400">Unlimited</span>
+                      <span className="text-xs text-purple-400">Max</span>
                     </div>
                   </div>
                 </div>
