@@ -1,6 +1,6 @@
-# GiftBlitz - Il Sistema di Reputazione NFT 🎖️
+# GiftBlitz - The NFT Reputation System 🎖️
 
-> **Perché usiamo un NFT Soulbound per la reputazione e come funziona**
+> **Why we use a Soulbound NFT for reputation and how it works**
 
 ### The Big Picture: Security, Speed & Utility
 ![Why Soulbound Master](./why_soulbound_master.png)
@@ -8,88 +8,88 @@
 
 ---
 
-### 🤔 E la Notarizzazione? (NFT vs Ledger)
+### 🤔 What about Notarization? (NFT vs Ledger)
 
-Hai chiesto giustamente: *"Ma non bastava la blockchain?"*
-La risposta è che **usiamo entrambe**, ma per scopi diversi. Immagina la differenza tra un **Estratto Conto** e il tuo **Credit Score**.
+You rightly asked: *"But wasn't the blockchain enough?"*
+The answer is that **we use both**, but for different purposes. Imagine the difference between a **Bank Statement** and your **Credit Score**.
 
-| Feature | **Notarizzazione (IOTA Tangle)** | **Soulbound NFT (Smart Contract)** |
+| Feature | **Notarization (IOTA Tangle)** | **Soulbound NFT (Smart Contract)** |
 | :--- | :--- | :--- |
-| **Cos'è?** | Il **Registro Completo** (Log) | Il **Punteggio Attuale** (Stato) |
-| **Dati** | "Trade #123 started", "Trade #123 locked", "Trade #123 dispute..." | "Level: 3", "Total Trades: 15" |
-| **Uso** | **Audit & Ricerca**: *"Fammi vedere esattamente cosa è successo nel trade X"* | **Accesso**: *"L'utente può entrare qui?"* (Sì/No immediato) |
-| **Analoga** | 📜 **L'Estratto Conto** (Migliaia di righe) | 💳 **La Carta Gold** (Un solo oggetto) |
+| **What is it?** | The **Complete Registry** (Log) | The **Current Score** (State) |
+| **Data** | "Trade #123 started", "Trade #123 locked", "Trade #123 dispute..." | "Level: 3", "Total Trades: 15" |
+| **Usage** | **Audit & Search**: *"Let me see exactly what happened in trade X"* | **Access**: *"Can the user enter here?"* (Yes/No immediate) |
+| **Analogy** | 📜 **The Bank Statement** (Thousands of lines) | 💳 **The Gold Card** (A single object) |
 
-**La Notarizzazione è la "Fonte della Verità"**. L'NFT è il **risultato calcolato** da quella verità, ottimizzato per essere usato dalle macchine (Smart Contract) e dagli umani (UI) in tempo reale.
+**Notarization is the "Source of Truth"**. The NFT is the **calculated result** from that truth, optimized to be used by machines (Smart Contract) and humans (UI) in real-time.
 
 ---
 
-## 🎯 A Cosa Serve il Reputation NFT?
+## 🎯 What is the Reputation NFT for?
 
-Il Reputation NFT è un **certificato on-chain** che traccia la tua storia su GiftBlitz. Serve a:
+The Reputation NFT is an **on-chain certificate** that tracks your history on GiftBlitz. It serves to:
 
-| Funzione | Perché È Importante |
+| Function | Why It's Important |
 |----------|---------------------|
-| **Tracciare Trade Count** | Determina i tuoi limiti di acquisto |
-| **Prevenire Sybil Attack** | Non puoi comprare/vendere reputazione |
-| **Trasparenza** | Tutti vedono la tua storia |
-| **Persistenza** | I dati sopravvivono anche se cambi wallet |
+| **Track Trade Count** | Determines your buying limits |
+| **Prevent Sybil Attack** | You cannot buy/sell reputation |
+| **Transparency** | Everyone sees your history |
+| **Persistence** | Data survives even if you switch wallets |
 
 ---
 
-## 🔒 Cos'è un NFT "Soulbound"?
+## 🔒 What is a "Soulbound" NFT?
 
-Un NFT Soulbound (SBT) è un token che **NON può essere trasferito o venduto**.
+A Soulbound NFT (SBT) is a token that **CANNOT be transferred or sold**.
 
 ```
-NFT Normale:           NFT Soulbound:
+Normal NFT:            Soulbound NFT:
 ┌─────────────┐        ┌─────────────┐
-│  Può essere │        │  Legato per │
-│  venduto    │        │  sempre al  │
-│  o regalato │        │  tuo wallet │
+│  Can be     │        │  Bound      │
+│  sold       │        │  forever to │
+│  or gifted  │        │  your wallet│
 └─────────────┘        └─────────────┘
       ↓                      ↓
    Tradable              NON Tradable
 ```
 
-### Perché Soulbound?
+### Why Soulbound?
 
-| Problema | Soluzione Soulbound |
+| Problem | Soulbound Solution |
 |----------|---------------------|
-| "Compro un account Pro da qualcuno" | ❌ Impossibile, l'NFT non si muove |
-| "Faccio 100 account e li farmo" | ❌ Costoso (1% fee × trade) + tempo |
-| "Vendo la mia reputazione" | ❌ L'NFT resta nel tuo wallet |
+| "I buy a Pro account from someone" | ❌ Impossible, the NFT doesn't move |
+| "I make 100 accounts and farm them" | ❌ Expensive (1% fee × trade) + time |
+| "I sell my reputation" | ❌ The NFT stays in your wallet |
 
-### 🛠️ Perché tecnicamente serve un NFT? (vs Log)
+### 🛠️ Why technically do we need an NFT? (vs Log)
 
-Potremmo semplicemente leggere lo storico delle transazioni sulla blockchain? Sì, ma sarebbe **inefficiente** per due motivi critici su IOTA/EVM:
+Could we simply read the transaction history on the blockchain? Yes, but it would be **inefficient** for two critical reasons on IOTA/EVM:
 
 ![Efficiency Comparison](./sbt_efficiency.png)
 
-1.  **Efficienza di Calcolo (Gas & Storage):**
-    *   **Log/Storia:** Per sapere se sei "affidabile", lo Smart Contract dovrebbe rileggere *tutte* le tue 100+ transazioni passate ogni volta che compri qualcosa. Questo costa calcolo (Gas) e su IOTA L1 richiederebbe un **Storage Deposit** crescente (dovresti bloccare sempre più IOTA per salvare i nuovi dati).
-    *   **NFT (Stato):** L'NFT è come una "variabile unica" orecisamente aggiornata. Leggere il tuo livello costa sempre **pochissimo ed è istantaneo**, sia che tu abbia fatto 1 trade o 1 milione.
+1.  **Computation Efficiency (Gas & Storage):**
+    *   **Log/History:** To know if you are "reliable", the Smart Contract would have to re-read *all* your 100+ past transactions every time you buy something. This costs computation (Gas) and on IOTA L1 would require increasing **Storage Deposit** (you would have to lock more and more IOTA to save new data).
+    *   **NFT (State):** The NFT is like a "single variable" precisely updated. Reading your level always costs **very little and is instant**, whether you have done 1 trade or 1 million.
 
-2.  **Componibilità Futura (Trust Lego):**
-    *   Un semplice "log" interno è visibile solo al nostro contratto.
-    *   Un **NFT Standard (ERC-721)** è un oggetto che "vive" nel tuo wallet.
-    *   *Esempio Futuro:* Un'altra dApp di prestiti su IOTA potrebbe dire: *"Se hai il Badge Veteran su GiftBlitz, ti diamo un prestito con collaterale più basso"*. Questo è impossibile senza un token standard.
+2.  **Future Composability (Trust Lego):**
+    *   A simple internal "log" is visible only to our contract.
+    *   A **Standard NFT (ERC-721)** is an object that "lives" in your wallet.
+    *   *Future Example:* Another lending dApp on IOTA might say: *"If you have the Veteran Badge on GiftBlitz, we give you a loan with lower collateral"*. This is impossible without a standard token.
 
 ---
 
-## 📊 Cosa Contiene il Reputation NFT?
+## 📊 What Does the Reputation NFT Contain?
 
 ```solidity
 struct ReputationNFT {
-    address owner;           // Il tuo wallet (fisso per sempre)
-    uint256 totalTrades;     // Quanti trade hai completato
-    uint256 totalVolume;     // Volume totale in € 
-    uint256 disputes;        // Quante dispute hai avuto
-    uint256 firstTradeTime;  // Quando hai iniziato
+    address owner;           // Your wallet (fixed forever)
+    uint256 totalTrades;     // How many trades you completed
+    uint256 totalVolume;     // Total volume in € 
+    uint256 disputes;        // How many disputes you had
+    uint256 firstTradeTime;  // When you started
 }
 ```
 
-### Esempio Pratico
+### Practical Example
 
 ```
 👤 Mario - Reputation NFT
@@ -110,54 +110,54 @@ struct ReputationNFT {
 
 ---
 
-## 🛡️ Come Protegge il Sistema?
+## 🛡️ How Does the System Protect?
 
-### 1. Anti-Sybil (Molti Account Fake)
+### 1. Anti-Sybil (Many Fake Accounts)
 
-**Senza NFT:**
+**Without NFT:**
 ```
-Attaccante crea 100 wallet → 100 identità pulite
-Può fare griefing infinito
+Attacker creates 100 wallets → 100 clean identities
+Can do infinite griefing
 ```
 
-**Con NFT Soulbound:**
+**With Soulbound NFT:**
 ```
-Attaccante crea 100 wallet → 100 NFT nuovi
-Ogni NFT parte da 0 trades → Max buy €30
-Per arrivare a €200: serve fare 15 trade reali × 100 account
-Costo: enorme tempo + fee
+Attacker creates 100 wallets → 100 new NFTs
+Each NFT starts from 0 trades → Max buy €30
+To reach €200: needs to do 15 real trades × 100 accounts
+Cost: huge time + fees
 ```
 
 ### 2. Anti-Reputation Farming
 
-**Scenario:** Utente fa trade con se stesso per gonfiare i numeri
+**Scenario:** User trades with themselves to inflate numbers
 
 ```
-Trade count = 15 → "Sbloccato" €200 max
-Ma costa: 15 × €30 × 1% = €4.50 in fee
-+ Tempo per ogni trade
-+ Se disputa per sbaglio = reset a 0
+Trade count = 15 → "Unlocked" €200 max
+But costs: 15 × €30 × 1% = €4.50 in fees
++ Time for each trade
++ If disputes by mistake = reset to 0
 ```
 
-### 3. Trasparenza Totale
+### 3. Total Transparency
 
-Quando compri da un seller, puoi vedere:
-- ✅ Quanti trade ha fatto
-- ✅ Quante dispute ha avuto (idealmente 0)
-- ✅ Da quanto tempo è sulla piattaforma
+When you buy from a seller, you can see:
+- ✅ How many trades they have done
+- ✅ How many disputes they have had (ideally 0)
+- ✅ How long they have been on the platform
 
 ---
 
-## 🎨 Come Appare Visivamente?
+## 🎨 How Does It Look Visually?
 
-L'NFT mostra un badge dinamico che cambia in base alla tua esperienza:
+The NFT shows a dynamic badge that changes based on your experience:
 
-| Trade Count | Badge | Colore |
+| Trade Count | Badge | Color |
 |-------------|-------|--------|
-| 0-2 | 🔵 Newcomer | Blu |
-| 3-6 | 🟢 Member | Verde |
-| 7-14 | 🟣 Trusted | Viola |
-| 15+ | 🟡 Veteran | Oro |
+| 0-2 | 🔵 Newcomer | Blue |
+| 3-6 | 🟢 Member | Green |
+| 7-14 | 🟣 Trusted | Purple |
+| 15+ | 🟡 Veteran | Gold |
 
 ```svg
 ┌────────────────────────┐
@@ -176,58 +176,58 @@ L'NFT mostra un badge dinamico che cambia in base alla tua esperienza:
 
 ## ❓ FAQ
 
-**Q: Quando ricevo il mio NFT?**
-> Automaticamente al tuo primo trade completato.
+**Q: When do I receive my NFT?**
+> Automatically upon your first completed trade.
 
-**Q: Posso avere più NFT su wallet diversi?**
-> Sì, ogni wallet ha il suo NFT con la sua storia separata.
+**Q: Can I have multiple NFTs on different wallets?**
+> Yes, each wallet has its own NFT with its separate history.
 
-**Q: Se perdo l'accesso al wallet, perdo la reputazione?**
-> Sì, la reputazione è legata al wallet. Usa un wallet sicuro!
+**Q: If I lose access to the wallet, do I lose reputation?**
+> Yes, reputation is tied to the wallet. Use a secure wallet!
 
-**Q: L'NFT costa gas per essere creato?**
-> Su IOTA l'NFT viene creato senza gas fee grazie alla feeless architecture.
+**Q: Does the NFT cost gas to be created?**
+> On IOTA the NFT is created without gas fees thanks to the feeless architecture.
 
-**Q: Se disputo, cosa succede al mio NFT?**
-> Il campo `disputes` aumenta di 1 e il `totalTrades` torna a 0.
+**Q: If I dispute, what happens to my NFT?**
+> The `disputes` field increases by 1 and `totalTrades` goes back to 0.
 
 ---
 
-## ✅ Conclusione: Serve Ancora l'NFT?
+## ✅ Conclusion: Is the NFT Still Needed?
 
-**SÌ, assolutamente!** Ecco perché:
+**YES, absolutely!** Here is why:
 
-| Senza NFT | Con NFT Soulbound |
+| Without NFT | With Soulbound NFT |
 |-----------|-------------------|
-| Chiunque può fingere di essere veterano | I dati sono on-chain e verificabili |
-| Puoi comprare account "Pro" | Impossibile trasferire reputazione |
-| Nessuna storia persistente | Tutto è tracciato per sempre |
-| Sybil attack facile | Sybil attack costoso e lento |
+| Anyone can pretend to be a veteran | Data is on-chain and verifiable |
+| You can buy "Pro" accounts | Impossible to transfer reputation |
+| No persistent history | Everything is tracked forever |
+| Easy Sybil attack | Expensive and slow Sybil attack |
 
-### Il Reputation NFT è la "carta d'identità" di GiftBlitz:
-- 🔒 **Non falsificabile** (on-chain)
-- 🔒 **Non trasferibile** (Soulbound)
-- 🔒 **Trasparente** (tutti possono verificare)
-- 🔒 **Persistente** (non si cancella)
+### The Reputation NFT is the "ID card" of GiftBlitz:
+- 🔒 **Unfalsifiable** (on-chain)
+- 🔒 **Non-transferable** (Soulbound)
+- 🔒 **Transparent** (everyone can verify)
+- 🔒 **Persistent** (cannot be deleted)
 
 ---
 
-## 🔧 Implementazione Tecnica
+## 🔧 Technical Implementation
 
 ```solidity
 // Standard: ERC-5192 (Soulbound Token Extension)
 // Network: IOTA EVM (ISC)
 
 interface ISoulbound {
-    // Blocca qualsiasi trasferimento
+    // Blocks any transfer
     function locked(uint256 tokenId) external view returns (bool);
-    // Sempre true per i nostri NFT
+    // Always true for our NFTs
 }
 
 contract GiftBlitzReputation is ERC721, ISoulbound {
     mapping(uint256 => ReputationData) public reputation;
     
-    // Override transfer per bloccare
+    // Override transfer to block
     function _beforeTokenTransfer(...) internal override {
         require(from == address(0), "Soulbound: non transferable");
     }
@@ -236,18 +236,18 @@ contract GiftBlitzReputation is ERC721, ISoulbound {
 
 ---
 
-## 📌 Riepilogo
+## 📌 Summary
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                    REPUTATION NFT                           │
 │                                                             │
-│  ✅ Traccia: trades, volume, dispute, tempo                │
-│  ✅ Non trasferibile: legato al wallet per sempre          │
-│  ✅ Determina: limiti di acquisto (buyer caps)             │
-│  ✅ Previene: Sybil, farming, compravendita account        │
-│  ✅ Mostra: badge visivo del tuo status                    │
+│  ✅ Tracks: trades, volume, disputes, time                 │
+│  ✅ Non-transferable: bound to wallet forever              │
+│  ✅ Determines: purchase limits (buyer caps)               │
+│  ✅ Prevents: Sybil, farming, account trading              │
+│  ✅ Shows: visual badge of your status                     │
 │                                                             │
-│  → È la prova on-chain che sei un utente affidabile        │
+│  → It is the on-chain proof that you are a reliable user   │
 └─────────────────────────────────────────────────────────────┘
 ```

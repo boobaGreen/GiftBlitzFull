@@ -1,284 +1,285 @@
-# GiftBlitz - Regole e Meccaniche 📚
+# GiftBlitz - Rules and Mechanics 📚
 
-> **Tutto quello che devi sapere per usare GiftBlitz come Buyer o Seller**
-
----
-
-## 🎯 Le 4 Regole Fondamentali
-
-```
-1️⃣ TRUST DEPOSIT = Seller: 100% FACE VALUE | Buyer: 110% Valore Card
-2️⃣ SELLER può vendere fino a €200 dal giorno 1
-3️⃣ BUYER ha caps progressivi (anti-griefing)
-4️⃣ UNA DISPUTA = reset del trade count a 0
-```
+> **Everything you need to know to use GiftBlitz as a Buyer or Seller**
 
 ---
 
-## 💰 Come Funziona il Trust Deposit
+## 🎯 The 4 Fundamental Rules
 
-**Cos'è il trust deposit?** Un deposito cauzionale che blocchi durante il trade. Lo riprendi se tutto va bene.
+```
+1️⃣ TRUST DEPOSIT = Seller: 100% FACE VALUE | Buyer: 110% Card Value
+2️⃣ SELLER can sell up to €200 from day 1
+3️⃣ BUYER has progressive caps (anti-griefing)
+4️⃣ ONE DISPUTE = trade count reset to 0
+```
 
-| Chi        | Cosa Deposita        | Esempio (carta €100, prezzo €80) |
+---
+
+## 💰 How Trust Deposit Works
+
+**What is the trust deposit?** A security deposit you lock during the trade. You get it back if everything goes well.
+
+| Who        | What They Deposit    | Example (€100 card, price €80)   |
 | ---------- | -------------------- | -------------------------------- |
 | **Seller** | 100% Face Value      | €100                             |
-| **Buyer**  | Prezzo + 110% Valore | €80 + €110 (110% di €100) = €190 |
+| **Buyer**  | Price + 110% Value   | €80 + €110 (110% of €100) = €190 |
 
-### Se tutto OK ✅
+### If everything OK ✅
 
-- Seller riceve: trust deposit + prezzo - 1% fee = **€179.20**
-- Buyer riceve: trust deposit indietro + carta = **€80 + carta da €100**
+- Seller receives: trust deposit + price - 1% fee = **€179.20**
+- Buyer receives: trust deposit back + €100 card = **€80 + €100 card**
 
-### Se DISPUTA (Protocol Treasury) 🏦
+### If DISPUTE (Protocol Treasury) 🏦
 
-- Entrambi perdono il trust deposit (confiscato dal protocollo)
-- Buyer recupera il prezzo pagato
-- **Deterrente massimo**: i fondi mancanti alimentano il fondo di sviluppo della piattaforma.
+- Both lose the trust deposit (confiscated by the protocol)
+- Buyer recovers the price paid
+- **Maximum deterrent**: missing funds feed the platform development fund.
 
 ---
 
-## 📦 Se Sei un SELLER (Vuoi Vendere)
+## 📦 If You Are a SELLER (Want to Sell)
 
-### Cosa Puoi Fare
+### What You Can Do
 
-| Trade Count   | Max Valore Box |
+| Trade Count   | Max Box Value  |
 | ------------- | -------------- |
-| **Qualsiasi** | **€200**       |
+| **Any**       | **€200**       |
 
-> ✅ **Puoi vendere una gift card da €100 dal primo giorno!**
+> ✅ **You can sell a €100 gift card from day one!**
 
-### Come Funziona
+### How It Works
 
-1. **Crea un Box** → Inserisci codice gift card (criptato) + trust deposit 100%
-2. **Attendi Buyer** → Qualcuno compra il tuo Box
-3. **Buyer Verifica** → Controlla che il codice funzioni
-4. **Buyer Conferma** → Ricevi trust deposit + prezzo - 1% fee
+1. **Create a Box** → Insert gift card code (encrypted) + 100% trust deposit
+2. **Wait for Buyer** → Someone buys your Box
+3. **Buyer Verify** → Checks if the code works
+4. **Buyer Confirm** → Receive trust deposit + price - 1% fee
 
-### ⚠️ Se Truffi (Codice Falso)
+### ⚠️ If You Scam (Fake Code)
 
 ```
-Buyer attiva DISPUTA → Perdi il trust deposit (va al Protocol Treasury)
-Non guadagni nulla → Solo perdita garantita
+Buyer activates DISPUTE → You lose trust deposit (goes to Protocol Treasury)
+You earn nothing → Only guaranteed loss
 ```
 
 ---
 
-## 🛒 Se Sei un BUYER (Vuoi Comprare)
+## 🛒 If You Are a BUYER (Want to Buy)
 
-### Limiti in Base ai Trade Completati
+### Limits Based on Completed Trades
 
-| Trade Completati | Max Acquisto |
+| Completed Trades | Max Purchase |
 | ---------------- | ------------ |
 | 0-2              | €30          |
 | 3-6              | €50          |
 | 7-14             | €100         |
 | 15+              | €200         |
 
-> ⚠️ **I caps per buyer esistono per prevenire griefing (false dispute)**
+> ⚠️ **Buyer caps exist to prevent griefing (false disputes)**
 
-### Come Funziona
+### How It Works
 
-1. **Scegli un Box** → Trova una gift card che ti interessa
-2. **Paga + Trust Deposit** → Depositi prezzo + 110% del Valore Card (Trust Deposit)
-3. **Ricevi Codice** → Il seller rivela il codice (ancora criptato)
-4. **Verifica** → Prova il codice sul sito del brand
-5. **Conferma o Disputa**:
-   - ✅ **Codice OK** → Confermi, riprendi trust deposit
-   - ❌ **Codice Falso** → Disputi, BURN di entrambi i trust deposit
+1. **Choose a Box** → Find a gift card you are interested in
+2. **Pay + Trust Deposit** → Deposit price + 110% of Card Value (Trust Deposit)
+3. **Receive Code** → Seller reveals the code (still encrypted)
+4. **Verify** → Test the code on the brand's site
+5. **Confirm or Dispute**:
+   - ✅ **Code OK** → Confirm, get trust deposit back
+   - ❌ **Fake Code** → Dispute, BURN of both trust deposits
 
-### ⚠️ Se Fai Griefing (Disputa Falsa)
+### ⚠️ If You Grief (False Dispute)
 
 ```
-Perdi il tuo trust deposit (€80) per bruciare trust deposit del seller (€80)
-Rapporto 1:1 → Non è profittevole!
-+ Il tuo trade count torna a 0
+You lose your trust deposit (€110) to burn seller's trust deposit (€100)
+Ratio ~1:1 → Not profitable!
++ Your trade count goes back to 0
 ```
 
 ---
 
-## 📈 Come Cresce il Tuo Trade Count
+## 📈 How Your Trade Count Grows
 
-| Evento               | Effetto       |
+| Event                | Effect        |
 | -------------------- | ------------- |
-| Trade OK come Seller | +1            |
-| Trade OK come Buyer  | +1            |
-| Box cancellata       | Nessuno       |
-| **DISPUTA**          | **RESET A 0** |
+| OK Trade as Seller   | +1            |
+| OK Trade as Buyer    | +1            |
+| Cancelled Box        | None          |
+| **DISPUTE**          | **RESET TO 0**|
 
-> 🎯 **È UN SOLO contatore!** Cresce sia quando compri che quando vendi.
+> 🎯 **IT'S A SINGLE counter!** Grows both when buying and selling.
 
-**Esempio:**
+**Example:**
 
 ```
-Mario (nuovo, tradeCount = 0)
+Mario (new, tradeCount = 0)
 
-Trade 1: COMPRA €20    → tradeCount = 1
-Trade 2: VENDE €25     → tradeCount = 2
-Trade 3: COMPRA €30    → tradeCount = 3 → MAX BUY = €50! ✨
+Trade 1: BUYS €20      → tradeCount = 1
+Trade 2: SELLS €25     → tradeCount = 2
+Trade 3: BUYS €30      → tradeCount = 3 → MAX BUY = €50! ✨
 ```
 
 ---
 
-## ⏱️ Timeouts e Protezioni
+## ⏱️ Timeouts and Protections
 
-### 🔒 Regola 1: NO Cancellazione Dopo l'Acquisto
+### 🔒 Rule 1: NO Cancellation After Purchase
 
-**Una volta che un buyer compra il tuo box, NON puoi più cancellare.**
+**Once a buyer buys your box, you CANNOT cancel anymore.**
 
-- ✅ Puoi cancellare PRIMA che qualcuno compri (gratis)
-- ❌ NON puoi cancellare DOPO che qualcuno ha comprato
-- 🎯 Questo garantisce commitment e fiducia
+- ✅ You can cancel BEFORE someone buys (free)
+- ❌ You CANNOT cancel AFTER someone bought
+- 🎯 This guarantees commitment and trust
 
-### ⏰ Regola 2: Reveal Timeout (72 Ore)
+### ⏰ Rule 2: Reveal Timeout (72 Hours)
 
-**Il seller ha 72 ore (3 giorni) per rivelare il codice dopo che il buyer compra.**
+**The seller has 72 hours (3 days) to reveal the code after the buyer buys.**
 
-**Se seller NON rivela entro 72h:**
+**If seller DOES NOT reveal within 72h:**
 
-- Buyer può richiedere rimborso completo
-- Buyer recupera: prezzo + trust deposit + 50% del trust deposit seller
-- Seller perde: 100% del trust deposit (50% va al buyer, 50% Protocol Treasury)
+- Buyer can request full refund
+- Buyer recovers: price + trust deposit + 50% of seller trust deposit
+- Seller loses: 100% of trust deposit (50% goes to buyer, 50% Protocol Treasury)
 
-**Esempio:**
-
-```
-Box: Amazon €100, prezzo €80
-
-Seller NON rivela entro 72h:
-→ Buyer recupera: €80 (prezzo) + €110 (suo trust deposit) + €40 (50% trust deposit seller) = €230
-→ Seller perde: €80 (trust deposit)
-→ Protocol Treasury: €40
-```
-
-**Perché 72 ore?**
-
-- Copre weekend e piccole emergenze
-- Abbastanza tempo per seller di tornare online
-- Non troppo lungo per buyer (3 giorni è accettabile)
-
-### ⏰ Regola 3: Auto-Finalize (72 Ore Dopo Reveal)
-
-**Il buyer ha 72 ore (3 giorni) per verificare il codice e confermare/disputare.**
-
-**Se buyer NON conferma né disputa entro 72h:**
-
-- Il trade si **auto-finalizza** automaticamente
-- Sistema assume: codice valido
-- Seller riceve il pagamento
-- Entrambi recuperano i trust deposit
-
-**⚠️ IMPORTANTE per Buyer:**
-
-- DEVI verificare il codice entro 72h
-- Dopo auto-finalize, NON puoi più disputare
-- Assicurati di poter testare il codice nei prossimi 3 giorni!
-
-**Esempio:**
+**Example:**
 
 ```
-T+0h:   Buyer compra box
-T+2h:   Seller rivela codice
-T+3h:   Buyer riceve codice ma NON lo verifica
-T+74h:  Auto-finalize → Seller riceve pagamento
-T+7d:   Buyer prova codice → INVALIDO
-        Troppo tardi! Non può più disputare
+Box: Amazon €100, price €80
+
+Seller DOES NOT reveal within 72h:
+→ Buyer recovers: €80 (price) + €110 (own trust deposit) + €50 (50% seller trust deposit) = €240
+→ Seller loses: €100 (trust deposit)
+→ Protocol Treasury: €50
 ```
 
-**Perché 72 ore?**
+**Why 72 hours?**
 
-- Tempo abbondante per verificare un codice gift
-- Simmetrico con reveal timeout (giusto per entrambi)
-- Protegge seller da buyer che "dimenticano" di confermare
+- Covers weekends and small emergencies
+- Enough time for seller to come back online
+- Not too long for buyer (3 days is acceptable)
 
-### 📊 Timeline Completa
+### ⏰ Rule 3: Auto-Finalize (72 Hours After Reveal)
+
+**The buyer has 72 hours (3 days) to verify the code and confirm/dispute.**
+
+**If buyer DOES NOT confirm nor dispute within 72h:**
+
+- The trade **auto-finalizes** automatically
+- System assumes: valid code
+- Seller receives payment
+- Both recover trust deposits
+
+**⚠️ IMPORTANT for Buyer:**
+
+- You MUST verify the code within 72h
+- After auto-finalize, you CANNOT dispute anymore
+- Ensure you can test the code in the next 3 days!
+
+**Example:**
 
 ```
-T+0h:     Buyer compra box
-          ↓ [Seller ha 72h per rivelare]
+T+0h:   Buyer buys box
+T+2h:   Seller reveals code
+T+3h:   Buyer receives code but DOES NOT verify
+T+74h:  Auto-finalize → Seller receives payment
+T+7d:   Buyer tests code → INVALID
+        Too late! Cannot dispute anymore
+```
 
-T+2h:     Seller rivela codice
-          ↓ [Buyer ha 72h per confermare/disputare]
+**Why 72 hours?**
 
-T+3h:     Buyer verifica codice
+- Plenty of time to verify a gift code
+- Symmetric with reveal timeout (fair for both)
+- Protects seller from buyers who "forget" to confirm
+
+### 📊 Complete Timeline
+
+```
+T+0h:     Buyer buys box
+          ↓ [Seller has 72h to reveal]
+
+T+2h:     Seller reveals code
+          ↓ [Buyer has 72h to confirm/dispute]
+
+T+3h:     Buyer verifies code
 
 Scenario A (Happy Path):
-T+4h:     Buyer conferma → ✅ Trade completato
+T+4h:     Buyer confirms → ✅ Trade completed
 
 Scenario B (Auto-Finalize):
-T+74h:    Nessuna azione → ✅ Auto-finalize (assume valido)
+T+74h:    No action → ✅ Auto-finalize (assumes valid)
 
 Scenario C (Dispute):
-T+5h:     Codice invalido → ❌ Buyer disputa → Protocol Treasury
+T+5h:     Invalid Code → ❌ Buyer disputes → Protocol Treasury
 
 Scenario D (Seller Ghosting):
-T+72h:    Seller NON ha rivelato → ⚠️ Buyer richiede rimborso + compensazione
+T+72h:    Seller did NOT reveal → ⚠️ Buyer claims refund + compensation
 ```
 
 ---
 
-## 🔄 Riepilogo Visivo
+## 🔄 Visual Summary
 
 ```
                        GiftBlitz TRADE FLOW
 
     SELLER                                      BUYER
     ┌─────────┐                                ┌─────────┐
-    │ Crea Box│◄─────── Matching ──────────────│ Compra  │
+    │ Create  │◄─────── Matching ──────────────│ Buy     │
+    │ Box     │                                │         │
     │+Deposit │                                │+Deposit │
     └────┬────┘                                └────┬────┘
          │                                          │
          ▼                                          ▼
     ┌─────────┐                                ┌─────────┐
-    │ Attende │                                │ Riceve  │
-    │         │◄─────── Codice ────────────────│ Codice  │
+    │ Wait    │                                │ Receive │
+    │         │◄─────── Code ──────────────────│ Code    │
     └────┬────┘                                └────┬────┘
          │                                          │
          │                                     ┌────┴────┐
          │                                     ▼         ▼
          │                               ┌─────────┐ ┌─────────┐
-         │                               │ Conferma│ │ Disputa │
+         │                               │ Confirm │ │ Dispute │
          │                               │   ✅    │ │   🔥    │
          │                               └────┬────┘ └────┬────┘
          │                                    │           │
          ▼                                    ▼           ▼
     ┌─────────────────┐              ┌─────────┐    ┌─────────────┐
-    │ Riceve Deposit +│◄─────────────│ Riceve  │    │ Protocol    │
-    │ Prezzo - 1% Fee │              │ Deposit │    │ Treasury    │
+    │ Receive Deposit │◄─────────────│ Receive │    │ Protocol    │
+    │ + Price - 1% Fee│              │ Deposit │    │ Treasury    │
     └─────────────────┘              └─────────┘    └─────────────┘
 ```
 
 ---
 
-## ❓ FAQ Rapide
+## ❓ Quick FAQ
 
-**Q: Posso vendere una gift card da €100 appena mi registro?**
+**Q: Can I sell a €100 gift card as soon as I register?**
 
-> ✅ Sì! I seller possono vendere fino a €200 dal giorno 1.
+> ✅ Yes! Sellers can sell up to €200 from day 1.
 
-**Q: Perché non posso comprare box grandi subito?**
+**Q: Why can't I buy big boxes immediately?**
 
-> Per prevenire griefing. Devi fare qualche trade piccolo prima.
+> To prevent griefing. You must do some small trades first.
 
-**Q: Cosa succede se disputo per errore?**
+**Q: What happens if I dispute by mistake?**
 
-> Entrambi perdete il trust deposit e il tuo trade count torna a 0. Verifica bene prima di disputare!
+> You both lose the trust deposit and your trade count goes back to 0. Verify well before disputing!
 
-**Q: Se l'altro disputa, perdo anche io?**
+**Q: If the other disputes, do I lose too?**
 
-> Sì, la disputa brucia i trust deposit di ENTRAMBI. Ecco perché funziona come deterrente.
+> Yes, the dispute burns trust deposits of BOTH. That's why it works as a deterrent.
 
-**Q: Quanto costa usare GiftBlitz?**
+**Q: How much does it cost to use GiftBlitz?**
 
-> Solo 1% fee sul prezzo, detratto dal pagamento al seller.
+> Only 1% fee on the price, deducted from the payment to the seller.
 
 ---
 
-## 📊 Tabella Riassuntiva Finale
+## 📊 Final Summary Table
 
-| Aspetto                 | Seller               | Buyer                 |
+| Aspect                  | Seller               | Buyer                 |
 | ----------------------- | -------------------- | --------------------- |
-| **Trust Deposit**       | 100% del Face Value  | 110% del Valore Card  |
-| **Max Trade (nuovo)**   | €200                 | €30                   |
+| **Trust Deposit**       | 100% of Face Value   | 110% of Card Value    |
+| **Max Trade (new)**     | €200                 | €30                   |
 | **Max Trade (veteran)** | €200                 | €200                  |
-| **Fee**                 | 1% sul prezzo        | 0%                    |
-| **Rischio Principale**  | BURN se codice falso | BURN se disputa falsa |
+| **Fee**                 | 1% on price          | 0%                    |
+| **Main Risk**           | BURN if fake code    | BURN if fake dispute  |

@@ -1,75 +1,75 @@
 # Implementation Plan - GiftBlitz MVP
 
-## 🎯 Obiettivo
+## 🎯 Goal
 
-Costruire una dApp P2P per lo scambio sicuro di Gift Card su IOTA, utilizzando il modello "Mutual Trust Deposit" (Doppio Deposito) per eliminare le dispute senza intermediari.
+Build a P2P dApp for the secure exchange of Gift Cards on IOTA, using the "Mutual Trust Deposit" (Double Deposit) model to eliminate disputes without intermediaries.
 
 ## 🛠️ Tech Stack
 
 - **Frontend:** React 18 (Vite) + TailwindCSS + Lucide Icons.
 - **Smart Contracts:** IOTA Smart Contracts (ISC) - Rust/Wasm.
 - **Network:** IOTA Testnet (EVM compatible or Native).
-- **Storage (Off-chain):** IPFS o Local Storage criptato (per il codice della card prima dello sblocco).
-- **NFT Standard:** ERC-5192 (Soulbound Token) per Reputation NFT.
-- **SVG Generation:** On-chain dynamic metadata per badge visivi.
+- **Storage (Off-chain):** IPFS or Encrypted Local Storage (for card code before unlock).
+- **NFT Standard:** ERC-5192 (Soulbound Token) for Reputation NFT.
+- **SVG Generation:** On-chain dynamic metadata for visual badges.
 
-## 📅 Roadmap di Sviluppo
+## 📅 Development Roadmap
 
 ### Phase 1: Smart Contract Core (The "Box" + NFT Foundation)
 
-- Implementazione logica `GiftBlitz` Contract.
-- `createBox(price, trust_deposit)`: Blocca fondi venditore.
-- `joinBox(boxId)`: Blocca fondi compratore + pagamento.
-- `openBox(secretKey)`: Rilascia fondi se la chiave è corretta (Happy Path).
-- `cancelBox()`: Ritiro box dal mercato (SOLO se stato = OPEN). Ritorna il trust deposit al venditore.
-- `autoFinalize()`: **Safety Feature.** Se il buyer non chiude né disputa entro 24h dalla rivelazione chiave → Fondi al Venditore.
-- `claimRefund()`: **Safety Feature.** Se il venditore non rivela la chiave entro 24h dal join → Rimborso totale al Buyer.
-- `burnBox()`: Funzione di distruzione reciproca (Dispute Path).
+- Implementation of `GiftBlitz` Contract logic.
+- `createBox(price, trust_deposit)`: Locks seller funds.
+- `joinBox(boxId)`: Locks buyer funds + payment.
+- `openBox(secretKey)`: Releases funds if key is correct (Happy Path).
+- `cancelBox()`: Withdraw box from market (ONLY if state = OPEN). Returns trust deposit to seller.
+- `autoFinalize()`: **Safety Feature.** If buyer does not close nor dispute within 24h of key reveal → Funds to Seller.
+- `claimRefund()`: **Safety Feature.** If seller does not reveal key within 24h of join → Full refund to Buyer.
+- `burnBox()`: Mutual destruction function (Dispute Path).
 - **🎨 NFT Integration:**
-  - `mintReputationNFT(address user)`: Minta Soulbound NFT al primo trade.
-  - `_updateNFTStats(address user, uint256 value)`: Aggiorna volume/trade count (chiamato per ENTRAMBI buyer e seller).
-  - `getMaxBuyValue(uint256 tradeCount)`: Calcola buyer cap automatico (0-2→€30, 3-6→€50, 7-14→€100, 15+→€200).
-  - `getMaxSellValue()`: Ritorna sempre €200 (seller può vendere dal giorno 1).
-  - **Nota:** Trust Deposit Asimmetrico: Seller 100% Prezzo, Buyer 110% Valore.
-  - **Nota:** Ogni trade completato aggiorna la reputazione di ENTRAMBE le parti (seller + buyer).
+  - `mintReputationNFT(address user)`: Mints Soulbound NFT on first trade.
+  - `_updateNFTStats(address user, uint256 value)`: Updates volume/trade count (called for BOTH buyer and seller).
+  - `getMaxBuyValue(uint256 tradeCount)`: Calculates automatic buyer cap (0-2→€30, 3-6→€50, 7-14→€100, 15+→€200).
+  - `getMaxSellValue()`: Always returns €200 (seller can sell from day 1).
+  - **Note:** Asymmetric Trust Deposit: Seller 100% Price, Buyer 110% Face Value.
+  - **Note:** Each completed trade updates the reputation of BOTH parties (seller + buyer).
 
 ### Phase 2: Frontend & Wallet Integration
 
-- Setup progetto Vite + IOTA SDK/Wagmi (se EVM).
-- Connessione Wallet (Metamask o TanglePay).
-- Generazione chiavi crittografiche Deterministiche (Stateless) via Wallet Signature (per evitare Local Storage).
+- Setup Vite project + IOTA SDK/Wagmi (if EVM).
+- Wallet Connection (Metamask or TanglePay).
+- Deterministic (Stateless) Cryptographic Key Generation via Wallet Signature (to avoid Local Storage).
 
 ### Phase 3: Core User Flows + NFT Minting
 
 - **Seller Flow:**
-  - Input dati card → Generazione Salt (Random) → Wallet Sign(Salt) → Derive Key.
-  - Encrypt Code con Key → Append Salt a Ciphertext.
+  - Input card data → Generate Salt (Random) → Wallet Sign(Salt) → Derive Key.
+  - Encrypt Code with Key → Append Salt to Ciphertext.
   - Call SC `createBox` (Store `Ciphertext + Salt` on-chain).
-  - Se primo trade → Minta Soulbound NFT automaticamente.
+  - If first trade → Mints Soulbound NFT automatically.
 - **Buyer Flow:**
-  - Listato Box disponibili (filtrato automaticamente per buyer caps).
-  - Call SC `joinBox` (Deposit Payment + Trust Deposit = 110% del Valore Card).
-  - Se primo trade → Minta Soulbound NFT automaticamente.
+  - List available Boxes (automatically filtered by buyer caps).
+  - Call SC `joinBox` (Deposit Payment + Trust Deposit = 110% of Card Value).
+  - If first trade → Mints Soulbound NFT automatically.
 - **Reveal Flow:**
-  - Seller rivela la chiave AES (o lo fa automaticamente dopo il lock del buyer?).
-  - _Nota:_ Il design atomico richiede che la chiave venga rivelata on-chain o via swap atomico. Per MVP semplice: Seller invia chiave off-chain dopo lock, se non lo fa → Burn.
+  - Seller reveals AES key (or does it automatically after buyer lock?).
+  - _Note:_ Atomic design requires key to be revealed on-chain or via atomic swap. For simple MVP: Seller sends key off-chain after lock, if not → Burn.
 - **Finalize Flow:**
-  - Buyer conferma codice valido → SC aggiorna NFT stats (volume, trade count, level).
+  - Buyer confirms valid code → SC updates NFT stats (volume, trade count, level).
 
 ### Phase 4: NFT Visual Design & Metadata
 
-- Implementazione `tokenURI(uint256 tokenId)` con SVG dinamico on-chain.
-- Design badge per 4 tier basati su trade count (Newcomer/Member/Trusted/Veteran).
-- Metadata JSON con stats aggiornati (volume, trade count, disputes).
-- Test rendering NFT su wallet (MetaMask, OpenSea testnet).
+- Implementation of `tokenURI(uint256 tokenId)` with on-chain dynamic SVG.
+- Badge design for 4 tiers based on trade count (Newcomer/Member/Trusted/Veteran).
+- JSON Metadata with updated stats (volume, trade count, disputes).
+- Test NFT rendering on wallet (MetaMask, OpenSea testnet).
 
-## ✅ Verifica (Testing Plan)
+## ✅ Verification (Testing Plan)
 
-1.  **Unit Test SC:** Testare tutti gli scenari economici (Happy path, Fraud attempt, Burn).
-2.  **Simulation:** Script TypeScript (già iniziato) per validare i modelli di trust deposit.
-3.  **Testnet Deployment:** Deploy su Shimmer/IOTA Testnet.
+1.  **Unit Test SC:** Test all economic scenarios (Happy path, Fraud attempt, Burn).
+2.  **Simulation:** TypeScript script (already started) to validate trust deposit models.
+3.  **Testnet Deployment:** Deploy on Shimmer/IOTA Testnet.
 
-## 📂 Struttura File Prevista
+## 📂 Expected File Structure
 
 ```
 /contracts
@@ -80,7 +80,7 @@ Costruire una dApp P2P per lo scambio sicuro di Gift Card su IOTA, utilizzando i
     CreateBoxForm.tsx
     MarketplaceList.tsx
     SwapInterface.tsx
-    ReputationBadge.tsx (Mostra NFT utente)
+    ReputationBadge.tsx (Shows user NFT)
   /hooks
     useGiftBlitzContract.ts
     useReputationNFT.ts

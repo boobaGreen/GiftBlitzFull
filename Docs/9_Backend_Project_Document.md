@@ -1,24 +1,24 @@
 # GiftBlitz - Technical Architecture Document 📦
 
-> **Architettura Full Decentralized per P2P Gift Card Exchange su IOTA**
+> **Full Decentralized Architecture for P2P Gift Card Exchange on IOTA**
 
 ---
 
 ## 1. Executive Summary
 
-GiftBlitz è una dApp **100% decentralizzata** per lo scambio P2P di gift card su **IOTA L1** con linguaggio **Move**.
+GiftBlitz is a **100% decentralized** dApp for P2P gift card exchange on **IOTA L1** with **Move** language.
 
-**Nessun backend server richiesto per MVP.**
+**No backend server required for MVP.**
 
-| IOTA Service             | Utilizzo                              |
+| IOTA Service             | Usage                                 |
 | ------------------------ | ------------------------------------- |
-| **Move Smart Contracts** | Escrow atomico, burning, gestione Box |
+| **Move Smart Contracts** | Atomic escrow, burning, Box management|
 | **Tokenization**         | Soulbound Reputation NFT              |
-| **Notarization**         | Audit trail on-chain integrato        |
+| **Notarization**         | Integrated on-chain audit trail       |
 
 ---
 
-## 2. Architettura Full Decentralized
+## 2. Full Decentralized Architecture
 
 ```mermaid
 graph TB
@@ -37,7 +37,7 @@ graph TB
     SC --> REG
 ```
 
-**Nessun backend:** Il frontend comunica direttamente con gli smart contract IOTA.
+**No backend:** The frontend communicates directly with IOTA smart contracts.
 
 ---
 
@@ -45,9 +45,9 @@ graph TB
 
 ### 3.1 Smart Contracts (On-Chain)
 
-| Layer          | Technology           | Note                 |
+| Layer          | Technology           | Notes                |
 | -------------- | -------------------- | -------------------- |
-| **Linguaggio** | IOTA Move            | Edition 2024         |
+| **Language**   | IOTA Move            | Edition 2024         |
 | **CLI**        | IOTA CLI >= 1.5.0    | Build, test, publish |
 | **Network**    | IOTA Testnet/Mainnet |                      |
 
@@ -75,7 +75,7 @@ graph TB
 │   ├── encrypted_code_hash, encrypted_key
 │   ├── state (OPEN/LOCKED/REVEALED/COMPLETED/BURNED/EXPIRED)
 │   ├── created_at
-│   ├── locked_at (NEW: timestamp acquisto)
+│   ├── locked_at (NEW: purchase timestamp)
 │   └── reveal_timestamp
 │
 ├── entry fun create_box(...)
@@ -83,9 +83,9 @@ graph TB
 ├── entry fun reveal_key(box, encrypted_key)
 ├── entry fun finalize(box)
 ├── entry fun dispute(box) → BURN
-├── entry fun claim_auto_finalize(box) → 72h dopo reveal
-├── entry fun claim_reveal_timeout(box) → 72h dopo lock (se no reveal)
-└── entry fun cancel_box(box) → solo se OPEN
+├── entry fun claim_auto_finalize(box) → 72h after reveal
+├── entry fun claim_reveal_timeout(box) → 72h after lock (if no reveal)
+└── entry fun cancel_box(box) → only if OPEN
 ```
 
 ### 4.2 `reputation.move` (Soulbound NFT)
@@ -109,62 +109,62 @@ graph TB
 
 ## 5. Design Decisions
 
-### 5.1 Timeouts & Auto-Finalize (Doppio Timeout)
+### 5.1 Timeouts & Auto-Finalize (Double Timeout)
 
-Per proteggere sia buyer che seller da ghosting, utilizziamo due timeout simmetrici di **72 ore**.
+To protect both buyer and seller from ghosting, we use two symmetric timeouts of **72 hours**.
 
-#### A) Reveal Timeout (72h dopo acquisto)
+#### A) Reveal Timeout (72h after purchase)
 
-Se il seller non rivela la chiave entro 72h dal lock (acquisto):
+If the seller does not reveal the key within 72h of lock (purchase):
 
-- Buyer chiama `claim_reveal_timeout()`
-- Buyer recupera tutto (payment + stake)
-- **Compensazione**: Buyer riceve 50% dello stake del seller
-- **BURN**: Il restante 50% dello stake del seller viene bruciato
+- Buyer calls `claim_reveal_timeout()`
+- Buyer recovers everything (payment + stake)
+- **Compensation**: Buyer receives 50% of seller's stake
+- **BURN**: The remaining 50% of seller's stake is burned
 
-#### B) Auto-Finalize (72h dopo reveal)
+#### B) Auto-Finalize (72h after reveal)
 
-Se il buyer non conferma né disputa entro 72h dalla rivelazione della chiave:
+If the buyer does not confirm nor dispute within 72h of key reveal:
 
-- Chiunque (di solito il seller) può chiamare `claim_auto_finalize()`
-- Il sistema assume che la transazione sia valida (silenzio-assenso)
-- Seller riceve il pagamento e gli stake vengono sbloccati
+- Anyone (usually the seller) can call `claim_auto_finalize()`
+- The system assumes the transaction is valid (silence means consent)
+- Seller receives payment and stakes are unlocked
 
 **Rationale:**
 
-- **Simmetria**: Entrambi hanno 3 giorni di tempo.
-- **Protezione Buyer**: Compensato se il seller sparisce.
-- **Protezione Seller**: Pagato se il buyer dimentica di confermare.
+- **Symmetry**: Both have 3 days.
+- **Buyer Protection**: Compensated if seller disappears.
+- **Seller Protection**: Paid if buyer forgets to confirm.
 
 ---
 
-### 5.2 Notarizzazione
+### 5.2 Notarization
 
-| Opzione              | Descrizione                              | Pro                  | Contro          |
+| Option               | Description                              | Pros                 | Cons            |
 | -------------------- | ---------------------------------------- | -------------------- | --------------- |
-| **A) Backend**       | Server Node.js notarizza                 | UX semplice          | Centralizzato   |
-| **B) On-Chain pura** | Smart contract emette eventi notarizzati | Decentralizzato      | Utente paga gas |
-| **C) Gas Station**   | On-chain + gas sponsorizzato             | UX + Decentralizzato | Rischio abuse   |
+| **A) Backend**       | Node.js server notarizes                 | Simple UX            | Centralized     |
+| **B) Pure On-Chain** | Smart contract emits notarized events    | Decentralized        | User pays gas   |
+| **C) Gas Station**   | On-chain + sponsored gas                 | UX + Decentralized   | Abuse risk      |
 
-✅ **Scelta: Opzione B (On-Chain pura)**
+✅ **Choice: Option B (Pure On-Chain)**
 
-Il gas su IOTA è bassissimo, quindi l'utente può pagare senza problemi. Ogni operazione critica (`finalize`, `dispute`) emette eventi che fungono da audit trail immutabile.
+Gas on IOTA is extremely low, so the user can pay without issues. Every critical operation (`finalize`, `dispute`) emits events that serve as an immutable audit trail.
 
 ---
 
-### 5.3 Query e Indexing
+### 5.3 Queries and Indexing
 
-✅ **Scelta: IOTA GraphQL Indexer**
+✅ **Choice: IOTA GraphQL Indexer**
 
-IOTA fornisce un indexer nativo gratuito che espone tutti gli oggetti on-chain via GraphQL API.
+IOTA provides a free native indexer that exposes all on-chain objects via GraphQL API.
 
-| Aspetto             | Dettaglio                               |
+| Aspect              | Detail                                  |
 | ------------------- | --------------------------------------- |
-| **Costo**           | Gratuito (infrastruttura pubblica IOTA) |
+| **Cost**            | Free (IOTA public infrastructure)       |
 | **Endpoint**        | `https://graphql.testnet.iota.cafe`     |
-| **Decentralizzato** | Parziale (puoi hostare il tuo nodo)     |
+| **Decentralized**   | Partial (you can host your own node)    |
 
-**Esempio Query - Tutti i Box Aperti:**
+**Example Query - All Open Boxes:**
 
 ```graphql
 query GetOpenBoxes {
@@ -179,7 +179,7 @@ query GetOpenBoxes {
 }
 ````
 
-**Integrazione Frontend:**
+**Frontend Integration:**
 
 ```typescript
 import { IotaGraphQLClient } from "@iota/iota-sdk/graphql";
@@ -200,7 +200,7 @@ async function getOpenBoxes() {
 
 ---
 
-## 6. Struttura Move Package
+## 6. Move Package Structure
 
 ```
 contracts/
@@ -278,26 +278,26 @@ iota client publish --gas-budget 100000000
 
 ## 9. Security
 
-| Aspetto                | Mitigazione                              |
+| Aspect                 | Mitigation                               |
 | ---------------------- | ---------------------------------------- |
-| **Code Leak**          | Solo hash on-chain, mai codice in chiaro |
-| **Reentrancy**         | Move non ha reentrancy by design         |
-| **Admin Abuse**        | AdminCap solo per emergenze              |
-| **Stake Manipulation** | Calcolato on-chain                       |
+| **Code Leak**          | Only hash on-chain, never plain code     |
+| **Reentrancy**         | Move has no reentrancy by design         |
+| **Admin Abuse**        | AdminCap only for emergencies            |
+| **Stake Manipulation** | Calculated on-chain                      |
 
 ---
 
-## 10. Scalabilità (Post-MVP)
+## 10. Scalability (Post-MVP)
 
-| Feature                     | Soluzione                       |
+| Feature                     | Solution                        |
 | --------------------------- | ------------------------------- |
-| **Query veloci**            | IOTA GraphQL Indexer            |
-| **Auto-finalize garantito** | Bounty system o backend leggero |
-| **UX senza gas**            | IOTA Gas Station                |
+| **Fast Queries**            | IOTA GraphQL Indexer            |
+| **Guaranteed Auto-finalize**| Bounty system or light backend  |
+| **Gas-less UX**             | IOTA Gas Station                |
 
 ---
 
-## 11. Riepilogo IOTA Services
+## 11. IOTA Services Summary
 
 ```
 ✅ IOTA Move Smart Contracts
@@ -307,13 +307,13 @@ iota client publish --gas-budget 100000000
    └── Soulbound Reputation NFT
 
 ✅ IOTA Notarization (on-chain events)
-   └── Audit trail integrato
+   └── Integrated audit trail
 
 ⏳ IOTA Gas Station (Future)
-   └── Sponsored transactions per UX migliore
+   └── Sponsored transactions for better UX
 
 ⏳ Stablecoin Integration (Future V2)
-   └── Supporto generico Coin<T> (USDC/EURC) per pagamenti fiat-pegged
+   └── Generic Coin<T> support (USDC/EURC) for fiat-pegged payments
 ```
 
 ---
@@ -321,9 +321,9 @@ iota client publish --gas-budget 100000000
 ## Next Steps
 
 1. [x] Setup Move package (Manually Created)
-2. [x] Implementare `giftblitz.move`
-3. [x] Implementare `reputation.move`
-4. [x] Implementare `registry.move`
+2. [x] Implement `giftblitz.move`
+3. [x] Implement `reputation.move`
+4. [x] Implement `registry.move`
 5. [ ] Write Move tests
-6. [ ] Deploy su Testnet
-7. [ ] Collegare Frontend
+6. [ ] Deploy to Testnet
+7. [ ] Connect Frontend

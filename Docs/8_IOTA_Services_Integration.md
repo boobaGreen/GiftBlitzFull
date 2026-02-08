@@ -2,7 +2,7 @@
 
 > **Alignment Check:** How GiftBlitz uses IOTA Services
 >
-> **IMPORTANTE**: Usiamo **IOTA Tokenization** (L1), NON IOTA Trust Framework (Identity/Hierarchies)
+> **IMPORTANT**: We use **IOTA Tokenization** (L1), NOT IOTA Trust Framework (Identity/Hierarchies)
 
 ---
 
@@ -48,14 +48,14 @@ ReputationNFT:
 └── NON TRANSFERABLE (Soulbound)
 ```
 
-> ⚠️ **Chiarimento**: Il nostro ReputationNFT **NON** è "IOTA Identity" (DID/Verifiable Credentials).
-> È un **Custom Soulbound Token** che usiamo come identity proxy. Rientra in **Tokenization**.
+> ⚠️ **Clarification**: Our ReputationNFT is **NOT** "IOTA Identity" (DID/Verifiable Credentials).
+> It is a **Custom Soulbound Token** that we use as an identity proxy. It falls under **Tokenization**.
 
 ---
 
 ## 📜 NOTARIZATION (Secondary - Via Events)
 
-Ogni azione genera un evento on-chain che funge da **audit trail immutabile**:
+Each action generates an on-chain event that serves as an **immutable audit trail**:
 
 | Event            | What It Notarizes                            |
 | ---------------- | -------------------------------------------- |
@@ -65,7 +65,7 @@ Ogni azione genera un evento on-chain che funge da **audit trail immutabile**:
 | `TradeFinalized` | Successful completion                        |
 | `TradeDisputed`  | Conflict resolution (burn proof)             |
 
-> **Nota**: Questo è notarization "leggero" via eventi Move, non il servizio IOTA Notarization formale.
+> **Note**: This is "light" notarization via Move events, not the formal IOTA Notarization service.
 
 ---
 

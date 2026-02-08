@@ -1,59 +1,59 @@
-# 🔍 Analisi Completa del Progetto GiftBlitz
+# 🔍 Complete Analysis of GiftBlitz Project
 
-> **Data Analisi:** 8 Febbraio 2026  
-> **Versione:** Production Build  
+> **Analysis Date:** February 8, 2026
+> **Version:** Production Build
 > **Network:** IOTA Testnet
 
 ---
 
 ## 📋 Executive Summary
 
-**GiftBlitz** è una dApp decentralizzata che risolve il problema della fiducia nel trading P2P di gift card attraverso un sistema di **Double Trust Deposit** su blockchain IOTA. Il progetto implementa un meccanismo di game theory che rende la frode matematicamente irrazionale, eliminando la necessità di arbitri centralizzati.
+**GiftBlitz** is a decentralized dApp that solves the problem of trust in P2P gift card trading through a **Double Trust Deposit** system on the IOTA blockchain. The project implements a game theory mechanism that makes fraud mathematically irrational, eliminating the need for centralized arbitrators.
 
-### Punti di Forza Principali
+### Main Strengths
 
-✅ **Architettura Smart Contract Solida**: Implementazione Move ben strutturata con gestione degli stati robusta  
-✅ **Meccanica di Game Theory Provata**: Sistema Trust Deposit asimmetrico (Buyer 110%, Seller 100%)  
-✅ **Sistema di Reputazione Soulbound**: NFT non trasferibile che cresce con l'esperienza  
-✅ **Frontend Moderno**: React + TypeScript + Tailwind con UX premium  
-✅ **Integrazione IOTA**: Uso nativo di IOTA Tokenization e Smart Contracts Layer 1
+✅ **Solid Smart Contract Architecture**: Well-structured Move implementation with robust state management
+✅ **Proven Game Theory Mechanics**: Asymmetric Trust Deposit system (Buyer 110%, Seller 100%)
+✅ **Soulbound Reputation System**: Non-transferable NFT that grows with experience
+✅ **Modern Frontend**: React + TypeScript + Tailwind with premium UX
+✅ **IOTA Integration**: Native use of IOTA Tokenization and Layer 1 Smart Contracts
 
-### Aree di Attenzione
+### Areas of Attention
 
-⚠️ **Scalabilità**: Necessità di ottimizzazione per volumi elevati  
-⚠️ **Recovery Identity**: Sistema di sincronizzazione vault tra browser (risolto di recente)  
-⚠️ **Mobile Wallet**: Supporto limitato a wallet desktop (TanglePay in valutazione)
+⚠️ **Scalability**: Need for optimization for high volumes
+⚠️ **Identity Recovery**: Vault synchronization system between browsers (recently resolved)
+⚠️ **Mobile Wallet**: Support limited to desktop wallets (TanglePay under evaluation)
 
 ---
 
-## 🏗️ Architettura del Progetto
+## 🏗️ Project Architecture
 
-### Struttura Directory
+### Directory Structure
 
 ```
 GiftBlitzFull/
-├── contracts/              # Smart contracts Move
+├── contracts/              # Move Smart contracts
 │   ├── sources/
-│   │   ├── giftblitz.move     # Logica escrow & trading
-│   │   └── reputation.move    # Sistema reputazione NFT
+│   │   ├── giftblitz.move     # Escrow & trading logic
+│   │   └── reputation.move    # NFT Reputation system
 │   ├── tests/
 │   └── build/
-├── fe/                     # Frontend React
+├── fe/                     # React Frontend
 │   ├── src/
-│   │   ├── pages/             # 8 pagine principali
-│   │   ├── components/        # 6 componenti riutilizzabili
+│   │   ├── pages/             # 8 main pages
+│   │   ├── components/        # 6 reusable components
 │   │   ├── context/           # State management
 │   │   ├── hooks/             # Custom React hooks
 │   │   ├── utils/             # Utility functions
 │   │   └── data/              # Mock data & contracts config
 │   └── public/
-├── Docs/                   # Documentazione completa
+├── Docs/                   # Complete documentation
 │   ├── 2_GiftBlitz_WhitePaper.md
 │   ├── 5_GiftBlitz_GameTheory_Analysis.md
 │   ├── 8_IOTA_Services_Integration.md
 │   └── ...
 ├── iota-service/          # IOTA CLI binaries (.gitignore)
-├── publish_testnet.sh     # Script deploy automatico
+├── publish_testnet.sh     # Automatic deploy script
 └── readme.md
 ```
 
@@ -63,15 +63,15 @@ GiftBlitzFull/
 
 ### 1. `giftblitz.move` - Core Trading Logic
 
-**Oggetti Principali:**
+**Main Objects:**
 
-| Oggetto    | Tipo          | Scopo                               |
+| Object     | Type          | Purpose                             |
 | ---------- | ------------- | ----------------------------------- |
-| `GiftBox`  | Shared Object | Escrow per le transazioni P2P       |
-| `Treasury` | Shared Object | Raccolta fee (1%) e fondi disputati |
-| `AdminCap` | Owned Object  | Capability per operazioni admin     |
+| `GiftBox`  | Shared Object | Escrow for P2P transactions         |
+| `Treasury` | Shared Object | Collecting fees (1%) and disputed funds |
+| `AdminCap` | Owned Object  | Capability for admin operations     |
 
-**Stati del GiftBox:**
+**GiftBox States:**
 
 ```mermaid
 stateDiagram-v2
@@ -84,72 +84,72 @@ stateDiagram-v2
     OPEN --> BURNED: cancel_box()
 ```
 
-**Funzioni Entry Point:**
+**Entry Point Functions:**
 
 ```move
-create_box()          // Seller crea Box con carta cifrata + trust deposit 100% Face Value
-join_box()            // Buyer entra con payment + trust deposit 110% Face Value
-reveal_key()          // Seller rivela chiave di decriptazione (entro 72h)
-finalize()            // Buyer conferma trade (happy path)
-dispute()             // Buyer disputa → BURN depositi (restituisce price al buyer)
-claim_auto_finalize() // Auto-conferma dopo 72h da reveal
-claim_reveal_timeout()// Buyer recupera fondi se seller non rivela entro 72h
-cancel_box()          // Seller cancella box non joined
-withdraw_fees()       // Admin preleva fee accumulate
+create_box()          // Seller creates Box with encrypted card + 100% Face Value trust deposit
+join_box()            // Buyer joins with payment + 110% Face Value trust deposit
+reveal_key()          // Seller reveals decryption key (within 72h)
+finalize()            // Buyer confirms trade (happy path)
+dispute()             // Buyer disputes → BURN deposits (refunds price to buyer)
+claim_auto_finalize() // Auto-confirm after 72h from reveal
+claim_reveal_timeout()// Buyer recovers funds if seller does not reveal within 72h
+cancel_box()          // Seller cancels un-joined box
+withdraw_fees()       // Admin withdraws accumulated fees
 ```
 
-**Meccanismo Trust Deposit:**
+**Trust Deposit Mechanism:**
 
 ```
-Esempio: Gift Card Amazon €100 venduta a €80
+Example: Amazon Gift Card €100 sold at €80
 
-SELLER deposita:
+SELLER deposits:
   - Trust Deposit: 100% Face Value = €100
 
-BUYER deposita:
+BUYER deposits:
   - Payment: €80
   - Trust Deposit: 110% Face Value = €110
-  TOTALE: €190
+  TOTAL: €190
 
-SCENARIO HAPPY PATH:
-  - Seller riceve: €80 (price) + €100 (deposit) - €0.80 (1% fee) = €179.20
-  - Buyer riceve: €110 (deposit back) + carta €100 value
+HAPPY PATH SCENARIO:
+  - Seller receives: €80 (price) + €100 (deposit) - €0.80 (1% fee) = €179.20
+  - Buyer receives: €110 (deposit back) + card €100 value
 
-SCENARIO DISPUTE:
-  - Buyer riceve: €80 (price refund)
-  - Seller perde: €100 (deposit → Treasury)
-  - Buyer perde: €110 (deposit → Treasury)
-  - Treasury confisca: €210
+DISPUTE SCENARIO:
+  - Buyer receives: €80 (price refund)
+  - Seller loses: €100 (deposit → Treasury)
+  - Buyer loses: €110 (deposit → Treasury)
+  - Treasury confiscates: €210
 ```
 
-**Perché è Anti-Frode:**
+**Why it is Anti-Fraud:**
 
-- Seller che froda perde €100 per guadagnare massimo €80 → **perdita netta €20**
-- Buyer che fa false dispute perde €110 ma recupera solo €80 → **perdita netta €30**
-- Frode = matematicamente irrazionale ✅
+- Seller who frauds loses €100 to gain maximum €80 → **net loss €20**
+- Buyer who makes false disputes loses €110 but recovers only €80 → **net loss €30**
+- Fraud = mathematically irrational ✅
 
 ---
 
-### 2. `reputation.move` - Sistema Soulbound NFT
+### 2. `reputation.move` - Soulbound NFT System
 
-**Struttura ReputationNFT:**
+**ReputationNFT Structure:**
 
 ```move
 public struct ReputationNFT has key {
     id: UID,
-    owner: address,           // Non trasferibile
-    public_key: vector<u8>,   // Chiave pubblica per encryption
-    vault: vector<u8>,        // Hub Private Key cifrata (cross-browser sync)
-    total_trades: u64,        // Conta trade completati
-    total_volume: u64,        // Volume totale in nanoIOTA
-    disputes: u64,            // Numero dispute (idealmente 0)
-    first_trade_time: u64,    // Timestamp primo trade
+    owner: address,           // Non-transferable
+    public_key: vector<u8>,   // Public key for encryption
+    vault: vector<u8>,        // Encrypted Hub Private Key (cross-browser sync)
+    total_trades: u64,        // Counts completed trades
+    total_volume: u64,        // Total volume in nanoIOTA
+    disputes: u64,            // Number of disputes (ideally 0)
+    first_trade_time: u64,    // First trade timestamp
 }
 ```
 
-**Trade Caps (Asimmetrici):**
+**Trade Caps (Asymmetric):**
 
-| Ruolo      | Trade Count | Max Value |
+| Role       | Trade Count | Max Value |
 | ---------- | ----------- | --------- |
 | **SELLER** | 0+          | €200      |
 | **BUYER**  | 0-2         | €30       |
@@ -157,28 +157,28 @@ public struct ReputationNFT has key {
 | **BUYER**  | 7-14        | €100      |
 | **BUYER**  | 15+         | €200      |
 
-**Logica:**
+**Logic:**
 
-- Seller ha già "skin in the game" (trust deposit 100%) → può vendere subito
-- Buyer ha caps progressivi per prevenire **griefing attacks** (false dispute seriali)
-- Una disputa resetta `total_trades` a 0 per entrambe le parti
+- Seller already has "skin in the game" (100% trust deposit) → can sell immediately
+- Buyer has progressive caps to prevent **griefing attacks** (serial false disputes)
+- A dispute resets `total_trades` to 0 for both parties
 
-**Funzioni Chiave:**
+**Key Functions:**
 
 ```move
-mint_profile()              // Crea NFT soulbound per nuovo utente
-update_stats()              // +1 trade dopo finalize
-reset_on_dispute()          // Penalizza disputante
-record_dispute_counterparty() // Penalizza controparte
-update_vault()              // Aggiorna vault cifrata (recovery)
-get_max_buy_value()         // Calcola cap buyer in base a trades
+mint_profile()              // Creates soulbound NFT for new user
+update_stats()              // +1 trade after finalize
+reset_on_dispute()          // Penalizes disputer
+record_dispute_counterparty() // Penalizes counterparty
+update_vault()              // Updates encrypted vault (recovery)
+get_max_buy_value()         // Calculates buyer cap based on trades
 ```
 
 ---
 
 ## 💻 Frontend (React + TypeScript)
 
-### Stack Tecnologico
+### Tech Stack
 
 ```json
 {
@@ -192,44 +192,44 @@ get_max_buy_value()         // Calcola cap buyer in base a trades
 }
 ```
 
-### Pagine Principali
+### Main Pages
 
-| File                 | Rotta        | Scopo                                             |
+| File                 | Route        | Purpose                                           |
 | -------------------- | ------------ | ------------------------------------------------- |
-| `Home.tsx`           | `/`          | Landing page con value proposition                |
-| `Market.tsx`         | `/market`    | Marketplace con lista GiftBox disponibili         |
-| `CreateBox.tsx`      | `/create`    | Form per creare nuovo GiftBox                     |
-| `PurchaseBox.tsx`    | `/buy/:id`   | Dettaglio box e acquisto                          |
-| `TradeDetail.tsx`    | `/trade/:id` | Gestione trade attivo (reveal, finalize, dispute) |
-| `Profile.tsx`        | `/profile`   | Dashboard utente con trade history                |
-| `Wiki.tsx`           | `/wiki`      | Documentazione e FAQ                              |
-| `AdminDashboard.tsx` | `/admin`     | Panel admin per Treasury management               |
+| `Home.tsx`           | `/`          | Landing page with value proposition               |
+| `Market.tsx`         | `/market`    | Marketplace with list of available GiftBoxes      |
+| `CreateBox.tsx`      | `/create`    | Form to create new GiftBox                        |
+| `PurchaseBox.tsx`    | `/buy/:id`   | Box detail and purchase                           |
+| `TradeDetail.tsx`    | `/trade/:id` | Active trade management (reveal, finalize, dispute) |
+| `Profile.tsx`        | `/profile`   | User dashboard with trade history                 |
+| `Wiki.tsx`           | `/wiki`      | Documentation and FAQ                             |
+| `AdminDashboard.tsx` | `/admin`     | Admin panel for Treasury management               |
 
-### Componenti Chiave
+### Key Components
 
 **`BoxCard.tsx`** (16.7 KB)
 
-- Rendering card gift box nel marketplace
-- Visualizzazione stato (OPEN, LOCKED, REVEALED, COMPLETED)
-- Badge reputazione seller
-- Countdown per timeouts (72h reveal, 72h finalize)
+- Gift box card rendering in marketplace
+- Status visualization (OPEN, LOCKED, REVEALED, COMPLETED)
+- Seller reputation badge
+- Countdown for timeouts (72h reveal, 72h finalize)
 
 **`SyncIdentityModal.tsx`**
 
-- Recovery identity cross-browser
-- Decryption vault cifrata on-chain
-- Gestione chiavi private locali
+- Cross-browser identity recovery
+- On-chain encrypted vault decryption
+- Local private key management
 
 **`Navbar.tsx`**
 
 - Wallet connection (@iota/dapp-kit)
-- Display balance e indirizzo
-- Navigazione responsive
+- Balance and address display
+- Responsive navigation
 
 **`CountdownTimer.tsx`**
 
-- Timer per 72h reveal/finalize timeout
-- Visual alerts per urgenze
+- Timer for 72h reveal/finalize timeout
+- Visual alerts for urgency
 
 ### Data Layer
 
@@ -244,19 +244,19 @@ get_max_buy_value()         // Calcola cap buyer in base a trades
 }
 ```
 
-Aggiornato automaticamente da `publish_testnet.sh`
+Automatically updated by `publish_testnet.sh`
 
 **`fe/src/data/mockData.ts`** (11.8 KB)
 
-- Brand gift card supportati (Amazon, Apple, Netflix, etc.)
-- Esempi box per sviluppo
-- Costanti (NANO_PER_IOTA, fee rates)
+- Supported gift card brands (Amazon, Apple, Netflix, etc.)
+- Box examples for development
+- Constants (NANO_PER_IOTA, fee rates)
 
 ---
 
-## 🔒 Sistema di Sicurezza
+## 🔒 Security System
 
-### Crittografia End-to-End
+### End-to-End Encryption
 
 ```mermaid
 sequenceDiagram
@@ -264,106 +264,106 @@ sequenceDiagram
     participant SC as Smart Contract
     participant B as Buyer
 
-    Note over S: 1. Genera AES Key random
-    S->>S: Encrypt code con AES Key
+    Note over S: 1. Generates random AES Key
+    S->>S: Encrypt code with AES Key
     S->>SC: create_box(encrypted_code_hash, encrypted_code)
 
     B->>SC: join_box(payment + trust deposit)
     SC->>SC: Lock funds
 
-    Note over S: 2. Encrypta AES Key con Buyer Public Key
+    Note over S: 2. Encrypts AES Key with Buyer Public Key
     S->>SC: reveal_key(encrypted_aes_key)
 
-    B->>SC: Legge encrypted_aes_key
-    Note over B: 3. Decrypt con Private Key
+    B->>SC: Reads encrypted_aes_key
+    Note over B: 3. Decrypt with Private Key
     B->>B: Decrypt AES Key → Decrypt Code
 
-    alt Code valido
+    alt Valid Code
         B->>SC: finalize()
         SC->>S: Payment + Trust Deposit (- 1% fee)
         SC->>B: Trust Deposit back
-    else Code invalido
+    else Invalid Code
         B->>SC: dispute()
         SC->>B: Price refund
         SC->>SC: BURN trust deposits → Treasury
     end
 ```
 
-**Nessun Dato Sensibile On-Chain:**
+**No Sensitive Data On-Chain:**
 
-- Solo `encrypted_code_hash` (SHA-256) pubblico
-- `encrypted_code` cifrato con AES-256
-- `encrypted_key` cifrato con RSA-2048 (Buyer Public Key)
+- Only `encrypted_code_hash` (SHA-256) public
+- `encrypted_code` encrypted with AES-256
+- `encrypted_key` encrypted with RSA-2048 (Buyer Public Key)
 
-### Timeouts di Sicurezza
+### Security Timeouts
 
-| Evento                                  | Timeout | Azione                                                                            |
+| Event                                   | Timeout | Action                                                                            |
 | --------------------------------------- | ------- | --------------------------------------------------------------------------------- |
-| Seller non rivela dopo lock             | 72h     | Buyer può chiamare `claim_reveal_timeout()` → recupera tutto + 50% seller deposit |
-| Buyer non finalizza/disputa dopo reveal | 72h     | Anyone può chiamare `claim_auto_finalize()` → fondi al seller                     |
+| Seller does not reveal after lock       | 72h     | Buyer can call `claim_reveal_timeout()` → recovers everything + 50% seller deposit |
+| Buyer does not finalize/dispute after reveal | 72h     | Anyone can call `claim_auto_finalize()` → funds to seller                         |
 
 ---
 
-## 🎮 Game Theory & Incentivi
+## 🎮 Game Theory & Incentives
 
-### Matrice dei Payoff (Esempio: €100 card @ €80)
+### Payoff Matrix (Example: €100 card @ €80)
 
 |                   | Buyer Honest                                       | Buyer False Dispute          |
 | ----------------- | -------------------------------------------------- | ---------------------------- |
 | **Seller Honest** | Seller: +€79.20<br>Buyer: +€20 value               | Seller: -€100<br>Buyer: -€30 |
-| **Seller Cheats** | Seller: +€80 (se buyer non disputa)<br>Buyer: -€80 | Seller: -€100<br>Buyer: €0   |
+| **Seller Cheats** | Seller: +€80 (if buyer doesn't dispute)<br>Buyer: -€80 | Seller: -€100<br>Buyer: €0   |
 
 **Nash Equilibrium:** (Seller Honest, Buyer Honest)
 
-**Perché Funziona:**
+**Why It Works:**
 
 1. **Seller Cheat Deterrence:**
-   - Se seller truffa → buyer disputa (perché recupera price)
-   - Seller perde €100 per tentare di rubare €80 → **perdita netta**
+   - If seller scams → buyer disputes (because they recover price)
+   - Seller loses €100 to try to steal €80 → **net loss**
 
 2. **Buyer Griefing Deterrence:**
-   - False dispute costa €110 (buyer deposit)
-   - Buyer recupera solo €80 (price) → **perdita netta €30**
-   - Seller perde €100 → rapporto 3.3:1 (buyer perde più in proporzione)
+   - False dispute costs €110 (buyer deposit)
+   - Buyer recovers only €80 (price) → **net loss €30**
+   - Seller loses €100 → ratio 3.3:1 (buyer loses more proportionally)
 
-3. **Trust Deposit Asimmetrico:**
-   - Buyer 110% previene attacco "redeem then dispute"
-   - Anche se buyer ruba codice, perde €110 per guadagnare €100 value → **perdita**
+3. **Asymmetric Trust Deposit:**
+   - Buyer 110% prevents "redeem then dispute" attack
+   - Even if buyer steals code, they lose €110 to gain €100 value → **loss**
 
 ---
 
-## 📊 Integrazione IOTA Hackathon
+## 📊 IOTA Hackathon Integration
 
-### Allineamento ai Requisiti
+### Alignment with Requirements
 
-| Requisito                      | Implementazione                                     | Status |
+| Requirement                    | Implementation                                      | Status |
 | ------------------------------ | --------------------------------------------------- | ------ |
 | **Real-world problem**         | P2P gift card trust (€23B/year lost globally)       | ✅     |
-| **Built on IOTA L1**           | Move Smart Contracts su IOTA                        | ✅     |
+| **Built on IOTA L1**           | Move Smart Contracts on IOTA                        | ✅     |
 | **IOTA Service: Tokenization** | GiftBox (shared object) + ReputationNFT (soulbound) | ✅     |
 
-**Servizi IOTA Utilizzati:**
+**IOTA Services Used:**
 
 1. **Tokenization (L1):**
-   - `GiftBox` come asset tokenizzato
+   - `GiftBox` as tokenized asset
    - `ReputationNFT` soulbound (on-chain identity proxy)
 
 2. **Smart Contracts (Move):**
-   - Escrow logic con stati
+   - Escrow logic with states
    - Capabilities pattern (`AdminCap`)
-   - Events per audit trail
+   - Events for audit trail
 
-**Non Utilizzati (volutamente):**
+**Not Used (intentionally):**
 
-- IOTA Identity (DID) → semplificato con custom NFT
-- IOTA Hierarchies → non applicabile a P2P
-- IOTA Trust Framework formale → gestito via game theory
+- IOTA Identity (DID) → simplified with custom NFT
+- IOTA Hierarchies → not applicable to P2P
+- Formal IOTA Trust Framework → managed via game theory
 
 ---
 
 ## 🚀 Deployment & Operations
 
-### Script di Deploy
+### Deploy Script
 
 **`publish_testnet.sh`** (2.4 KB)
 
@@ -391,7 +391,7 @@ cat > ../fe/src/data/contracts.json <<EOF
 EOF
 ```
 
-**Processo Completo:**
+**Complete Process:**
 
 ```bash
 # WSL
@@ -405,17 +405,17 @@ bash publish_testnet.sh
 cd fe
 npm run build
 
-# Deploy to Vercel (presente vercel.json)
+# Deploy to Vercel (vercel.json present)
 git push
 ```
 
 ---
 
-## 📈 Metriche di Progetto
+## 📈 Project Metrics
 
 ### Codebase
 
-| Categoria                | Files   | Lines      |
+| Category                 | Files   | Lines      |
 | ------------------------ | ------- | ---------- |
 | Smart Contracts (Move)   | 2       | ~540       |
 | Frontend (React/TS)      | ~30     | ~5000+     |
@@ -427,162 +427,162 @@ git push
 **`giftblitz.move`:**
 
 - 448 lines
-- 9 entry functions pubbliche
-- 6 stati possibili
-- 5 eventi emessi
+- 9 public entry functions
+- 6 possible states
+- 5 events emitted
 
 **`reputation.move`:**
 
 - 95 lines
 - 3 entry functions
-- 4 funzioni `package` visibility (chiamate solo da giftblitz)
+- 4 `package` visibility functions (called only by giftblitz)
 
 ### Frontend Components
 
-- **8 Pages** (routing completo)
+- **8 Pages** (full routing)
 - **6 Reusable Components**
 - **3 Context Providers** (wallet, identity, toast)
 - **2 Custom Hooks**
 
 ---
 
-## 🔍 Analisi Critica
+## 🔍 Critical Analysis
 
-### Punti di Forza
+### Strengths
 
-1. **✅ Solidità Matematica**
-   - Sistema trust deposit ben calibrato
-   - Game theory provata con matrici payoff
-   - Nessun incentivo alla frode
+1. **✅ Mathematical Solidity**
+   - Well-calibrated trust deposit system
+   - Proven game theory with payoff matrices
+   - No incentive for fraud
 
-2. **✅ Codice Move Pulito**
-   - Naming chiaro e consistente
-   - Gestione errori con assert espliciti
-   - Pattern Move idiomatici (shared objects, capabilities)
+2. **✅ Clean Move Code**
+   - Clear and consistent naming
+   - Error handling with explicit asserts
+   - Idiomatic Move patterns (shared objects, capabilities)
 
-3. **✅ UX Premium**
-   - Design moderno dark mode
-   - Animazioni smooth (framer-motion)
-   - Countdown timer visibili per timeouts
+3. **✅ Premium UX**
+   - Modern dark mode design
+   - Smooth animations (framer-motion)
+   - Visible countdown timers for timeouts
 
-4. **✅ Documentazione Completa**
-   - WhitePaper dettagliato
-   - Game Theory Analysis rigorosa
-   - Guide deployment step-by-step
+4. **✅ Complete Documentation**
+   - Detailed WhitePaper
+   - Rigorous Game Theory Analysis
+   - Step-by-step deployment guides
 
 5. **✅ Security First**
-   - Encryption end-to-end
-   - Timeouts per prevenire deadlock
+   - End-to-end encryption
+   - Timeouts to prevent deadlocks
    - Soulbound NFT (no account trading)
 
-### Aree di Miglioramento
+### Areas for Improvement
 
-1. **⚠️ Scalabilità Query**
-   - Frontend usa query dirette ai box (no indexer)
-   - Performance potenzialmente lenta con 1000+ box attivi
-   - **Soluzione:** Implementare IOTA GraphQL indexer
+1. **⚠️ Query Scalability**
+   - Frontend uses direct box queries (no indexer)
+   - Potentially slow performance with 1000+ active boxes
+   - **Solution:** Implement IOTA GraphQL indexer
 
 2. **⚠️ Mobile Wallet Support**
-   - Attualmente solo desktop wallet (IOTA Wallet browser extension)
-   - TanglePay mobile in valutazione ma non integrato
-   - **Impatto:** Limita adoption mobile-first users
+   - Currently only desktop wallet (IOTA Wallet browser extension)
+   - TanglePay mobile under evaluation but not integrated
+   - **Impact:** Limits adoption by mobile-first users
 
 ---
 
-## 🎯 Raccomandazioni
+## 🎯 Recommendations
 
-### Priorità Alta (Pre-Mainnet)
+### High Priority (Pre-Mainnet)
 
-1. **Testing Rigoroso**
-   - Unit test Move per tutti gli edge case
-   - Integration test end-to-end (create → finalize/dispute)
-   - Stress test con 100+ box concorrenti
+1. **Rigorous Testing**
+   - Move unit tests for all edge cases
+   - End-to-end integration tests (create → finalize/dispute)
+   - Stress test with 100+ concurrent boxes
 
-2. **Audit Security**
-   - Revisione Move code da esperti IOTA/Sui
-   - Penetration test frontend (XSS, injection)
-   - Verifica encryption implementation (AES-256, RSA-2048)
+2. **Security Audit**
+   - Move code review by IOTA/Sui experts
+   - Frontend penetration test (XSS, injection)
+   - Encryption implementation verification (AES-256, RSA-2048)
 
 3. **Gas Optimization**
-   - Ridurre storage on-chain ove possibile
-   - Batch operations dove applicabile
-   - Analisi costi per utente finale
+   - Reduce on-chain storage where possible
+   - Batch operations where applicable
+   - Cost analysis for end user
 
-### Priorità Media (Post-Launch)
+### Medium Priority (Post-Launch)
 
 4. **GraphQL Indexer**
-   - Setup IOTA indexer personalizzato
-   - Cache layer per marketplace query
+   - Custom IOTA indexer setup
+   - Cache layer for marketplace query
    - Real-time events subscription
 
 5. **Mobile Wallet**
-   - Integrazione TanglePay SDK
-   - WalletConnect v2 per altri wallet
-   - Testing su iOS/Android
+   - TanglePay SDK integration
+   - WalletConnect v2 for other wallets
+   - Testing on iOS/Android
 
 6. **Analytics Dashboard**
-   - Metrics: volume giornaliero, dispute rate, avg trade size
+   - Metrics: daily volume, dispute rate, avg trade size
    - User retention & churn analysis
    - Treasury balance tracking
 
-### Priorità Bassa (Future)
+### Low Priority (Future)
 
 7. **Advanced Features**
    - Multi-currency support (USD, EUR gift cards)
-   - Batch trading (sell 10x €10 cards come bundle)
-   - Escrow insurance pool (opzionale per utenti risk-averse)
+   - Batch trading (sell 10x €10 cards as bundle)
+   - Escrow insurance pool (optional for risk-averse users)
 
 8. **Governance**
-   - DAO per gestione Treasury dispute funds
-   - Community voting su fee rate (attualmente 1%)
-   - Upgrade contract tramite upgrade capability
+   - DAO for Treasury dispute funds management
+   - Community voting on fee rate (currently 1%)
+   - Contract upgrade via upgrade capability
 
 ---
 
-## 📝 Conclusioni
+## 📝 Conclusions
 
-**GiftBlitz è un progetto tecnicamente solido con una proposta di valore chiara:**
+**GiftBlitz is a technically solid project with a clear value proposition:**
 
-- ✅ Risolve un problema reale (€23B waste globally)
-- ✅ Architettura blockchain ben progettata (Move + IOTA L1)
-- ✅ Meccanica anti-frode matematicamente provata
-- ✅ UX/UI moderna e professionale
-- ✅ Documentazione completa e rigorosa
+- ✅ Solves a real problem (€23B waste globally)
+- ✅ Well-designed blockchain architecture (Move + IOTA L1)
+- ✅ Mathematically proven anti-fraud mechanism
+- ✅ Modern and professional UX/UI
+- ✅ Complete and rigorous documentation
 
-**Il progetto è pronto per:**
+**The project is ready for:**
 
-- Testing su IOTA testnet (già deployed)
-- User testing con early adopters
-- Raccolta feedback su UX e trust mechanism
+- Testing on IOTA testnet (already deployed)
+- User testing with early adopters
+- Feedback collection on UX and trust mechanism
 
-**Prima di mainnet:**
+**Before mainnet:**
 
-- Security audit obbligatorio
-- Test copertura edge cases (timeouts, dispute simultanee, gas exhaustion)
-- Ottimizzazione costi gas per micro-transazioni
+- Mandatory security audit
+- Edge cases coverage test (timeouts, simultaneous disputes, gas exhaustion)
+- Gas cost optimization for micro-transactions
 
-**Potenziale:**
+**Potential:**
 
-- **Short-term:** Catturare 0.1% mercato italiano (€1.5M volume → €15k revenue/anno)
-- **Mid-term:** Espansione EU con supporto multi-lingua
-- **Long-term:** Integration con issuer diretti (Amazon, Apple) per carte "verified"
+- **Short-term:** Capture 0.1% Italian market (€1.5M volume → €15k revenue/year)
+- **Mid-term:** EU expansion with multi-language support
+- **Long-term:** Integration with direct issuers (Amazon, Apple) for "verified" cards
 
 ---
 
-## 🏆 Valutazione Finale
+## 🏆 Final Evaluation
 
-| Criterio             | Punteggio | Note                                                            |
+| Criterion            | Score     | Notes                                                           |
 | -------------------- | --------- | --------------------------------------------------------------- |
-| **Solidità Tecnica** | 9/10      | Move implementation eccellente, alcune ottimizzazioni possibili |
-| **Innovazione**      | 8/10      | Applicazione creativa di game theory a problema reale           |
-| **UX/Design**        | 8/10      | UI moderna, potrebbe migliorare onboarding                      |
-| **Sicurezza**        | 7/10      | Encryption solida, ma richiede audit professionale              |
-| **Documentazione**   | 9/10      | WhitePaper e docs dettagliati, poche lacune                     |
-| **Deployment Ready** | 7/10      | Testnet OK, mainnet richiede audit + testing                    |
-| **Market Fit**       | 8/10      | Problema validato, execution da provare sul campo               |
+| **Technical Solidity**| 9/10      | Excellent Move implementation, some optimizations possible      |
+| **Innovation**       | 8/10      | Creative application of game theory to real problem             |
+| **UX/Design**        | 8/10      | Modern UI, onboarding could be improved                         |
+| **Security**         | 7/10      | Solid encryption, but requires professional audit               |
+| **Documentation**    | 9/10      | Detailed WhitePaper and docs, few gaps                          |
+| **Deployment Ready** | 7/10      | Testnet OK, mainnet requires audit + testing                    |
+| **Market Fit**       | 8/10      | Validated problem, execution to be proven in the field          |
 
-**Overall: 8/10** - Progetto maturo e ben eseguito, pronto per fase di testing con utenti reali.
+**Overall: 8/10** - Mature and well-executed project, ready for testing phase with real users.
 
 ---
 
-_Fine Analisi - Generata il 8 Febbraio 2026_
+_End of Analysis - Generated on February 8, 2026_

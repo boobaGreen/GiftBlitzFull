@@ -1,465 +1,456 @@
 # GiftBlitz - Game Theory & Security Analysis 🔒📊
 
-> **Obiettivo:** Analizzare e bilanciare il sistema di trust deposit per renderlo:
+> **Goal:** Analyze and balance the trust deposit system to make it:
 >
-> 1. **Invogliante** → Basse barriere d'ingresso per utenti onesti
-> 2. **Sicuro** → Frode matematicamente irrazionale
-> 3. **Resistente** → Protezione da attacchi esterni (wash trading, griefing)
+> 1. **Enticing** → Low entry barriers for honest users
+> 2. **Secure** → Fraud mathematically irrational
+> 3. **Resistant** → Protection from external attacks (wash trading, griefing)
 
 > [!IMPORTANT]
-> **Le sezioni 1-5 sono ANALISI STORICHE** che documentano il processo di ragionamento.
-> **La DECISIONE FINALE è nella Sezione 6** → Trust Deposit 100% simmetrico + Buyer caps automatici + No livelli Newbie/Pro.
+> **Sections 1-5 are HISTORICAL ANALYSES** documenting the reasoning process.
+> **The FINAL DECISION is in Section 6** → Asymmetric Trust Deposit + Buyer caps + No Newbie/Pro levels.
 
 ---
 
-## 1. Analisi del Modello Attuale (da WhitePaper)
+## 1. Analysis of Current Model (from WhitePaper)
 
-### 1.1 Trust Deposit Venditore (Seller)
+### 1.1 Seller Trust Deposit
 
-| Livello | Trust Deposit Richiesto | Logica                                                              |
+| Level   | Trust Deposit Required  | Logic                                                               |
 | ------- | ----------------------- | ------------------------------------------------------------------- |
-| Base    | **100% del FACE VALUE** | **Safety First:** Impedisce double-spending con perdita netta certa |
+| Base    | **100% of FACE VALUE**  | **Safety First:** Prevents double-spending with certain net loss    |
 
-### 1.2 Trust Deposit Compratore (Buyer)
+### 1.2 Buyer Trust Deposit
 
-| Livello | Trust Deposit Richiesto | Logica                       |
+| Level   | Trust Deposit Required  | Logic                        |
 | ------- | ----------------------- | ---------------------------- |
-| Newbie  | 50% del valore          | Da verificare se sufficiente |
-| Pro     | 25% del valore?         | Da definire                  |
+| Newbie  | 50% of value            | To be verified if sufficient |
+| Pro     | 25% of value?           | To be defined                |
 
-### 1.3 Level-Up Requirements (Attuale)
+### 1.3 Level-Up Requirements (Current)
 
-- **Pro:** 5 trade + €30 media per trade (€150 volume minimo)
+- **Pro:** 5 trades + €30 average per trade (€150 minimum volume)
 
-## 2. Esempi Completi con Flusso Monetario
+## 2. Complete Examples with Money Flow
 
-> **Chiarimento Importante:**
+> **Important Clarification:**
 >
-> - **Valore Carta** = Quanto vale la carta (es. €50 Amazon)
-> - **Prezzo Vendita** = Quanto il buyer paga (es. €40, con 20% sconto)
-> - **Trust Deposit** = Deposito cauzionale (calcolato come % del PREZZO, non del valore)
+> - **Card Value** = How much the card is worth (e.g., €50 Amazon)
+> - **Sale Price** = How much the buyer pays (e.g., €40, with 20% discount)
+> - **Trust Deposit** = Security deposit (calculated as % of PRICE, not value)
 
 ---
 
-### ❓ Q1: Perché il 100% del Face Value (e non del prezzo)?
+### ❓ Q1: Why 100% of Face Value (and not price)?
 
-#### Esempio: Vendo Carta €100 a Prezzo €80
+#### Example: Selling €100 Card at Price €80
 
-**Setup Iniziale:**
-| Attore | Deposita | Totale Bloccato |
-|--------|----------|-----------------|
-| Seller | Trust Deposit = 100% di €100 (Face Value) = **€100** | €100 |
-| Buyer | Prezzo €80 + Trust Deposit €110 (110% V) = €190 | **€190** |
-| **Totale in Escrow** | | **€290** |
+**Initial Setup:**
+| Actor | Deposits | Total Locked |
+|-------|----------|--------------|
+| Seller | Trust Deposit = 100% of €100 (Face Value) = **€100** | €100 |
+| Buyer | Price €80 + Trust Deposit €110 (110% V) = €190 | **€190** |
+| **Total in Escrow** | | **€290** |
 
 ---
 
-**🟢 SCENARIO A: Trade Onesto (Happy Path)**
+**🟢 SCENARIO A: Honest Trade (Happy Path)**
 
-1. Seller rivela chiave, Buyer verifica → conferma.
-2. Smart Contract rilascia fondi.
+1. Seller reveals key, Buyer verifies → confirms.
+2. Smart Contract releases funds.
 
-| Attore | Riceve Indietro                            | Guadagno Netto            |
+| Actor  | Receives Back                              | Net Gain                  |
 | ------ | ------------------------------------------ | ------------------------- |
-| Seller | €100 (trust deposit) + €80 (prezzo) = €180 | **+€80** (vendo carta)    |
-| Buyer  | €110 (trust deposit) + Carta (€100)        | **+€20** (valore - costo) |
+| Seller | €100 (trust deposit) + €80 (price) = €180  | **+€80** (sells card)     |
+| Buyer  | €110 (trust deposit) + Card (€100)         | **+€20** (value - cost)   |
 
 ---
 
-**🔴 SCENARIO B: Double Spending (Seller Froda)**
+**🔴 SCENARIO B: Double Spending (Seller Frauds)**
 
-Il Seller vende la carta qui E su un'altra piattaforma per €80.
-Qui fornisce codice invalido (o già usato). Buyer disputa.
+The Seller sells the card here AND on another platform for €80.
+Here provides invalid code (or already used). Buyer disputes.
 
-1. **Altrove:** Seller incassa €80.
-2. **Qui (GiftBlitz):** Buyer disputa → Treasury confisca il deposito del Seller (€100).
-3. **Calcolo Seller:**
-   - Guadagno Altrove: +€80
-   - Perdita Qui: -€100
-   - **NETTO: -€20 💸**
+1. **Elsewhere:** Seller collects €80.
+2. **Here (GiftBlitz):** Buyer disputes → Treasury confiscates Seller's deposit (€100).
+3. **Seller Calculation:**
+   - Gain Elsewhere: +€80
+   - Loss Here: -€100
+   - **NET: -€20 💸**
 
-**Conclusione:**
-Con il deposito al **100% del Face Value**, il double-spending è matematicamente una **perdita certa**.
-Il truffatore non va in pari (come accadrebbe col deposito sul prezzo), ma ci rimette soldi.
-**FRODE IRRAZIONALE E COSTOSA. ✅**
+**Conclusion:**
+With the deposit at **100% of Face Value**, double-spending is mathematically a **certain loss**.
+The scammer does not break even (as would happen with deposit on price), but loses money.
+**FRAUD IRRATIONAL AND COSTLY. ✅**
 
 ---
 
-### 🧮 PROOF MATEMATICA: Perché il Buyer è SEMPRE Incentivato a Fare BURN
+### 🧮 MATHEMATICAL PROOF: Why the Buyer is ALWAYS Incentivized to BURN
 
-> **⚠️ OBIEZIONE COMUNE:** "Se sono già stato truffato (codice falso), non mi conviene dire 'OK' per almeno recuperare il mio trust deposit, invece di bruciare tutto?"
+> **⚠️ COMMON OBJECTION:** "If I've already been scammed (fake code), isn't it better to say 'OK' to at least recover my trust deposit, instead of burning everything?"
 
-**RISPOSTA: NO!** Ecco la dimostrazione formale.
+**ANSWER: NO!** Here is the formal proof.
 
-#### Setup del Problema
+#### Problem Setup
 
-- **Carta:** Valore nominale V = €50
-- **Prezzo:** P = €40 (sconto 20%)
-- **Trust Deposit Buyer:** B = 100% × P = €40
-- **Trust Deposit Seller:** S = 100% × P = €40 (o 200% per Newbie = €80)
+- **Card:** Face value V = €50
+- **Price:** P = €40 (20% discount)
+- **Buyer Trust Deposit:** B = 100% × P = €40
+- **Seller Trust Deposit:** S = 100% × P = €40 (or 200% for Newbie = €80)
 
-#### Flusso Smart Contract
+#### Smart Contract Flow
 
-1. Buyer deposita: **P + B** = €40 + €40 = €80
-2. Seller deposita: **S** = €40 (o €80)
-3. Totale in escrow: €120 (o €160)
+1. Buyer deposits: **P + B** = €40 + €40 = €80
+2. Seller deposits: **S** = €40 (or €80)
+3. Total in escrow: €120 (or €160)
 
-#### Cosa Succede in Caso di BURN:
+#### What Happens in Case of BURN:
 
 ```
  ┌─────────────────────────────────────────────────────┐
- │   TREASURY = Confisca SOLO i Trust Deposit (B + S)       │
- │   Il PREZZO (P) viene RESTITUITO al Buyer!               │
+ │   TREASURY = Confiscates ONLY Trust Deposits (B + S)     │
+ │   The PRICE (P) is RETURNED to the Buyer!                │
  └─────────────────────────────────────────────────────┘
 ```
 
-#### Tabella Decisionale del Buyer (quando truffato)
+#### Buyer Decision Table (when scammed)
 
-| Azione              | Buyer Perde           | Buyer Recupera        | Risultato Netto Buyer |
+| Action              | Buyer Loses           | Buyer Recovers        | Net Result Buyer      |
 | ------------------- | --------------------- | --------------------- | --------------------- |
-| Conferma OK (falso) | P = €40               | Trust Deposit B = €40 | **-€40** ❌           |
-| DISPUTA             | Trust Deposit B = €40 | Prezzo P = €40        | **€0** ✅             |
+| Confirm OK (false)  | P = €40               | Trust Deposit B = €40 | **-€40** ❌           |
+| DISPUTE             | Trust Deposit B = €40 | Price P = €40         | **€0** ✅             |
 
-#### ✅ CONCLUSIONE FORMALE
+#### ✅ FORMAL CONCLUSION
 
-**Se il buyer è stato truffato (codice invalido):**
+**If the buyer has been scammed (invalid code):**
 
 ```
-Payoff(Conferma OK) = -P = -€40
+Payoff(Confirm OK) = -P = -€40
 Payoff(BURN)        = -B + P = -€40 + €40 = €0
 
-Poiché €0 > -€40 → la DISPUTA è SEMPRE la scelta razionale!
+Since €0 > -€40 → DISPUTE is ALWAYS the rational choice!
 ```
 
-**In formula generale:**
+**In general formula:**
 
 ```
-Se B ≤ P → BURN è sempre dominante per buyer truffato.
-MA ATTENZIONE: Se Valore Card > Trust Deposit, un buyer malevolo potrebbe truffare (Scenario Burner Account).
-**Soluzione:** Impostare Buyer Trust Deposit > Valore Card (es. 110%).
+If B ≤ P → BURN is always dominant for scammed buyer.
+BUT WARNING: If Card Value > Trust Deposit, a malicious buyer could scam (Burner Account Scenario).
+**Solution:** Set Buyer Trust Deposit > Card Value (e.g., 110%).
 ```
 
 ---
 
-### 🎯 IMPLICAZIONE: Perché il Seller Non Può Truffare
+### 🎯 IMPLICATION: Why the Seller Cannot Scam
 
-Sapendo che il Buyer farà **sempre** BURN se truffato:
+Knowing that the Buyer will **always** BURN if scammed:
 
-| Scenario          | Seller Guadagna | Seller Perde | EV Seller        |
+| Scenario          | Seller Gains    | Seller Loses | Seller EV        |
 | ----------------- | --------------- | ------------ | ---------------- |
-| Trade onesto      | +P = €40        | €0           | **+€40** ✅      |
-| Frode (→ Disputa) | €0              | S = €40/€80  | **-€40/-€80** ❌ |
+| Honest Trade      | +P = €40        | €0           | **+€40** ✅      |
+| Fraud (→ Dispute) | €0              | S = €40/€80  | **-€40/-€80** ❌ |
 
-**Il seller razionale sa che la frode causa BURN con certezza → non froda mai.**
+**The rational seller knows that fraud causes BURN with certainty → never frauds.**
 
 ---
 
-### 📊 Matrice di Gioco Completa (Nash Equilibrium)
+### 📊 Complete Game Matrix (Nash Equilibrium)
 
-|                   | Buyer Conferma | Buyer BURN               |
+|                   | Buyer Confirms | Buyer BURN               |
 | ----------------- | -------------- | ------------------------ |
-| **Seller Onesto** | (+40, +10) ✅  | (-80, 0)                 |
-| **Seller Froda**  | (+40, -40)     | (-80, 0) ← accade sempre |
+| **Seller Honest** | (+40, +10) ✅  | (-80, 0)                 |
+| **Seller Frauds** | (+40, -40)     | (-80, 0) ← happens always|
 
-**Nash Equilibrium:** (Seller Onesto, Buyer Conferma) = (+40, +10)
+**Nash Equilibrium:** (Seller Honest, Buyer Confirms) = (+40, +10)
 
-- Se Seller froda → Buyer apre Disputa (perché 0 > -40)
-- Sapendo questo → Seller non froda (perché -80 < +40)
-- → Equilibrio: Trade onesto
-
----
-
-**📊 Conclusione Q1:**
-
-```
-Trust Deposit 100% del PREZZO = €40 per vendere carta da €50 al prezzo di €40
-Frode: Max guadagno €0 (perché BURN), Max perdita €40-€80
-→ FRODE MATEMATICAMENTE IRRAZIONALE ✅
-```
-
-**💡 Nota Finale:**
-Il sistema funziona perché il **prezzo torna al buyer in caso di burn**.
-Questo rende il BURN a "costo zero" per il buyer truffato, mentre il seller perde il trust deposit.
+- If Seller frauds → Buyer opens Dispute (because 0 > -40)
+- Knowing this → Seller does not fraud (because -80 < +40)
+- → Equilibrium: Honest trade
 
 ---
 
-### ❓ Q2: È giusto il 100% per venditori Pro?
-
-#### Esempio: Carta €100, Prezzo €80
-
-**Setup con Trust Deposit 100%:**
-| Attore | Deposita |
-|--------|----------|
-| Seller Pro | Trust Deposit = 100% di €80 = **€80** |
-| Buyer | Prezzo €80 + Trust Deposit 50% = €40 | **€120** |
-
-**Frode Seller:**
+**📊 Conclusion Q1:**
 
 ```
-Max guadagno (buyer non disputa): €80 (prezzo)
-Perdita (buyer disputa): €80 (trust deposit)
-Rapporto: 1:1 → NEUTRO ⚠️
+Trust Deposit 100% of PRICE = €40 to sell €50 card at €40 price
+Fraud: Max gain €0 (because BURN), Max loss €40-€80
+→ FRAUD MATHEMATICALLY IRRATIONAL ✅
 ```
 
-**Problema:** Con rapporto 1:1, il fraudatore potrebbe tentare se:
+**💡 Final Note:**
+The system works because the **price returns to the buyer in case of burn**.
+This makes the BURN "zero cost" for the scammed buyer, while the seller loses the trust deposit.
 
-- Ha già intenzione di abbandonare la piattaforma
-- Può creare account multipli (Sybil)
+---
 
-**💡 Proposta per Pro:**
+### ❓ Q2: Is 100% fair for Pro sellers?
+
+#### Example: Card €100, Price €80
+
+**Setup with 100% Trust Deposit:**
+| Actor | Deposits |
+|-------|----------|
+| Pro Seller | Trust Deposit = 100% of €80 = **€80** |
+| Buyer | Price €80 + Trust Deposit 50% = €40 | **€120** |
+
+**Seller Fraud:**
+
+```
+Max gain (buyer doesn't dispute): €80 (price)
+Loss (buyer disputes): €80 (trust deposit)
+Ratio: 1:1 → NEUTRAL ⚠️
+```
+
+**Problem:** With 1:1 ratio, the fraudster might try if:
+
+- Already intends to abandon the platform
+- Can create multiple accounts (Sybil)
+
+**💡 Proposal for Pro:**
 
 1. **Trust Deposit 100% + Trade Value Cap:**
    - Pro max trade = €200
-   - Limita il danno massimo per singola frode
-2. **Cooling period:** Pro deve aspettare 24h prima di fare trade >€100
-3. **Trust Deposit dinamico:** Trust Deposit = 100% + (10% per ogni dispute passata)
+   - Limits max damage per single fraud
+2. **Cooling period:** Pro must wait 24h before trading >€100
+3. **Dynamic Trust Deposit:** Trust Deposit = 100% + (10% per past dispute)
 
 ---
 
-### ❓ Q3: È corretto il requisito "5 trade + €30 media" per diventare Pro?
+### ❓ Q3: Is the "5 trades + €30 average" requirement correct to become Pro?
 
-#### Analisi Attacco Sybil (Farming Reputazione)
+#### Sybil Attack Analysis (Reputation Farming)
 
-**Costo per creare 1 account Pro:**
-
-```
-5 trade × €30 medio = €150 volume
-Fee 1% = €1.50 speso
-Tempo: ~1 settimana se attivo
-```
-
-**Poi froda:**
+**Cost to create 1 Pro account:**
 
 ```
-1 trade da €100 → Guadagno €80 (se buyer non disputa)
-                → Perdita €80 (se disputa)
+5 trades × €30 avg = €150 volume
+Fee 1% = €1.50 spent
+Time: ~1 week if active
 ```
 
-**Problema:** Dopo essere diventato Pro, può frodare con rapporto ~1:1.
-Il costo €1.50 per "comprare" status Pro è troppo basso!
+**Then frauds:**
 
-**💡 Proposta Requisiti Pro:**
+```
+1 trade of €100 → Gain €80 (if buyer doesn't dispute)
+                → Loss €80 (if disputes)
+```
 
-| Requisito       | Attuale | Proposto      | Perché                      |
+**Problem:** After becoming Pro, can fraud with ~1:1 ratio.
+The €1.50 cost to "buy" Pro status is too low!
+
+**💡 Proposal Pro Requirements:**
+
+| Requirement     | Current | Proposed      | Why                         |
 | --------------- | ------- | ------------- | --------------------------- |
-| Trade count     | 5       | **10**        | Più frizione                |
-| Volume medio    | €30     | **€40**       | Evita micro-trade farming   |
-| Volume totale   | €150    | **€400**      | Costo farming = €4 fee      |
-| Tempo minimo    | -       | **14 giorni** | Impedisce hit-and-run       |
-| Dispute massime | -       | **0**         | Un dispute = reset a Newbie |
+| Trade count     | 5       | **10**        | More friction               |
+| Avg Volume      | €30     | **€40**       | Avoids micro-trade farming  |
+| Total Volume    | €150    | **€400**      | Farming cost = €4 fee       |
+| Min Time        | -       | **14 days**   | Prevents hit-and-run        |
+| Max Disputes    | -       | **0**         | One dispute = reset to Newbie|
 
-**Costo farming nuovo:**
+**New farming cost:**
 
 ```
-10 trade × €40 × 1% fee = €4
-+ 14 giorni di attesa
-+ Rischio che una controparte disputi (reset)
+10 trades × €40 × 1% fee = €4
++ 14 days waiting
++ Risk that a counterparty disputes (reset)
 ```
 
-Più costoso e rischioso → Disincentiva Sybil
+More expensive and risky → Disincentivizes Sybil
 
 ---
 
-## 3. Analisi Approfondita: Compratore (Buyer)
+## 3. In-Depth Analysis: Buyer
 
-### ❓ Q4: Quanto trust deposit per Buyer Newbie?
+### ❓ Q4: How much trust deposit for Buyer Newbie?
 
-**Scenario:** Buyer Newbie compra carta da €50 a prezzo €40
+**Scenario:** Buyer Newbie buys €50 card at price €40
 
-- **Rischio per il sistema:** Buyer reclama frode falsa per bruciare trust deposit venditore
-- **Costo del griefing:** Il trust deposit del buyer stesso viene bruciato
+- **System Risk:** Buyer claims fake fraud to burn seller's trust deposit
+- **Griefing Cost:** The buyer's own trust deposit is burned
 
-**Attuale (assunto):** 50% del prezzo = €20
+**Current (assumed):** 50% of price = €20
 
-**Analisi:**
+**Analysis:**
 
 ```
-Griefing: Costo = €20 bruciati
-Danno inflitto = €100 (trust deposit venditore Newbie) o €50 (Pro)
-Rapporto Danno/Costo = 5:1 o 2.5:1 → PROFITTEVOLE per griefer!
+Griefing: Cost = €20 burned
+Damage inflicted = €100 (Newbie seller trust deposit) or €50 (Pro)
+Damage/Cost Ratio = 5:1 or 2.5:1 → PROFITABLE for griefer!
 ```
 
-**⚠️ VULNERABILITÀ CRITICA:** Un concorrente potrebbe:
+**⚠️ CRITICAL VULNERABILITY:** A competitor could:
 
-1. Comprare con account fake
-2. Disputare sempre → bruciare trust deposit a venditori onesti
-3. Costo: solo €20 per causare €100 di danno
+1. Buy with fake account
+2. Always dispute → burn honest sellers' trust deposits
+3. Cost: only €20 to cause €100 damage
 
-**💡 Proposta:**
-| Livello Buyer | Trust Deposit Proposto | Logica |
-|---------------|----------------|--------|
-| Newbie | **100% del PREZZO** | Pari al venditore Pro |
-| Pro | **50% del prezzo** | Ridotto per buyer verificati |
+**💡 Proposal:**
+| Buyer Level | Proposed Trust Deposit | Logic |
+|-------------|------------------------|-------|
+| Newbie | **100% of PRICE** | Equal to Pro seller |
+| Pro | **50% of price** | Reduced for verified buyers |
 
-Con 100%: Griefing costa €40 per bruciare €100 → Rapporto 2.5:1 ancora rischioso
-**Alternativa:** Trust Deposit buyer = Trust Deposit seller (simmetrico)
-
----
-
-### ❓ Q5: Quanto trust deposit per Buyer Pro?
-
-Se Buyer Pro ha trust deposit 50%:
-
-- Trade €100 a €80 → Trust Deposit €40
-- Griefing: Costo €40, Danno €100 → Rapporto 2.5:1
-
-**💡 Proposta:** Buyer Pro trust deposit = **75% del prezzo**
-
-- Rapporto Danno/Costo = 1.33:1 → marginale ma non profittevole considerando:
-  - Perdita reputazione (account Pro "sprecato")
-  - Costo farming nuovo account Pro
+With 100%: Griefing costs €40 to burn €100 → Ratio 2.5:1 still risky
+**Alternative:** Buyer trust deposit = Seller trust deposit (symmetric)
 
 ---
 
-## 4. Meccanica Reputazione Unificata
+### ❓ Q5: How much trust deposit for Buyer Pro?
 
-### ❓ Q6: È chiara la dinamica del contatore unico?
+If Buyer Pro has 50% trust deposit:
 
-**Regola attuale:** Ogni trade completato → +1 trade count + volume per ENTRAMBI
+- Trade €100 at €80 → Trust Deposit €40
+- Griefing: Cost €40, Damage €100 → Ratio 2.5:1
 
-**Scenari:**
-| Scenario | Seller | Buyer | Risultato |
-|----------|--------|-------|-----------|
-| Trade OK | +1 trade, +€50 vol | +1 trade, +€50 vol | Entrambi crescono |
-| Dispute (burn) | +1 dispute | +1 dispute | Entrambi puniti |
-| Cancel (pre-lock) | Nessun effetto | N/A | Nessun effetto |
+**💡 Proposal:** Buyer Pro trust deposit = **75% of price**
 
-**✅ Semplice e chiaro.** Nessuna asimmetria.
-
-**⚠️ Problema:** Un seller può "comprare" da se stesso per farmare reputazione?
-
-**Analisi Wash Trading:**
-
-- Seller crea Box €100
-- Buyer (stesso owner) compra e finalizza
-- Costo: 1% fee = €1
-- Guadagno: +2 trade count (uno per ruolo)
-
-**💡 Proposta Anti-Wash:**
-
-1. **Cooldown** tra trade con stessa controparte (24h)
-2. **Pattern detection:** Flag se >50% trade con stessi indirizzi
-3. **Trust Deposit proporzionale al volume:** Trade piccoli (<€20) non contano per level-up
+- Damage/Cost Ratio = 1.33:1 → marginal but not profitable considering:
+  - Reputation loss ("Pro" account wasted)
+  - Cost farming new Pro account
 
 ---
 
-## 5. Vettori di Attacco Esterni
+## 4. Unified Reputation Mechanics
 
-### 🔴 Attacco 1: Competitor Griefing
+### ❓ Q6: Is the single counter dynamic clear?
 
-**Scenario:** Un competitor (es. CardCash) vuole distruggere GiftBlitz
+**Current Rule:** Each completed trade → +1 trade count + volume for BOTH
 
-- Compra 100 carte da venditori onesti
-- Disputa sempre → brucia €10,000 di trust deposit venditori
-- Costo per attaccante: €10,000 (trust deposit bruciato) + €500 carte = €10,500
+**Scenarios:**
+| Scenario | Seller | Buyer | Result |
+|----------|--------|-------|--------|
+| Trade OK | +1 trade, +€50 vol | +1 trade, +€50 vol | Both grow |
+| Dispute (burn) | +1 dispute | +1 dispute | Both punished |
+| Cancel (pre-lock) | No effect | N/A | No effect |
 
-**Difesa:**
+**✅ Simple and clear.** No asymmetry.
 
-- ✅ Se trust deposit buyer = trust deposit seller → Costo = Danno (neutro)
-- ✅ Rate limiting: Max 3 dispute/giorno per account
-- ✅ Blocklist: Account con >30% dispute rate bloccati
+**⚠️ Problem:** Can a seller "buy" from themselves to farm reputation?
 
-### 🔴 Attacco 2: Sybil Farming
+**Wash Trading Analysis:**
 
-**Scenario:** Creare molti account Pro per poi frodare
+- Seller creates Box €100
+- Buyer (same owner) buys and finalizes
+- Cost: 1% fee = €1
+- Gain: +2 trade count (one per role)
 
-- Costo per 1 Pro: 10 trade × €50 × 1% = €5
-- Poi froda 1 trade da €500 → Guadagno €500
+**💡 Anti-Wash Proposal:**
+
+1. **Cooldown** between trades with same counterparty (24h)
+2. **Pattern detection:** Flag if >50% trades with same addresses
+3. **Volume proportional Trust Deposit:** Small trades (<€20) don't count for level-up
+
+---
+
+## 5. External Attack Vectors
+
+### 🔴 Attack 1: Competitor Griefing
+
+**Scenario:** A competitor (e.g., CardCash) wants to destroy GiftBlitz
+
+- Buys 100 cards from honest sellers
+- Always disputes → burns €10,000 of sellers' trust deposits
+- Attacker cost: €10,000 (burned trust deposit) + €500 cards = €10,500
+
+**Defense:**
+
+- ✅ If buyer trust deposit = seller trust deposit → Cost = Damage (neutral)
+- ✅ Rate limiting: Max 3 disputes/day per account
+- ✅ Blocklist: Accounts with >30% dispute rate blocked
+
+### 🔴 Attack 2: Sybil Farming
+
+**Scenario:** Create many Pro accounts to then fraud
+
+- Cost for 1 Pro: 10 trades × €50 × 1% = €5
+- Then fraud 1 trade of €500 → Gain €500
 - ROI: 100x
 
-**Difesa:**
+**Defense:**
 
-- ✅ Max trade value = f(reputazione): Newbie max €50, Pro max €200
-- ✅ Tempo minimo in piattaforma (30 giorni per Pro)
-- ✅ KYC opzionale per sbloccare limiti alti (con incentivi)
+- ✅ Max trade value = f(reputation): Newbie max €50, Pro max €200
+- ✅ Minimum time on platform (30 days for Pro)
+- ✅ Optional KYC to unlock high limits (with incentives)
 
 ### 🟢 Auto-Confirm Timer (24h)
 
-**Problema:** Buyer 'dimentica' di confermare o sparisce.
-**Soluzione:** Smart Contract ha un timer.
+**Problem:** Buyer 'forgets' to confirm or disappears.
+**Solution:** Smart Contract has a timer.
 
-- Se dopo **24 ORE** dal reveal non c'è Disputa né Conferma → **Auto-Confirm**.
-- Fondi rilasciati al Seller.
-- Protegge il Seller da ghosting.
+- If after **24 HOURS** from reveal there is no Dispute nor Confirmation → **Auto-Confirm**.
+- Funds released to Seller.
+- Protects Seller from ghosting.
 
-**Difesa Finale:**
+**Final Defense:**
 
-- ✅ Trust Deposit Asimmetrico (Buyer > Valore)
-- ✅ **Auto-Confirm 24h** (nessun cooling period necessario)
-- ✅ Pattern detection: flag se stesso utente disputa >30% trades
-- ✅ Possibilità di caricare screenshot prova nel dispute (off-chain)
+- ✅ Asymmetric Trust Deposit (Buyer > Value)
+- ✅ **Auto-Confirm 24h** (no cooling period needed)
+- ✅ Pattern detection: flag if same user disputes >30% trades
+- ✅ Ability to upload screenshot proof in dispute (off-chain)
 
 ---
 
-## 6. ✅ DECISIONE FINALE (APPROVATO - v3 Caps Asimmetrici)
+## 6. ✅ FINAL DECISION (APPROVED - v3 Asymmetric Caps)
 
-### 📊 Sistema Finale
+### 📊 Final System
 
 ```
-REGOLA 1: Selezionato Trust Deposit Asimmetrico (Safe Trust Deposit)
-   - Seller Trust Deposit: 100% del Prezzo
-   - Buyer Trust Deposit: 110% del VALORE della Card
-REGOLA 2: Seller può vendere fino a €200 DAL GIORNO 1
-REGOLA 3: Buyer ha caps progressivi (anti-griefing)
-REGOLA 4: Una disputa = reset del trade count a 0
+RULE 1: Selected Asymmetric Trust Deposit (Safe Trust Deposit)
+   - Seller Trust Deposit: 100% of Price
+   - Buyer Trust Deposit: 110% of Card VALUE
+RULE 2: Seller can sell up to €200 FROM DAY 1
+RULE 3: Buyer has progressive caps (anti-griefing)
+RULE 4: One dispute = trade count reset to 0
 ```
 
-### 📈 Caps Asimmetrici
+### 📈 Asymmetric Caps
 
-**SELLER (Chi Vende):**
-| Trade Count | Max Valore Box |
-|-------------|----------------|
+**SELLER (Who Sells):**
+| Trade Count | Max Box Value |
+|-------------|---------------|
 | 0+ | **€200** |
 
-> ✅ Un nuovo utente può vendere la sua gift card da €100 subito!
+> ✅ A new user can sell their €100 gift card immediately!
 
-**BUYER (Chi Compra):**
-| Trade Count | Max Acquisto |
+**BUYER (Who Buys):**
+| Trade Count | Max Purchase |
 |-------------|--------------|
 | 0-2 | €30 |
 | 3-6 | €50 |
 | 7-14 | €100 |
 | 15+ | €200 |
 
-### 🛡️ Protezioni Anti-Abuse
+### 🛡️ Anti-Abuse Protections
 
-| Protezione              | Implementazione                                                            |
+| Protection              | Implementation                                                             |
 | ----------------------- | -------------------------------------------------------------------------- |
-| **Trust Deposit Model** | **Asimmetrico (Safe Trust Deposit)**: Buyer 110% Value > Seller 100% Price |
-| **Seller Caps**         | €200 (già ha 100% trust deposit)                                           |
-| **Buyer Caps**          | Progressivi (anti-griefing)                                                |
-| **Auto-Confirm**        | Dopo 24h se nessuna azione                                                 |
-| **Reset Dispute**       | Una disputa = trade count torna a 0                                        |
+| **Trust Deposit Model** | **Asymmetric (Safe Trust Deposit)**: Buyer 110% Value > Seller 100% Price  |
+| **Seller Caps**         | €200 (already has 100% trust deposit)                                      |
+| **Buyer Caps**          | Progressive (anti-griefing)                                                |
+| **Auto-Confirm**        | After 24h if no action                                                     |
+| **Reset Dispute**       | One dispute = trade count back to 0                                        |
 
-### 🛡️ Protezioni Anti-Abuse
-
-| Protezione              | Implementazione                         |
-| ----------------------- | --------------------------------------- |
-| **Trust Deposit Model** | **Asimmetrico (Safe Trust Deposit)**    |
-| **Trade Caps**          | Progressivi basati sui trade completati |
-| **Auto-Confirm**        | Dopo 24h se nessuna azione              |
-| **Reset Dispute**       | Una disputa = trade count torna a 0     |
-
-> **Perché questo sistema?**
+> **Why this system?**
 >
-> - ✅ Più semplice (no "livelli" da spiegare)
-> - ✅ Stesso livello di sicurezza
-> - ✅ Progressione naturale
-> - ✅ Deterrente forte (reset completo su disputa)
+> - ✅ Simpler (no "levels" to explain)
+> - ✅ Same security level
+> - ✅ Natural progression
+> - ✅ Strong deterrent (complete reset on dispute)
 
 ---
 
-## 7. Implementazione
+## 7. Implementation
 
-### ✅ DOCUMENTAZIONE (Completato)
+### ✅ DOCUMENTATION (Completed)
 
-- [x] WhitePaper aggiornato con sistema semplificato
-- [x] Game Theory Analysis aggiornato
-- [x] Competitor Analysis aggiornato
+- [x] WhitePaper updated with simplified system
+- [x] Game Theory Analysis updated
+- [x] Competitor Analysis updated
 
-### ✅ CODICE (Completato)
+### ✅ CODE (Completed)
 
-- [x] `types/index.ts`: Rimosso `reputationLevel`, aggiunto `getMaxTradeValue()`
-- [x] `mockData.ts`: Aggiornato a `minTrades` invece di `minReputation`
-- [x] Trust Deposit = 100% Prezzo (Seller), 110% Valore (Buyer)
+- [x] `types/index.ts`: Removed `reputationLevel`, added `getMaxTradeValue()`
+- [x] `mockData.ts`: Updated to `minTrades` instead of `minReputation`
+- [x] Trust Deposit = 100% Price (Seller), 110% Value (Buyer)
 - [ ] Trust Deposit calculator: price \* 1.0 (100%)

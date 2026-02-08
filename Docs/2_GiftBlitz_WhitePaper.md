@@ -96,198 +96,198 @@ sequenceDiagram
 
 ---
 
-## 5. Reputation & Trade Caps System (Semplificato)
+## 5. Reputation & Trade Caps System (Simplified)
 
-> 🎯 **Principio Base:** Il Trust Deposit è ASIMMETRICO. Il **Seller** mette 100% del Prezzo. Il **Buyer** mette 110% del VALORE della card. Questo rende matematicamente impossibile trarre profitto dal burning.
+> 🎯 **Core Principle:** The Trust Deposit is ASYMMETRIC. The **Seller** puts 100% of the Price. The **Buyer** puts 110% of the card VALUE. This makes it mathematically impossible to profit from burning.
 
 ---
 
-### 5.1 Le 3 Regole Fondamentali
+### 5.1 The 3 Fundamental Rules
 
 ```
 ┌────────────────────────────────────────────────────────────────┐
-│  REGOLA 1: SELLER TRUST DEPOSIT = 100% FACE VALUE | BUYER TRUST DEPOSIT = 110% VALUE  │
-│  REGOLA 2: TRADE CAPS crescono con i trade completati         │
-│  REGOLA 3: UNA DISPUTA = RESET DEL CAP A ZERO                 │
+│  RULE 1: SELLER TRUST DEPOSIT = 100% FACE VALUE | BUYER TRUST DEPOSIT = 110% VALUE  │
+│  RULE 2: TRADE CAPS grow with completed trades                │
+│  RULE 3: ONE DISPUTE = CAP RESET TO ZERO                      │
 └────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-### 5.2 Come Funziona il Trust Deposit (Esempio)
+### 5.2 How Trust Deposit Works (Example)
 
-**Scenario:** Vendi una gift card Amazon da €100 al prezzo di €80
+**Scenario:** Sell a €100 Amazon gift card for €80
 
-| Chi                  | Cosa Deposita          | Calcolo                                                |
+| Who                  | What They Deposit      | Calculation                                            |
 | -------------------- | ---------------------- | ------------------------------------------------------ |
-| **Seller**           | Trust Deposit          | 100% del Valore Carta × €100 = **€100**                |
-| **Buyer**            | Prezzo + Trust Deposit | €80 + (110% del Valore × €100) = €80 + €110 = **€190** |
-| **Totale in Escrow** |                        | **€290**                                               |
+| **Seller**           | Trust Deposit          | 100% of Card Value × €100 = **€100**                   |
+| **Buyer**            | Price + Trust Deposit  | €80 + (110% of Value × €100) = €80 + €110 = **€190**   |
+| **Total in Escrow**  |                        | **€290**                                               |
 
-**Se tutto OK:**
+**If everything is OK:**
 
-- Seller riceve: €100 (trust deposit) + €80 (prezzo) - €0.80 (1% fee) = **€179.20**
-- Buyer riceve: €110 (trust deposit) + carta da €100 = **€210 di valore**
+- Seller receives: €100 (trust deposit) + €80 (price) - €0.80 (1% fee) = **€179.20**
+- Buyer receives: €110 (trust deposit) + €100 card = **€210 in value**
 
-**Se DISPUTA (Treasury):**
+**If DISPUTE (Treasury):**
 
-- Seller perde: €80 (trust deposit confiscato)
-- Buyer perde: €80 (trust deposit confiscato), ma recupera €80 (prezzo) = **€0 netto**
+- Seller loses: €80 (trust deposit confiscated)
+- Buyer loses: €80 (trust deposit confiscated), but recovers €80 (price) = **€0 net**
 
 ---
 
-### 5.3 Trade Caps (Asimmetrici Seller/Buyer)
+### 5.3 Trade Caps (Asymmetric Seller/Buyer)
 
-> 🎯 **REGOLA CHIAVE:** I caps sono DIVERSI per Seller e Buyer!
+> 🎯 **KEY RULE:** Caps are DIFFERENT for Sellers and Buyers!
 >
-> - **Seller:** Può vendere fino a €200 DAL GIORNO 1 (già mette 100% trust deposit)
-> - **Buyer:** Caps progressivi per prevenire griefing
+> - **Seller:** Can sell up to €200 FROM DAY 1 (already puts 100% trust deposit)
+> - **Buyer:** Progressive caps to prevent griefing
 
-#### Perché Asimmetrici?
+#### Why Asymmetric?
 
-| Ruolo      | Rischio                                                     | Soluzione              |
+| Role       | Risk                                                        | Solution               |
 | ---------- | ----------------------------------------------------------- | ---------------------- |
-| **Seller** | Basso (già mette 100% trust deposit, perde tutto se truffa) | Nessun cap restrittivo |
-| **Buyer**  | Alto (può fare false dispute = griefing)                    | Caps progressivi       |
+| **Seller** | Low (already puts 100% trust deposit, loses all if scamming)| No restrictive cap     |
+| **Buyer**  | High (can make false disputes = griefing)                   | Progressive caps       |
 
-#### Caps per SELLER (Chi Vende)
+#### Caps for SELLER (Who Sells)
 
-| Trade Completati | Max Valore Box | Note                |
-| ---------------- | -------------- | ------------------- |
-| **0+**           | **€200**       | Può vendere subito! |
+| Completed Trades | Max Box Value | Notes               |
+| ---------------- | ------------- | ------------------- |
+| **0+**           | **€200**      | Can sell immediately!|
 
-> ✅ **Un nuovo utente può VENDERE una gift card da €100 dal primo giorno!**
-> Il seller mette già 100% trust deposit, quindi ha già "skin in the game".
+> ✅ **A new user can SELL a €100 gift card from day one!**
+> The seller already puts 100% trust deposit, so they have "skin in the game".
 
-#### Caps per BUYER (Chi Compra)
+#### Caps for BUYER (Who Buys)
 
-| Trade Completati | Max Acquisto | Come Ci Arrivi  |
-| ---------------- | ------------ | --------------- |
-| **0-2**          | €30          | Primo giorno    |
-| **3-6**          | €50          | Dopo 3 trade OK |
-| **7-14**         | €100         | Dopo 7 trade OK |
-| **15+**          | €200         | Utente veterano |
+| Completed Trades | Max Purchase | How to Get There |
+| ---------------- | ------------ | ---------------- |
+| **0-2**          | €30          | First day        |
+| **3-6**          | €50          | After 3 OK trades|
+| **7-14**         | €100         | After 7 OK trades|
+| **15+**          | €200         | Veteran user     |
 
-**Esempio Pratico:**
+**Practical Example:**
 
 ```
-👤 Mario (nuovo utente, tradeCount = 0)
+👤 Mario (new user, tradeCount = 0)
 
-✅ COME SELLER: Può creare Box fino a €200
-   Crea Box Amazon €100 → OK! (mette €80 trust deposit)
+✅ AS SELLER: Can create Box up to €200
+   Creates Amazon €100 Box → OK! (puts €80 trust deposit)
 
-❌ COME BUYER: Max €30
-   Vuole comprare Box da €50 → Non può ancora!
-   Deve prima fare 3 trade per sbloccare €50
+❌ AS BUYER: Max €30
+   Wants to buy €50 Box → Cannot yet!
+   Must do 3 trades first to unlock €50
 
-📦 Mario compra 3 box piccole (€20, €25, €30)
-   tradeCount = 3 → Max acquisto = €50 ✨
+📦 Mario buys 3 small boxes (€20, €25, €30)
+   tradeCount = 3 → Max purchase = €50 ✨
 ```
 
 ---
 
-### 5.4 Come Guadagni Trade Count
+### 5.4 How to Earn Trade Count
 
-> 🎯 **IMPORTANTE: È UN SOLO CONTATORE!**
-> Ogni utente ha UN UNICO `tradeCount` che cresce sia quando compri che quando vendi.
-> Non esistono contatori separati per buyer e seller.
+> 🎯 **IMPORTANT: IT'S A SINGLE COUNTER!**
+> Each user has ONE SINGLE `tradeCount` that grows both when buying and when selling.
+> There are no separate counters for buyers and sellers.
 
-| Evento                           | Effetto       | Note                |
+| Event                            | Effect        | Notes               |
 | -------------------------------- | ------------- | ------------------- |
-| Trade completato come **Seller** | +1 trade      | Buyer ha confermato |
-| Trade completato come **Buyer**  | +1 trade      | Hai confermato      |
-| Box cancellata (prima del lock)  | Nessuno       | Non conta           |
-| **DISPUTA (Treasury)**           | **RESET A 0** | Qualunque ruolo     |
+| Trade completed as **Seller**    | +1 trade      | Buyer confirmed     |
+| Trade completed as **Buyer**     | +1 trade      | You confirmed       |
+| Box cancelled (before lock)      | None          | Doesn't count       |
+| **DISPUTE (Treasury)**           | **RESET TO 0**| Any role            |
 
-**Esempio Pratico:**
+**Practical Example:**
 
 ```
-👤 Mario inizia con tradeCount = 0 (max €30)
+👤 Mario starts with tradeCount = 0 (max €30)
 
-Trade 1: Mario COMPRA da Alice     → Mario: 1, Alice: +1
-Trade 2: Mario VENDE a Luigi       → Mario: 2, Luigi: +1
-Trade 3: Mario COMPRA da Sara      → Mario: 3 → MAX €50! ✨
+Trade 1: Mario BUYS from Alice     → Mario: 1, Alice: +1
+Trade 2: Mario SELLS to Luigi      → Mario: 2, Luigi: +1
+Trade 3: Mario BUYS from Sara      → Mario: 3 → MAX €50! ✨
 
-Mario ha raggiunto 3 trade (2 come buyer, 1 come seller)
-Ora può fare trade fino a €50!
+Mario reached 3 trades (2 as buyer, 1 as seller)
+Now he can trade up to €50!
 ```
 
-> ⚠️ **ATTENZIONE:** Una singola disputa (come seller O buyer) resetta TUTTO il tuo trade count a 0. Ricomincerai da €30 max.
+> ⚠️ **WARNING:** A single dispute (as seller OR buyer) resets ALL your trade count to 0. You will start over from €30 max.
 
 ---
 
-### 5.5 Soulbound NFT (Reputazione On-Chain)
+### 5.5 Soulbound NFT (On-Chain Reputation)
 
-Ogni utente ha un **NFT non trasferibile** che traccia la sua storia:
+Each user has a **non-transferable NFT** that tracks their history:
 
 ```solidity
 struct ReputationNFT {
-  address owner;           // Non puoi venderlo/trasferirlo
-  uint256 totalTrades;     // Conta trade completati
-  uint256 totalVolume;     // Volume totale (€)
-  uint256 disputes;        // Numero di dispute (idealmente 0)
-  uint256 firstTradeTime;  // Quando hai iniziato
+  address owner;           // Cannot sell/transfer
+  uint256 totalTrades;     // Counts completed trades
+  uint256 totalVolume;     // Total volume (€)
+  uint256 disputes;        // Number of disputes (ideally 0)
+  uint256 firstTradeTime;  // When you started
 }
 ```
 
-**Perché Soulbound?**
+**Why Soulbound?**
 
-- ❌ Non puoi comprare reputazione da altri
-- ❌ Non puoi vendere un account "Pro"
-- ✅ Devi guadagnartela con trade reali
-
----
-
-### 5.6 Nessuna Configurazione per il Seller
-
-> ✅ **I buyer caps sono AUTOMATICI!**
-> Il seller non deve scegliere nulla. Il sistema gestisce automaticamente chi può comprare basandosi sul prezzo del Box e sul trade count del buyer.
-
-**Esempio:**
-
-```
-Seller crea Box da €80 (valore €100)
-
-Chi può comprare?
-- Buyer con 0-2 trades → Max €30 → ❌ Non può
-- Buyer con 3-6 trades → Max €50 → ❌ Non può
-- Buyer con 7+ trades → Max €100 → ✅ Può comprare!
-```
-
-Questo semplifica l'UX: il seller crea il Box e basta, il sistema fa il resto.
+- ❌ You cannot buy reputation from others
+- ❌ You cannot sell a "Pro" account
+- ✅ You must earn it with real trades
 
 ---
 
-### 5.7 Riepilogo Visivo
+### 5.6 No Configuration for Seller
+
+> ✅ **Buyer caps are AUTOMATIC!**
+> The seller doesn't have to choose anything. The system automatically manages who can buy based on Box price and buyer's trade count.
+
+**Example:**
 
 ```
-                    IL TUO TRADING JOURNEY
+Seller creates €80 Box (€100 value)
+
+Who can buy?
+- Buyer with 0-2 trades → Max €30 → ❌ Cannot
+- Buyer with 3-6 trades → Max €50 → ❌ Cannot
+- Buyer with 7+ trades → Max €100 → ✅ Can buy!
+```
+
+This simplifies UX: the seller creates the Box and that's it, the system does the rest.
+
+---
+
+### 5.7 Visual Summary
+
+```
+                    YOUR TRADING JOURNEY
 
    €30 ──── €50 ──── €100 ──── €200 ──── €500
     │        │         │         │         │
-    0        3         7        15        30  ← Trade completati
+    0        3         7        15        30  ← Completed Trades
 
-   ⚠️ UNA DISPUTA = TORNI QUI ──────────────┘
-    (Fondi mandati al Protocol Treasury)
+   ⚠️ ONE DISPUTE = BACK TO START ──────────┘
+    (Funds sent to Protocol Treasury)
                                     ↓
                                    €30
 ```
 
 ---
 
-### 5.8 FAQ Rapide
+### 5.8 Quick FAQ
 
-**Q: Se compro e vendo nella stessa transazione, guadagno 2 trade count?**
+**Q: If I buy and sell in the same transaction, do I gain 2 trade counts?**
 
-> No, ogni trade conta 1 volta per lato. Se Alice vende a Mario, Alice +1 e Mario +1.
+> No, each trade counts once per side. If Alice sells to Mario, Alice +1 and Mario +1.
 
-**Q: Se l'altro utente disputa, perdo anche io il trade count?**
+**Q: If the other user disputes, do I lose my trade count too?**
 
-> Sì. La disputa resetta ENTRAMBI gli utenti coinvolti. Ecco perché disputare è costoso per tutti.
+> Yes. A dispute resets BOTH involved users. This is why disputing is costly for everyone.
 
-**Q: Posso fare trade con me stesso per farmare?**
+**Q: Can I trade with myself to farm?**
 
-> Tecnicamente sì, ma paghi 1% fee per ogni trade e sprechi tempo. Costo per arrivare a €200 cap: ~15 trades × €30 × 1% = €4.50 + tempo. Non conviene frodare.
+> Technically yes, but you pay 1% fee for each trade and waste time. Cost to reach €200 cap: ~15 trades × €30 × 1% = €4.50 + time. Not worth frauding.
 
 ---
 
@@ -307,7 +307,7 @@ Each Soulbound NFT displays a dynamic badge that updates as you level up.
 </svg>
 ```
 
-**Color Scheme (basato su Trade Count):**
+**Color Scheme (based on Trade Count):**
 
 - **Newcomer (0-2 trades):** 🔵 Blue (#3b82f6)
 - **Member (3-6 trades):** 🟢 Green (#22c55e)
