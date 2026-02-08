@@ -118,11 +118,11 @@ sequenceDiagram
 
 **Scenario:** Sell a €100 Amazon gift card for €80
 
-| Who                  | What They Deposit      | Calculation                                            |
-| -------------------- | ---------------------- | ------------------------------------------------------ |
-| **Seller**           | Trust Deposit          | 100% of Card Value × €100 = **€100**                   |
-| **Buyer**            | Price + Trust Deposit  | €80 + (110% of Value × €100) = €80 + €110 = **€190**   |
-| **Total in Escrow**  |                        | **€290**                                               |
+| Who                 | What They Deposit     | Calculation                                          |
+| ------------------- | --------------------- | ---------------------------------------------------- |
+| **Seller**          | Trust Deposit         | 100% of Card Value × €100 = **€100**                 |
+| **Buyer**           | Price + Trust Deposit | €80 + (110% of Value × €100) = €80 + €110 = **€190** |
+| **Total in Escrow** |                       | **€290**                                             |
 
 **If everything is OK:**
 
@@ -145,28 +145,28 @@ sequenceDiagram
 
 #### Why Asymmetric?
 
-| Role       | Risk                                                        | Solution               |
-| ---------- | ----------------------------------------------------------- | ---------------------- |
-| **Seller** | Low (already puts 100% trust deposit, loses all if scamming)| No restrictive cap     |
-| **Buyer**  | High (can make false disputes = griefing)                   | Progressive caps       |
+| Role       | Risk                                                         | Solution           |
+| ---------- | ------------------------------------------------------------ | ------------------ |
+| **Seller** | Low (already puts 100% trust deposit, loses all if scamming) | No restrictive cap |
+| **Buyer**  | High (can make false disputes = griefing)                    | Progressive caps   |
 
 #### Caps for SELLER (Who Sells)
 
-| Completed Trades | Max Box Value | Notes               |
-| ---------------- | ------------- | ------------------- |
-| **0+**           | **€200**      | Can sell immediately!|
+| Completed Trades | Max Box Value | Notes                 |
+| ---------------- | ------------- | --------------------- |
+| **0+**           | **€200**      | Can sell immediately! |
 
 > ✅ **A new user can SELL a €100 gift card from day one!**
 > The seller already puts 100% trust deposit, so they have "skin in the game".
 
 #### Caps for BUYER (Who Buys)
 
-| Completed Trades | Max Purchase | How to Get There |
-| ---------------- | ------------ | ---------------- |
-| **0-2**          | €30          | First day        |
-| **3-6**          | €50          | After 3 OK trades|
-| **7-14**         | €100         | After 7 OK trades|
-| **15+**          | €200         | Veteran user     |
+| Completed Trades | Max Purchase | How to Get There  |
+| ---------------- | ------------ | ----------------- |
+| **0-2**          | €30          | First day         |
+| **3-6**          | €50          | After 3 OK trades |
+| **7-14**         | €100         | After 7 OK trades |
+| **15+**          | €200         | Veteran user      |
 
 **Practical Example:**
 
@@ -192,12 +192,12 @@ sequenceDiagram
 > Each user has ONE SINGLE `tradeCount` that grows both when buying and when selling.
 > There are no separate counters for buyers and sellers.
 
-| Event                            | Effect        | Notes               |
-| -------------------------------- | ------------- | ------------------- |
-| Trade completed as **Seller**    | +1 trade      | Buyer confirmed     |
-| Trade completed as **Buyer**     | +1 trade      | You confirmed       |
-| Box cancelled (before lock)      | None          | Doesn't count       |
-| **DISPUTE (Treasury)**           | **RESET TO 0**| Any role            |
+| Event                         | Effect         | Notes           |
+| ----------------------------- | -------------- | --------------- |
+| Trade completed as **Seller** | +1 trade       | Buyer confirmed |
+| Trade completed as **Buyer**  | +1 trade       | You confirmed   |
+| Box cancelled (before lock)   | None           | Doesn't count   |
+| **DISPUTE (Treasury)**        | **RESET TO 0** | Any role        |
 
 **Practical Example:**
 
@@ -310,9 +310,9 @@ Each Soulbound NFT displays a dynamic badge that updates as you level up.
 **Color Scheme (based on Trade Count):**
 
 - **Newcomer (0-2 trades):** 🔵 Blue (#3b82f6)
-- **Member (3-6 trades):** 🟢 Green (#22c55e)
-- **Trusted (7-14 trades):** 🟣 Purple (#a855f7)
-- **Veteran (15+ trades):** 🟡 Gold (#eab308)
+- **Verified (3-6 trades):** 🟢 Cyan (#06b6d4)
+- **Pro (7-14 trades):** 🟣 Indigo (#6366f1)
+- **Veteran (15+ trades):** 🟡 Purple (#a855f7)
 
 ---
 

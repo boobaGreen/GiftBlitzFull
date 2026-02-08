@@ -23,7 +23,7 @@
 
 ## IOTA Technology Used:
 
-- **Tokenization:** ✅ **Soulbound Reputation NFT (ERC-5192)**. Each user receives a non-transferable NFT representing their on-chain reputation. **SECURITY FIX:** The **Seller's** Trust Deposit is **100% of the Price**, the **Buyer's** Trust Deposit is **110% of the Face Value** of the card (to make burning irrational). The NFT tracks trade count, volume, and disputes. **Buyer caps are automatic** based on trade count (0-2→€30, 3-6→€50, 7-14→€100, 15+→€200). Sellers can sell up to €200 from day 1.
+- **Tokenization:** ✅ **Soulbound Reputation NFT (ERC-5192)**. Each user receives a non-transferable NFT representing their on-chain reputation. **SECURITY FIX:** The **Seller's** Trust Deposit is **100% of the Price**, the **Buyer's** Trust Deposit is **110% of the Face Value** of the card (to make burning irrational). The NFT tracks trade count, volume, and disputes. **Buyer caps are automatic** based on trade count (Newcomer 0-2→€30, Verified 3-6→€50, Pro 7-14→€100, Veteran 15+→€200). Sellers can sell up to €200 from day 1.
 - **Digital ID:** ❌ Not necessary (the EVM address is already pseudonymous, the Soulbound NFT acts as reputational identity)
 - **Notarization:** ⚠️ Optional (hash dispute for future audits)
 - **Smart Contracts:** ✅ (ISC) Escrow Management, "Burning" Logic (Mutual Stake), and Reputation NFT Minting/Update
