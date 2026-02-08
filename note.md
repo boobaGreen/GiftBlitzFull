@@ -1,6 +1,4 @@
-- ripensare al penalita se venditore non da codice entro le 72h , adesso paga la meta dello stake ripensare.
+- Rethink the penalty if the seller does not provide the code within 72h; currently, they pay half the stake. Rethink.
 
-- decidere se far inserire anche gift custom di casisitiche nonin elnco
-- togliere le generiche da menu a tendina attuale
-
-------------------------------------------------------------------------------------------------------Implemen
+- Decide whether to allow inserting custom gift cards for cases not in the list.
+- Remove generic ones from the current dropdown menu.
