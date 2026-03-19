@@ -45,8 +45,16 @@ contracts/
 │   └── reputation.move     (Reputation system: 95 lines)
 ├── tests/
 │   └── giftblitz_tests.move (Integration tests)
-└── Move.toml               (Package configuration)
+├── Move.toml               (Package configuration)
+└── Move.lock               (Compiled dependencies)
 ```
+
+### 💻 Deployment Environment
+
+The project is developed and tested on **Windows 11 using WSL (Windows Subsystem for Linux)**.
+Deployment scripts (`publish_testnet.sh`) are optimized for `bash` and the linux-amd64 version of the IOTA CLI.
+
+---
 
 ---
 

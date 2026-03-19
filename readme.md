@@ -56,11 +56,13 @@ cd /mnt/c/path/to/GigtBlitzFull
 ### 2. Deploy the contract
 
 ```bash
+# Run this from your WSL terminal (e.g., Ubuntu)
 bash publish_testnet.sh
 ```
 
-Example output:
+Example output (running on WSL):
 ```text
+clod@ClaudioDallAra:/mnt/c/Users/ClaudioDall'Ara/Desktop/Clod/GigtBlitzFull$ bash publish_testnet.sh
 🌍 Starting Deployment to IOTA TESTNET...
 ✅ Package Deployed: 0x9917848e00d8f156fec6648c15c04bbdc2221afc46a9d48a852116802b7f723a
 📝 Transaction Digest: 7jCxbJhyGcnALjNzSHD8Xt7hEV1MAZN4NejeqUtbGRP4
