@@ -682,11 +682,36 @@ const Home: React.FC = () => {
             <h2 className="text-4xl md:text-5xl font-black text-white mb-6">
               Earn Trust. Level Up.
             </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto text-lg">
+            <p className="text-gray-400 max-w-3xl mx-auto text-lg mb-8">
               Your <b>Soulbound Reputation NFT</b> is your passport. It records
               your trading history on-chain. Real reliability unlocks real
               value.
             </p>
+
+            {/* Why it exists explanation */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-5xl mx-auto">
+              <div className="flex items-start text-left gap-3 bg-slate-900/50 backdrop-blur-sm border border-cyan-500/20 px-5 py-4 rounded-xl">
+                <div className="mt-1"><Shield className="w-5 h-5 text-cyan-400" /></div>
+                <div>
+                  <h4 className="text-white font-bold mb-1">Damage Control</h4>
+                  <p className="text-gray-400 text-sm leading-snug">Zero-rep accounts are capped at €30. Spam bots cannot steal high-value cards.</p>
+                </div>
+              </div>
+              <div className="flex items-start text-left gap-3 bg-slate-900/50 backdrop-blur-sm border border-purple-500/20 px-5 py-4 rounded-xl">
+                <div className="mt-1"><Zap className="w-5 h-5 text-purple-400" /></div>
+                <div>
+                  <h4 className="text-white font-bold mb-1">MAD Enforcement</h4>
+                  <p className="text-gray-400 text-sm leading-snug">A single dispute permanently resets your tier to 0. Veterans never risk cheating.</p>
+                </div>
+              </div>
+              <div className="flex items-start text-left gap-3 bg-slate-900/50 backdrop-blur-sm border border-red-500/20 px-5 py-4 rounded-xl">
+                <div className="mt-1"><AlertCircle className="w-5 h-5 text-red-500 animate-pulse" /></div>
+                <div>
+                  <h4 className="text-white font-bold mb-1">Rival Bleedout</h4>
+                  <p className="text-gray-400 text-sm leading-snug">Griefing the network costs exactly 110% of the damage inflicted. Jealous competitors mathematically bankrupt themselves.</p>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 relative max-w-7xl mx-auto">

@@ -546,6 +546,34 @@ Honesty is the only mathematically profitable strategy.
 
 ---
 
+### 2:58 – 3:08 | 🛡️ THE SYBIL DEFENSE (Competitor Bleedout)
+
+> 🎵 Music: **Deep, heavy bass synth drop** — intimidating, highly secure feel.
+
+**FULL SCREEN GRAPHIC — Dark purple/neon aesthetic:**
+
+**Text overlay (Center, typing effect, fast):**
+```
+> What if a jealous competitor attacks the network?
+> What if botnets try to grief high-value trades?
+```
+
+**Text overlay (Below, large, slamming onto screen with a metallic THUD sound):**
+```
+💥 RIVAL BLEEDOUT
+Griefing costs 110% of the damage inflicted. 
+Malicious actors mathematically bankrupt themselves.
+
+🛡️ DAMAGE CONTROL TIERS
+Zero-reputation bots are hard-capped at €30. 
+They cannot touch high-value €500 cards.
+```
+
+**🎤 VOICEOVER (Claudio — serious, definitive):**
+> *"Even if a jealous competitor tries to attack the network... griefing costs them one hundred and ten percent of the damage they inflict. And since new accounts are hard-capped to small amounts, spam bots can't even touch high-value trades. They just mathematically bleed out."*
+
+---
+
 ### 2:58 – 3:02 | CHAPTER TITLE — THE REVEAL
 
 **AI Clip Prompt #10** (4 seconds):

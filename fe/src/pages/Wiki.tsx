@@ -26,7 +26,7 @@ const Wiki: React.FC = () => {
             id: 'reputation',
             title: 'Hacker Reputation',
             icon: <Award className="w-5 h-5 text-green-400" />,
-            content: "Your Reputation NFT tracks your trade history. Higher reputation unlocks larger trade caps (up to €1000). The protocol charges a minimal 1% fee on successful sales for maintenance."
+            content: "Your Reputation NFT tracks your trade history. Higher reputation unlocks larger trade caps (up to €200 Max). The protocol charges a minimal 1% fee on successful sales for maintenance."
         }
     ];
 
@@ -156,7 +156,7 @@ const Wiki: React.FC = () => {
                     <h2 className="text-3xl font-bold text-white">Trust via Mutually Assured Destruction</h2>
                     <p className="text-gray-400">
                         The "Dispute" mechanism is the ultimate deterrent. If a seller sends a fake code, the buyer can <strong>CONFISCATE</strong> both stakes to the Protocol Treasury. 
-                        Since the seller deposits 100% of the Face Value, attempting to double-spend results in a guaranteed net loss.
+                        Additionally, triggering a dispute instantly <strong>resets the Reputation Tier of both parties to 0</strong>. Since the seller deposits 100% of the Face Value, attempting to double-spend results in a guaranteed net loss and the destruction of their trading privileges.
                     </p>
                     <div className="flex flex-wrap justify-center gap-8 mt-8">
                         <div className="text-center">

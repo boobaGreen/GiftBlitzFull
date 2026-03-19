@@ -35,7 +35,9 @@ Let's run a stress test on a standard trade: **Selling a €100 Gift Card for �
 * **Ruxaby ($30 Buyer Deposit):** Attacker spends $30 to burn the seller's $50 deposit. **Damage ratio: 1.6x.** Result: Cheap to attack the network.
 * **NoOnes / Paxful (0% Buyer Deposit):** Attacker spends €0. Buyer ties up seller's crypto in moderation queues. Result: Massive platform friction, reliant on human support teams.
 * **Gift101 (150% Buyer Deposit):** Attacker spends €150 to burn seller's €50 deposit. **Damage ratio: 0.3x.** Result: Safe from griefing, BUT the 150% barrier destroys UX for honest buyers.
-* **🏆 GiftBlitz (110% Face Value):** Attacker spends €110 to burn seller's €100 deposit. **Damage ratio: 0.9x.** Result: Unprofitable to attack (Cost > Damage), while keeping the deposit requirement reasonable for honest users.
+* **🏆 GiftBlitz (Asymmetric Tiers + 110% Stake):** 
+  * **Financial Bleedout:** To disrupt €10,000 worth of trades, a jealous rival must lock and burn €11,000 of their own capital (Cost > Damage). It is mathematically ruinous to attack the network.
+  * **Sybil Resistance (Tier Limits):** The rival cannot simply target massive €500 cards to maximize disruption. New bot accounts are permanently capped at €30. To attack a €200 card, the malicious bot must first complete 15+ legitimate, perfect trades to reach "Veteran" tier... only to trigger a dispute, burn its own capital, and instantly have its Reputation reset back to 0. The combination of financial loss and time-cost makes griefing mathematically irrational.
 
 ### 🃏 Attack Scenario C: The "Free Card" (Buyer Fraud)
 *The Buyer uses the valid code, but disputes it anyway to try and get a refund.*
