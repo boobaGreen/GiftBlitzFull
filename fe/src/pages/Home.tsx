@@ -67,17 +67,19 @@ const Home: React.FC = () => {
 
       {/* THE PROBLEM - VISUAL INFOGRAPHIC */}
       <section className="py-24 bg-black relative border-y border-white/5 overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[500px] bg-red-900/10 rounded-full blur-[120px] pointer-events-none" />
+        {/* Soft Multi-color Glow */}
+        <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[600px] h-[600px] bg-amber-900/10 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-900/10 rounded-full blur-[120px] pointer-events-none" />
 
         <div className="max-w-6xl mx-auto px-4 relative z-10">
           <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 text-red-400 text-xs font-bold uppercase tracking-wider mb-4 border border-red-500/20">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 text-gray-300 text-xs font-bold uppercase tracking-wider mb-6 border border-white/10 backdrop-blur-sm shadow-sm">
               The Status Quo is Broken
             </div>
             <h2 className="text-4xl md:text-5xl font-black text-white mb-6">
               Why Gift Cards Suck (Today).
             </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto text-lg">
+            <p className="text-gray-400 max-w-2xl mx-auto text-lg leading-relaxed">
               The current market is fundamentally flawed. It's either unsafe,
               expensive, or wasteful.
             </p>
@@ -86,58 +88,57 @@ const Home: React.FC = () => {
           <div className="grid md:grid-cols-3 gap-8">
             {/* PAIN 1: TRUST GAP */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              whileInView={{ opacity: 1, scale: 1, y: 0 }}
               viewport={{ once: true }}
-              className="bg-[#1a0505] p-1 rounded-3xl border border-red-900/50 hover:border-red-500/50 transition-colors group"
+              className="group p-1 rounded-3xl bg-gradient-to-b from-white/5 to-transparent border border-white/10 hover:border-amber-500/30 transition-all duration-500"
             >
-              <div className="h-full bg-black/40 rounded-[20px] p-8 flex flex-col items-center text-center">
-                <div className="w-16 h-16 rounded-full bg-red-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                  <AlertCircle className="w-8 h-8 text-red-500" />
+              <div className="h-full bg-black/60 rounded-[20px] p-8 flex flex-col items-center text-center">
+                <div className="w-16 h-16 rounded-2xl bg-amber-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <AlertCircle className="w-8 h-8 text-amber-500" />
                 </div>
-                <h3 className="text-xl font-bold text-red-100 mb-2">
+                <h3 className="text-xl font-bold text-white mb-3">
                   The Trust Dilemma
                 </h3>
-                <p className="text-red-200/60 text-sm leading-relaxed mb-6">
+                <p className="text-gray-400 text-sm leading-relaxed mb-8">
                   "Who sends first?" <br />
                   If I send the code, you might vanish. If I pay first, you
                   might send a used code.
                 </p>
-                <div className="mt-auto w-full p-3 rounded-xl bg-red-500/10 border border-red-500/20">
-                  <div className="text-xs font-bold text-red-400 uppercase">
+                <div className="mt-auto w-full p-4 rounded-xl bg-amber-500/5 border border-amber-500/20">
+                  <div className="text-[10px] font-bold text-amber-400/80 uppercase tracking-widest mb-1">
                     Risk Level
                   </div>
-                  <div className="text-2xl font-black text-white">CRITICAL</div>
+                  <div className="text-xl font-black text-amber-400">CRITICAL</div>
                 </div>
               </div>
             </motion.div>
 
             {/* PAIN 2: BILLIONS LOST */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              whileInView={{ opacity: 1, scale: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="bg-[#1a0505] p-1 rounded-3xl border border-red-900/50 hover:border-red-500/50 transition-colors group relative overflow-hidden"
+              className="group p-1 rounded-3xl bg-gradient-to-b from-white/5 to-transparent border border-white/10 hover:border-cyan-500/30 transition-all duration-500 relative overflow-hidden"
             >
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-red-900/20 opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="h-full bg-black/40 rounded-[20px] p-8 flex flex-col items-center text-center relative z-10">
-                <div className="w-16 h-16 rounded-full bg-red-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                  <TrendingUp className="w-8 h-8 text-red-500 rotate-180" />
+              <div className="h-full bg-black/60 rounded-[20px] p-8 flex flex-col items-center text-center relative z-10">
+                <div className="w-16 h-16 rounded-2xl bg-cyan-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <TrendingUp className="w-8 h-8 text-cyan-500 rotate-180" />
                 </div>
-                <h3 className="text-xl font-bold text-red-100 mb-2">
+                <h3 className="text-xl font-bold text-white mb-3">
                   Trapped Value
                 </h3>
-                <p className="text-red-200/60 text-sm leading-relaxed mb-6">
+                <p className="text-gray-400 text-sm leading-relaxed mb-8">
                   Unused cards collect dust in drawers because liquidating them
-                  is too hard.
+                  is too hard or too risky.
                 </p>
-                <div className="mt-auto w-full p-3 rounded-xl bg-red-500/10 border border-red-500/20">
-                  <div className="text-xs font-bold text-red-400 uppercase">
+                <div className="mt-auto w-full p-4 rounded-xl bg-cyan-500/5 border border-cyan-500/20">
+                  <div className="text-[10px] font-bold text-cyan-400/80 uppercase tracking-widest mb-1">
                     Global Annual Loss
                   </div>
-                  <div className="text-2xl font-black text-white">
-                    $23 Billion
+                  <div className="text-xl font-black text-cyan-400">
+                    $23 BILLION
                   </div>
                 </div>
               </div>
@@ -145,33 +146,34 @@ const Home: React.FC = () => {
 
             {/* PAIN 3: MIDDLEMAN TAX */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              whileInView={{ opacity: 1, scale: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
-              className="bg-[#1a0505] p-1 rounded-3xl border border-red-900/50 hover:border-red-500/50 transition-colors group"
+              className="group p-1 rounded-3xl bg-gradient-to-b from-white/5 to-transparent border border-white/10 hover:border-pink-500/30 transition-all duration-500"
             >
-              <div className="h-full bg-black/40 rounded-[20px] p-8 flex flex-col items-center text-center">
-                <div className="w-16 h-16 rounded-full bg-red-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                  <Shield className="w-8 h-8 text-red-500" />
+              <div className="h-full bg-black/60 rounded-[20px] p-8 flex flex-col items-center text-center relative overflow-hidden">
+                <div className="w-16 h-16 rounded-2xl bg-pink-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <Shield className="w-8 h-8 text-pink-500" />
                 </div>
-                <div className="absolute top-10 right-10 rotate-12">
-                  <div className="px-2 py-1 bg-red-600 text-white text-[10px] font-bold rounded rotate-12 shadow-lg">
+                {/* Visual Fake Scam Badge */}
+                <div className="absolute top-6 right-6 rotate-12 opacity-50">
+                  <div className="px-2 py-1 bg-red-500/20 text-red-400 border border-red-500/30 text-[9px] font-black rounded rotate-12 shadow-lg tracking-widest">
                     SCAM?
                   </div>
                 </div>
-                <h3 className="text-xl font-bold text-red-100 mb-2">
+                <h3 className="text-xl font-bold text-white mb-3">
                   The Middleman Tax
                 </h3>
-                <p className="text-red-200/60 text-sm leading-relaxed mb-6">
-                  Safe sites charge 30%+ fees. P2P sites are wild west
-                  minefields of scammers.
+                <p className="text-gray-400 text-sm leading-relaxed mb-8">
+                  Safe sites charge 30%+ fees to verify. P2P sites are a wild west
+                  minefield of scammers.
                 </p>
-                <div className="mt-auto w-full p-3 rounded-xl bg-red-500/10 border border-red-500/20">
-                  <div className="text-xs font-bold text-red-400 uppercase">
+                <div className="mt-auto w-full p-4 rounded-xl bg-pink-500/5 border border-pink-500/20">
+                  <div className="text-[10px] font-bold text-pink-400/80 uppercase tracking-widest mb-1">
                     Avg. Platform Fee
                   </div>
-                  <div className="text-2xl font-black text-white">~30%</div>
+                  <div className="text-xl font-black text-pink-400">~ 30%</div>
                 </div>
               </div>
             </motion.div>
@@ -260,6 +262,122 @@ const Home: React.FC = () => {
               <span className="text-xs font-bold text-pink-500 uppercase tracking-wider">
                 Trust Deposits
               </span>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* NEW: GAME THEORY & MAD EQUILIBRIUM SECTION */}
+      <section className="py-24 relative bg-black border-y border-white/5 overflow-hidden">
+        {/* Abstract Math Grid Background */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,black_10%,transparent_100%)] pointer-events-none" />
+
+        <div className="max-w-7xl mx-auto px-4 relative z-10">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-amber-900/40 to-orange-900/40 border border-amber-500/30 text-amber-400 text-xs font-bold uppercase tracking-wider mb-6 shadow-lg backdrop-blur-md">
+              <Zap className="w-3 h-3" /> Mutually Assured Destruction
+            </div>
+            <h2 className="text-4xl md:text-5xl font-black text-white mb-6">
+              Why We Beat the Competition.
+            </h2>
+            <p className="text-gray-400 max-w-3xl mx-auto text-lg">
+              Competitors use easily exploited flat fees or UX-killing 150% deposits. 
+              GiftBlitz introduces a perfectly balanced **Asymmetric Deposit Model** tied to Face Value. 
+              Cheating mathematically guarantees a net loss.
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-8">
+            {/* SELLER FRAUD FAILS */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="relative group p-1 rounded-3xl bg-gradient-to-b from-red-500/20 to-transparent border border-red-500/30 overflow-hidden"
+            >
+              <div className="absolute top-0 right-0 p-4 opacity-10">
+                <Shield className="w-32 h-32 text-red-500" />
+              </div>
+              <div className="relative h-full bg-black/80 backdrop-blur-xl p-8 rounded-[20px] flex flex-col">
+                <div className="mb-6">
+                  <h3 className="text-2xl font-black text-white mb-2 flex items-center gap-3">
+                    <span className="w-3 h-3 rounded-full bg-red-500 animate-pulse" />
+                    Seller Frauds Fail
+                  </h3>
+                  <p className="text-red-200/60 text-sm">
+                    Seller tries to sell a fake code, an already used card, or "double-spends" it on another platform simultaneously.
+                  </p>
+                </div>
+
+                <div className="space-y-4 mb-8 font-mono text-sm">
+                  <div className="flex justify-between items-center p-3 rounded-lg bg-white/5 border border-white/10">
+                    <span className="text-gray-400">Our Deposit Rule:</span>
+                    <span className="text-white font-bold">100% Face Value</span>
+                  </div>
+                  <div className="flex justify-between items-center p-3 rounded-lg bg-green-500/10 border border-green-500/20">
+                    <span className="text-gray-400">Gain from other site:</span>
+                    <span className="text-green-400 font-bold">+80% Price</span>
+                  </div>
+                  <div className="flex justify-between items-center p-3 rounded-lg bg-red-500/10 border border-red-500/20">
+                    <span className="text-gray-400">Penalty on GiftBlitz:</span>
+                    <span className="text-red-400 font-bold">-100% Face Value</span>
+                  </div>
+                </div>
+
+                <div className="mt-auto p-4 rounded-xl bg-red-500/10 border border-red-500/30">
+                  <div className="text-xs text-red-400 uppercase font-black tracking-widest mb-1">Net Result:</div>
+                  <div className="text-2xl text-white font-black">-20% NET LOSS</div>
+                  <p className="text-xs text-red-300 mt-2">
+                    Competitors (like <b className="text-white">Ruxaby</b> or <b className="text-white">Paxful</b>) use flat deposits (e.g. $50), making this attack +$30 profitable on high-value cards.
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* BUYER GRIEFING FAILS */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="relative group p-1 rounded-3xl bg-gradient-to-b from-blue-500/20 to-transparent border border-blue-500/30 overflow-hidden"
+            >
+              <div className="absolute top-0 right-0 p-4 opacity-10">
+                <Lock className="w-32 h-32 text-blue-500" />
+              </div>
+              <div className="relative h-full bg-black/80 backdrop-blur-xl p-8 rounded-[20px] flex flex-col">
+                <div className="mb-6">
+                  <h3 className="text-2xl font-black text-white mb-2 flex items-center gap-3">
+                    <span className="w-3 h-3 rounded-full bg-blue-500 animate-pulse" />
+                    Buyer Griefing Fails
+                  </h3>
+                  <p className="text-blue-200/60 text-sm">
+                    Trolls attempt to burn honest sellers' deposits by falsely disputing.
+                  </p>
+                </div>
+
+                <div className="space-y-4 mb-8 font-mono text-sm">
+                  <div className="flex justify-between items-center p-3 rounded-lg bg-white/5 border border-white/10">
+                    <span className="text-gray-400">Our Deposit Rule:</span>
+                    <span className="text-white font-bold">110% Face Value</span>
+                  </div>
+                  <div className="flex justify-between items-center p-3 rounded-lg bg-green-500/10 border border-green-500/20">
+                    <span className="text-gray-400">Price Refunded:</span>
+                    <span className="text-green-400 font-bold">+80% Price</span>
+                  </div>
+                  <div className="flex justify-between items-center p-3 rounded-lg bg-red-500/10 border border-red-500/20">
+                    <span className="text-gray-400">Deposit Burned:</span>
+                    <span className="text-red-400 font-bold">-110% Face Value</span>
+                  </div>
+                </div>
+
+                <div className="mt-auto p-4 rounded-xl bg-blue-500/10 border border-blue-500/30">
+                  <div className="text-xs text-blue-400 uppercase font-black tracking-widest mb-1">Net Result:</div>
+                  <div className="text-2xl text-white font-black">-30% NET LOSS</div>
+                  <p className="text-xs text-blue-300 mt-2">
+                    Competitors (like <b className="text-white">Gift101</b>) demand a 150% deposit, destroying the user experience. We achieve mathematical safety at 110%.
+                  </p>
+                </div>
+              </div>
             </motion.div>
           </div>
         </div>

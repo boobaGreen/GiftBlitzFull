@@ -504,7 +504,7 @@ The Buyer
 
 ---
 
-### 2:38 – 2:58 | 🧠 THE GAME THEORY MOMENT — Freeze Frame
+### 2:38 – 2:58 | 🧠 THE GAME THEORY MOMENT (MAD EQUILIBRIUM)
 
 > **This is the KEY educational moment of the entire video.**
 > Screen recording PAUSES. Music drops to near silence. Full-screen infographic.
@@ -515,31 +515,31 @@ The Buyer
 
 **LEFT SIDE (red tint):**
 ```
-🔴 WHY WOULD A SELLER CHEAT?
+🔴 WHY SELLER FRAUD FAILS:
 
-Deposit at stake:    10 IOTA
-Payment received:     8 IOTA
-━━━━━━━━━━━━━━━━━━━
-Net result of fraud: -2 IOTA
-
-❌ CHEATING = LOSING MONEY
+Deposit at stake:    100% Face Value
+Payment received:    80% Price
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Net result of fraud: -20% NET LOSS
++ Reputation NFT Reset
 ```
 
 **RIGHT SIDE (blue tint):**
 ```
-🔵 WHY WOULD A BUYER LIE?
+🔵 WHY BUYER GRIEFING FAILS:
 
-Deposit at stake:    11 IOTA
-Would recover:        8 IOTA
-━━━━━━━━━━━━━━━━━━━
-Net result of lying: -3 IOTA
-
-❌ LYING = LOSING MORE
+Deposit at stake:    110% Face Value
+Would recover:       80% Price 
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Net result of lying: -30% NET LOSS
++ Reputation NFT Reset
 ```
 
 **CENTER BOTTOM (gold text, appears after 3 seconds):**
 ```
-✅ GAME THEORY: Honesty is the only profitable strategy.
+✅ MUTUALLY ASSURED DESTRUCTION (MAD)
+Honesty is the only mathematically profitable strategy.
+(Unlike competitors with exploitable flat fees or UX-killing 150% deposits)
 ```
 
 > 🎵 Music: beat drops back in
