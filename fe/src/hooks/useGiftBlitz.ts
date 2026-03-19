@@ -69,12 +69,17 @@ export const useGiftBlitz = () => {
         if (!account) return;
 
         try {
-            // 1. Generate Salt (32 bytes)
+            // 1. REQUIRE existing profile for seller caps check (Mirror Protocol)
+            const myNft = await getReputationNFT(account.address);
+            if (!myNft) {
+                throw new Error("You must create a profile first before listing a gift card. Go to Profile page and click 'Create Profile'.");
+            }
+
+            // 2. Generate Salt (32 bytes)
             const salt = crypto.getRandomValues(new Uint8Array(32));
             const saltHex = Array.from(salt).map(b => b.toString(16).padStart(2, '0')).join('');
             
-            // 2. Sign Salt with Wallet to derive Deterministic Key
-            // We sign a human readable message containing the hex salt
+            // 3. Sign Salt with Wallet to derive Deterministic Key
             const message = `GiftBlitz Key Generation\nSalt: ${saltHex}`;
             console.log("Requesting signature for key derivation...");
             
@@ -82,59 +87,40 @@ export const useGiftBlitz = () => {
                  message: new TextEncoder().encode(message) 
             });
 
-            // 3. Derive Key
+            // 4. Derive Stateless Key from Signature
             const symKey = await deriveKeyFromSignature(signature);
 
-            // 4. Encrypt Code
+            // 5. Encrypt Code
             const ciphertextOnly = await encryptCodeWithKey(clearCode, symKey);
             
-            // 5. Pack Salt + Ciphertext
+            // 6. Pack Salt + Ciphertext for the blockchain
             const fullEncryptedPaylod = packCiphertextWithSalt(ciphertextOnly, salt);
 
-            // 6. Calculate Hash 
+            // 7. Calculate Hash for on-chain integrity verification
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const encryptedCodeHash = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', fullEncryptedPaylod as any)));
 
             const tx = new Transaction();
-
-            // ATOMIC MINT: If seller doesn't have a profile, mint it now
-            const myNft = await getReputationNFT(account.address);
-            if (!myNft) {
-                console.log("Atomic Profile Minting (Seller): User has no profile, adding mint_profile to transaction...");
-                const myKeys = await getEncryptionKeyPair(account.address);
-                const vaultMessage = "Authorize Identity Vault Creation\nThis allows you to recover your encrypted trades on any device/domain.";
-                const { signature: vaultSignature } = await signPersonalMessage({
-                    message: new TextEncoder().encode(vaultMessage)
-                });
-                const vault = await encryptVault(myKeys.privateKey, vaultSignature);
-                
-                tx.moveCall({
-                    target: `${PACKAGE_ID}::reputation::mint_profile`,
-                    arguments: [
-                        tx.pure.vector('u8', Array.from(myKeys.publicKey)),
-                        tx.pure.vector('u8', Array.from(vault)),
-                    ],
-                });
-            }
 
             const [stakeCoin] = tx.splitCoins(tx.gas, [tx.pure.u64(faceValue)]);
 
             tx.moveCall({
                 target: `${PACKAGE_ID}::${MODULE}::create_box`,
                 arguments: [
+                    tx.object(myNft.id), // 1. Pass ReputationNFT for reciprocal enforcement (Mirror logic)
                     tx.pure.string(cardBrand),
                     tx.pure.u64(faceValue),
                     tx.pure.u64(price),
                     tx.pure.vector('u8', encryptedCodeHash),
-                    tx.pure.vector('u8', Array.from(fullEncryptedPaylod)), // Contains Salt!
+                    tx.pure.vector('u8', Array.from(fullEncryptedPaylod)), // 6. Contains Salt!
                     stakeCoin,
-                    tx.object('0x6'),
+                    tx.object('0x6'), // 8. Clock
                 ],
             });
 
             const result = await signAndExecute({ transaction: tx as any });
             
-            console.log("Box created successfully with stateless key derivation.");
+            console.log("Box created successfully with Mirror Reputation check.");
 
             return { result, symKey };
         } catch (err) {
