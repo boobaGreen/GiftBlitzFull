@@ -33,7 +33,7 @@ const Profile: React.FC = () => {
             }
         };
         checkAdmin();
-    }, [user.iotaClient, user.address]);
+    }, [iotaClient, user.address]);
 
 
     const handleSyncIdentity = async () => {
@@ -86,9 +86,14 @@ const Profile: React.FC = () => {
         return true;
     });
 
-    // Progress to next tier
+    // Progress to next tier (Relative to current tier floor)
+    const currentTierBase = tierConfig.prevTierLimit ?? 0;
+    const nextTierGoal = tierConfig.tradesNeeded;
+    const progressValue = user.tradeCount - currentTierBase;
+    const totalNeededInCurrentTier = nextTierGoal - currentTierBase;
+
     const progressToNextTier = tierConfig.nextTier
-        ? Math.min(100, Math.round((user.tradeCount / tierConfig.tradesNeeded) * 100))
+        ? Math.min(100, Math.max(0, Math.round((progressValue / totalNeededInCurrentTier) * 100)))
         : 100;
 
     // Action Required Logic (Urgent Items)
@@ -171,7 +176,7 @@ const Profile: React.FC = () => {
                                             <span className="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em] block mb-1">Reputation Progress</span>
                                             <span className="text-xl font-black text-white">{progressToNextTier}% <span className="text-gray-600 text-sm">to {tierConfig.nextTier || 'MAX'}</span></span>
                                         </div>
-                                        <span className="text-[10px] font-black text-cyan-400 uppercase tracking-widest">{user.tradeCount} / {tierConfig.tradesNeeded} Trades</span>
+                                        <span className="text-[10px] font-black text-cyan-400 uppercase tracking-widest">{progressValue} / {totalNeededInCurrentTier} Trades</span>
                                     </div>
                                     <div className="h-2 w-full bg-slate-900 rounded-full overflow-hidden p-0.5 border border-white/5">
                                         <motion.div 
@@ -183,18 +188,7 @@ const Profile: React.FC = () => {
                                 </div>
                             </div>
 
-                            {/* Wallet Stats Card */}
-                            <div className="w-full md:w-auto p-8 rounded-[2rem] bg-gradient-to-br from-white/10 to-transparent border border-white/10 flex flex-col items-center justify-center min-w-[240px]">
-                                <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em] mb-2">Available Credits</span>
-                                <div className="flex items-baseline gap-2 mb-4">
-                                    <span className="text-4xl font-black text-white tracking-tighter">{user.balance.toFixed(2)}</span>
-                                    <span className="text-sm font-black text-cyan-400/70 tracking-widest">IOTA</span>
-                                </div>
-                                <button className="w-full py-3 rounded-xl bg-cyan-500 text-black text-[10px] font-black uppercase tracking-[0.2em] hover:shadow-[0_0_30px_rgba(6,182,212,0.3)] transition-all">
-                                    Top Up Assets
-                                </button>
-                            </div>
-                        </div>
+                       </div>
                     </div>
                 </motion.div>
 
@@ -337,7 +331,7 @@ const Profile: React.FC = () => {
                                     {['ALL', 'ACTIVE', 'COMPLETED'].map((id) => (
                                         <button
                                             key={id}
-                                            onClick={() => setFilter(id as any)}
+                                            onClick={() => setFilter(id as 'ALL' | 'ACTIVE' | 'COMPLETED')}
                                             className={`px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${filter === id ? 'bg-cyan-500 text-black' : 'text-gray-500 hover:text-white'}`}
                                         >
                                             {id}

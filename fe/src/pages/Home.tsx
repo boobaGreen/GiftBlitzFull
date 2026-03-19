@@ -719,7 +719,7 @@ const Home: React.FC = () => {
             </h2>
             <p className="text-gray-400 max-w-3xl mx-auto text-lg mb-8">
               Your <b>Soulbound Reputation NFT</b> is your passport. It records
-              your trading history on-chain. Honest behavior unlocks <b>higher purchase limits</b> to prevent systemic fraud.
+              your trading history on-chain. Honest behavior unlocks <b>higher trade limits</b> to prevent systemic fraud.
             </p>
 
             {/* Why it exists explanation */}
@@ -728,7 +728,7 @@ const Home: React.FC = () => {
                 <div className="mt-1"><Shield className="w-5 h-5 text-cyan-400" /></div>
                 <div>
                   <h4 className="text-white font-bold mb-1">Damage Control</h4>
-                  <p className="text-gray-400 text-sm leading-snug">Zero-rep accounts are capped at €30. Spam bots cannot steal high-value cards.</p>
+                  <p className="text-gray-400 text-sm leading-snug">Zero-rep accounts are capped at €30. Spam bots cannot buy or list high-value items.</p>
                 </div>
               </div>
               <div className="flex items-start text-left gap-3 bg-slate-900/50 backdrop-blur-sm border border-purple-500/20 px-5 py-4 rounded-xl">
@@ -748,9 +748,9 @@ const Home: React.FC = () => {
             </div>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 relative max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-6 relative max-w-[90rem] mx-auto">
             {/* Connecting Line (Desktop) */}
-            <div className="hidden md:block absolute top-12 left-[16%] right-[16%] h-0.5 bg-gradient-to-r from-slate-700 via-cyan-900 to-purple-900 z-0" />
+            <div className="hidden lg:block absolute top-12 left-[10%] right-[10%] h-0.5 bg-gradient-to-r from-slate-700 via-cyan-900 via-indigo-900 via-purple-900 to-amber-900 z-0" />
 
             {/* TIER 1: Newcomer Card */}
             <motion.div
@@ -778,7 +778,7 @@ const Home: React.FC = () => {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-500">trades</span>
-                      <span className="text-white">0 - 2</span>
+                      <span className="text-white">1 - 2</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-500">volume</span>
@@ -793,7 +793,7 @@ const Home: React.FC = () => {
                   {/* Benefit */}
                   <div className="mt-auto">
                     <div className="text-[10px] text-blue-300/70 uppercase tracking-widest mb-1">
-                      Purchase Limit
+                      Trade Limit
                     </div>
                     <div className="flex items-baseline gap-2">
                       <span className="text-3xl font-black text-white">
@@ -833,7 +833,7 @@ const Home: React.FC = () => {
                     </div>
                     <div className="flex justify-between relative z-10">
                       <span className="text-gray-500">trades</span>
-                      <span className="text-white">3 - 6</span>
+                      <span className="text-white">3 - 5</span>
                     </div>
                     <div className="flex justify-between relative z-10">
                       <span className="text-gray-500">volume</span>
@@ -848,7 +848,7 @@ const Home: React.FC = () => {
                   {/* Benefit */}
                   <div className="mt-auto">
                     <div className="text-[10px] text-cyan-300/70 uppercase tracking-widest mb-1">
-                      Purchase Limit
+                      Trade Limit
                     </div>
                     <div className="flex items-baseline gap-2">
                       <span className="text-2xl font-black text-white">
@@ -888,7 +888,7 @@ const Home: React.FC = () => {
                     </div>
                     <div className="flex justify-between relative z-10">
                       <span className="text-gray-500">trades</span>
-                      <span className="text-white">7 - 14</span>
+                      <span className="text-white">6 - 10</span>
                     </div>
                     <div className="flex justify-between relative z-10">
                       <span className="text-gray-500">volume</span>
@@ -903,7 +903,7 @@ const Home: React.FC = () => {
                   {/* Benefit */}
                   <div className="mt-auto">
                     <div className="text-[10px] text-indigo-300/70 uppercase tracking-widest mb-1">
-                      Purchase Limit
+                      Trade Limit
                     </div>
                     <div className="flex items-baseline gap-2">
                       <span className="text-2xl font-black text-white">
@@ -926,13 +926,6 @@ const Home: React.FC = () => {
             >
               <div className="absolute inset-0 bg-purple-500/20 rounded-3xl blur-2xl group-hover:bg-purple-500/30 transition-colors" />
               <div className="relative h-full bg-[#0f172a] p-1 rounded-3xl border border-purple-500/50 shadow-[0_0_40px_rgba(168,85,247,0.15)] group-hover:shadow-[0_0_60px_rgba(168,85,247,0.3)] transition-shadow">
-                <div className="absolute -top-3 -right-3 z-20">
-                  <span className="relative flex h-6 w-6">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-6 w-6 bg-purple-500 border-2 border-white"></span>
-                  </span>
-                </div>
-
                 <div className="h-full bg-slate-900/50 rounded-[20px] p-6 flex flex-col overflow-hidden relative">
                   {/* Shine effect */}
                   <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-bl from-purple-500/5 to-transparent pointer-events-none" />
@@ -956,7 +949,7 @@ const Home: React.FC = () => {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-500">trades</span>
-                      <span className="text-white">15+</span>
+                      <span className="text-white">11 - 25</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-500">volume</span>
@@ -971,13 +964,78 @@ const Home: React.FC = () => {
                   {/* Benefit */}
                   <div className="mt-auto">
                     <div className="text-[10px] text-purple-300/70 uppercase tracking-widest mb-1">
-                      Purchase Limit
+                      Trade Limit
                     </div>
                     <div className="flex items-baseline gap-2">
                       <span className="text-2xl font-black text-white">
-                        €200
+                        €500
                       </span>
-                      <span className="text-xs text-purple-400">Max</span>
+                      <span className="text-xs text-purple-400">/ trade</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* TIER 5: Elite (New) */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.25 }}
+              className="relative z-10 group"
+            >
+              <div className="absolute inset-0 bg-amber-500/20 rounded-3xl blur-2xl group-hover:bg-amber-500/30 transition-colors" />
+              <div className="relative h-full bg-[#0f172a] p-1 rounded-3xl border border-amber-500/50 shadow-[0_0_40px_rgba(245,158,11,0.15)] group-hover:shadow-[0_0_60px_rgba(245,158,11,0.3)] transition-shadow">
+                <div className="absolute -top-3 -right-3 z-30">
+                  <span className="relative flex h-10 w-10">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-50"></span>
+                    <div className="relative w-10 h-10 rounded-full bg-gradient-to-br from-amber-400 to-orange-600 border-2 border-slate-950 flex items-center justify-center shadow-2xl">
+                      <Zap className="w-5 h-5 text-white fill-white" />
+                    </div>
+                  </span>
+                </div>
+
+                <div className="h-full bg-slate-900/50 rounded-[20px] p-6 flex flex-col overflow-hidden relative">
+                  <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-bl from-amber-500/10 to-transparent pointer-events-none" />
+
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-lg font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-400">
+                      Elite
+                    </h3>
+                    <div className="w-8 h-8 rounded-lg bg-amber-900/30 flex items-center justify-center border border-amber-500/20 text-amber-400 font-bold text-sm">
+                      5
+                    </div>
+                  </div>
+
+                  <div className="bg-black/40 rounded-xl p-4 border border-amber-500/30 font-mono text-[10px] space-y-3 mb-6 relative">
+                    <div className="flex justify-between border-b border-white/5 pb-2">
+                      <span className="text-gray-500">status</span>
+                      <span className="text-amber-400 font-black">UNTOUCHABLE</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-500">trades</span>
+                      <span className="text-white">26+</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-500">volume</span>
+                      <span className="text-white">€10,000+</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-500">disputes</span>
+                      <span className="text-green-400">0</span>
+                    </div>
+                  </div>
+
+                  <div className="mt-auto">
+                    <div className="text-[10px] text-amber-300/70 uppercase tracking-widest mb-1">
+                      Trade Limit
+                    </div>
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-2xl font-black text-white">
+                        €1,000
+                      </span>
+                      <span className="text-xs text-amber-500 font-bold">VIP</span>
                     </div>
                   </div>
                 </div>

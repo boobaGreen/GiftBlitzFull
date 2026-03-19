@@ -100,7 +100,7 @@ const Wiki: React.FC = () => {
             id: 'reputation',
             title: 'Reputation NFTs',
             icon: <Award className="w-4 h-4" />,
-            description: 'Scaling your trading limits.',
+            description: 'Scaling your trade limits.',
             content: (
                 <div className="space-y-6">
                     <p className="text-gray-400 text-lg leading-relaxed">
@@ -112,29 +112,34 @@ const Wiki: React.FC = () => {
                                 <tr>
                                     <th className="px-6 py-4">Tier</th>
                                     <th className="px-6 py-4">Required Trades</th>
-                                    <th className="px-6 py-4">Max Purchase</th>
+                                    <th className="px-6 py-4">Max Trade (Buy/Sell)</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-white/5">
                                 <tr>
                                     <td className="px-6 py-4 text-white font-bold">Newcomer</td>
-                                    <td className="px-6 py-4 text-gray-500">0 - 2</td>
-                                    <td className="px-6 py-4 text-cyan-400">€30</td>
+                                    <td className="px-6 py-4 text-gray-500">1 - 2</td>
+                                    <td className="px-6 py-4 text-white">€30</td>
                                 </tr>
                                 <tr>
-                                    <td className="px-6 py-4 text-white font-bold">Verified</td>
-                                    <td className="px-6 py-4 text-gray-500">3 - 6</td>
-                                    <td className="px-6 py-4 text-cyan-400">€50</td>
+                                    <td className="px-6 py-4 text-cyan-400 font-bold">Verified</td>
+                                    <td className="px-6 py-4 text-gray-500">3 - 5</td>
+                                    <td className="px-6 py-4 text-cyan-400 font-bold">€50</td>
                                 </tr>
                                 <tr>
-                                    <td className="px-6 py-4 text-white font-bold">Pro</td>
-                                    <td className="px-6 py-4 text-gray-500">7 - 14</td>
-                                    <td className="px-6 py-4 text-cyan-400">€100</td>
+                                    <td className="px-6 py-4 text-indigo-400 font-bold">Pro</td>
+                                    <td className="px-6 py-4 text-gray-500">6 - 10</td>
+                                    <td className="px-6 py-4 text-indigo-400 font-bold">€100</td>
                                 </tr>
                                 <tr>
-                                    <td className="px-6 py-4 text-white font-bold">Veteran</td>
-                                    <td className="px-6 py-4 text-gray-500">15+</td>
-                                    <td className="px-6 py-4 text-cyan-400">€200</td>
+                                    <td className="px-6 py-4 text-purple-400 font-bold">Veteran</td>
+                                    <td className="px-6 py-4 text-gray-500">11 - 25</td>
+                                    <td className="px-6 py-4 text-purple-400 font-bold">€500</td>
+                                </tr>
+                                <tr>
+                                    <td className="px-6 py-4 text-amber-400 font-bold">Elite</td>
+                                    <td className="px-6 py-4 text-gray-500">26+</td>
+                                    <td className="px-6 py-4 text-amber-400 font-bold">€1000</td>
                                 </tr>
                             </tbody>
                         </table>

@@ -422,10 +422,11 @@ The Seller
 
 Brand:      Amazon
 Face Value: 10 IOTA
-Price:       8 IOTA (20% discount)
+Price:       8 IOTA
+Mirror Cap:  30 IOTA (Level: Newcomer) 🔒
 
-Seller deposits 10 IOTA as guarantee
-"Skin in the game."
+Seller must have sufficient reputation to list this value.
+"Mutual Trust Segmentation."
 ```
 
 **Text overlay (bottom, appears at 1:48, smaller):**
@@ -561,16 +562,16 @@ Honesty is the only mathematically profitable strategy.
 **Text overlay (Below, large, slamming onto screen with a metallic THUD sound):**
 ```
 💥 RIVAL BLEEDOUT
-Griefing costs 110% of the damage inflicted. 
-Malicious actors mathematically bankrupt themselves.
+Griefing costs 110% of the damage inflicted.
 
-🛡️ DAMAGE CONTROL TIERS
-Zero-reputation bots are hard-capped at €30. 
-They cannot touch high-value €500 cards.
+🛡️ TIER-CROSSING PROTECTION
+High-value trades are reserved for "Elite Circles".
+Low-tier bots are hard-capped at €30.
+They cannot even *interact* with veteran trades.
 ```
 
 **🎤 VOICEOVER (Claudio — serious, definitive):**
-> *"Even if a jealous competitor tries to attack the network... griefing costs them one hundred and ten percent of the damage they inflict. And since new accounts are hard-capped to small amounts, spam bots can't even touch high-value trades. They just mathematically bleed out."*
+> *"Even if a jealous competitor tries to attack the network... griefing costs them one hundred and ten percent of the damage they inflict. And with our Mirror Reputation Protocol, high-value trades are locked in "Elite Circles". Spam bots are hard-capped at thirty euros. They can't even touch the veterans. They just mathematically bleed out."*
 
 ---
 

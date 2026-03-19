@@ -80,26 +80,39 @@ export interface User {
 
 // Caps ASIMMETRICI: Seller può vendere fino a €200 subito, Buyer ha caps progressivi
 
-// Helper: Buyer Stake is 110% of Card Value (Safe Stake)
-export function getBuyerStake(boxValue: number): number {
-    return Math.ceil(boxValue * 1.1);
-}
-
-// Seller: Può vendere fino a €200 DAL GIORNO 1 (già mette 100% stake)
-export function getMaxSellValue(): number {
-    return 200; // Nessun limite restrittivo per chi vende
-}
-
-// Buyer: Caps progressivi per prevenire griefing
-export function getMaxBuyValue(tradeCount: number): number {
-    if (tradeCount >= 15) return 200;
-    if (tradeCount >= 7) return 100;
-    if (tradeCount >= 3) return 50;
+// Trade Limit Mirror: both Buyer and Seller share the same progressive caps
+export function getMaxTradeValue(tradeCount: number): number {
+    if (tradeCount >= 25) return 1000;
+    if (tradeCount >= 10) return 500;
+    if (tradeCount >= 5) return 100;
+    if (tradeCount >= 2) return 50;
     return 30;
 }
 
+// Deprecated separate functions, now using unified trade limit
+export function getMaxBuyValue(tradeCount: number): number {
+    return getMaxTradeValue(tradeCount);
+}
+
+export function getMaxSellValue(tradeCount: number): number {
+    return getMaxTradeValue(tradeCount);
+}
+
+export interface TierConfig {
+    name: string;
+    color: string;
+    bg: string;
+    border: string;
+    icon: string;
+    maxBuy: number;
+    nextTier: string | null;
+    nextMaxBuy: number | null;
+    prevTierLimit: number;
+    tradesNeeded: number;
+}
+
 // Trade count based tiers
-export const TIER_CONFIG = {
+export const TIER_CONFIG: Record<number, TierConfig> = {
     30: {
         name: 'Newcomer',
         color: 'text-blue-400',
@@ -109,7 +122,8 @@ export const TIER_CONFIG = {
         maxBuy: 30,
         nextTier: 'Verified',
         nextMaxBuy: 50,
-        tradesNeeded: 3,
+        prevTierLimit: 0,
+        tradesNeeded: 2,
     },
     50: {
         name: 'Verified',
@@ -120,7 +134,8 @@ export const TIER_CONFIG = {
         maxBuy: 50,
         nextTier: 'Pro',
         nextMaxBuy: 100,
-        tradesNeeded: 7,
+        prevTierLimit: 2,
+        tradesNeeded: 5,
     },
     100: {
         name: 'Pro',
@@ -130,23 +145,37 @@ export const TIER_CONFIG = {
         icon: '🟣',
         maxBuy: 100,
         nextTier: 'Veteran',
-        nextMaxBuy: 200,
-        tradesNeeded: 15,
+        nextMaxBuy: 500,
+        prevTierLimit: 5,
+        tradesNeeded: 10,
     },
-    200: {
+    500: {
         name: 'Veteran',
         color: 'text-purple-400',
         bg: 'bg-purple-500/20',
         border: 'border-purple-500/30',
         icon: '🟡',
-        maxBuy: 200,
+        maxBuy: 500,
+        nextTier: 'Elite',
+        nextMaxBuy: 1000,
+        prevTierLimit: 10,
+        tradesNeeded: 25,
+    },
+    1000: {
+        name: 'Elite',
+        color: 'text-amber-400',
+        bg: 'bg-amber-500/20',
+        border: 'border-amber-500/30',
+        icon: '👑',
+        maxBuy: 1000,
         nextTier: null,
         nextMaxBuy: null,
+        prevTierLimit: 25,
         tradesNeeded: 999,
     },
 };
 
-export function getTierConfig(tradeCount: number) {
-    const maxBuy = getMaxBuyValue(tradeCount);
-    return TIER_CONFIG[maxBuy as keyof typeof TIER_CONFIG] || TIER_CONFIG[30];
+export function getTierConfig(tradeCount: number): TierConfig {
+    const maxTrade = getMaxTradeValue(tradeCount);
+    return TIER_CONFIG[maxTrade] || TIER_CONFIG[30];
 }

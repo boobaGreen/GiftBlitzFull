@@ -286,10 +286,11 @@ public entry fun join_box(
 
 1. **State Check**: Verifies that `state == STATE_OPEN`.
 2. **Buyer Caps**: Checks that the price does not exceed the buyer's reputation limit.
-   - 0-2 trades: max 30 IOTA
-   - 3-6 trades: max 50 IOTA
-   - 7-14 trades: max 100 IOTA
-   - 15+ trades: max 200 IOTA
+   - 1-2 trades: max 30 IOTA
+   - 3-5 trades: max 50 IOTA
+   - 6-10 trades: max 100 IOTA
+   - 11-25 trades: max 500 IOTA
+   - 26+ trades: max 1000 IOTA
 3. **Total Payment**: `price + (110% face_value)`
    - Example: face_value=100, price=80 → buyer pays `80 + 110 = 190 IOTA`.
 4. **Lock**: Changes state to `STATE_LOCKED` and saves timestamp.
@@ -538,15 +539,16 @@ public(package) fun update_stats(nft: &mut ReputationNFT, volume: u64)
 
 ---
 
-#### `get_max_buy_value` (Lines 87-93) - **BUYER CAPS**
+#### `get_max_trade_value` (Lines 87-94) - **MIRROR CAPS**
 
 ```move
-public fun get_max_buy_value(nft: &ReputationNFT): u64 {
+public fun get_max_trade_value(nft: &ReputationNFT): u64 {
     let t = nft.total_trades;
-    if (t <= 2) { return 30_000_000_000 }       // 30 IOTA
-    else if (t <= 6) { return 50_000_000_000 }  // 50 IOTA
-    else if (t <= 14) { return 100_000_000_000 } // 100 IOTA
-    else { return 200_000_000_000 }              // 200 IOTA
+    if (t <= 1) { return 30_000_000_000 }       // 30 IOTA (Human 1-2)
+    else if (t <= 4) { return 50_000_000_000 }  // 50 IOTA (Human 3-5)
+    else if (t <= 9) { return 100_000_000_000 } // 100 IOTA (Human 6-10)
+    else if (t <= 24) { return 500_000_000_000 } // 500 IOTA (Human 11-25)
+    else { return 1_000_000_000_000 }            // 1000 IOTA (Human 26+)
 }
 ```
 
@@ -677,7 +679,7 @@ fun test_happy_path()
 
 1. **Trust Deposits**: Economic deterrence against fraud.
 2. **Timeouts**: 72h for reveal + 72h for finalize.
-3. **Buyer Caps**: Progressive limits based on reputation.
+3. **Mirror Caps**: Progressive limits for both Buyers and Sellers based on reputation.
 4. **Dispute Penalties**: Full reputation reset.
 5. **PRE Encryption**: Zero knowledge of gift card code.
 6. **Admin Separation**: Only fee withdrawal, no trade control.

@@ -59,6 +59,21 @@ cd /mnt/c/path/to/GigtBlitzFull
 bash publish_testnet.sh
 ```
 
+Example output:
+```text
+🌍 Starting Deployment to IOTA TESTNET...
+✅ Package Deployed: 0x9917848e00d8f156fec6648c15c04bbdc2221afc46a9d48a852116802b7f723a
+📝 Transaction Digest: 7jCxbJhyGcnALjNzSHD8Xt7hEV1MAZN4NejeqUtbGRP4
+🔍 Searching for AdminCap...
+⚠️ Could not find AdminCap automatically (method 1).
+   Trying alternative extraction from publish output...
+✅ Admin Cap: 0x0639dbf689a16e4072a1f51be4cf142ce7599cfa35d90aab8d5830484da8fd84
+🔍 Searching for Treasury...
+✅ Treasury ID: 0x8a0f98e616cab94727a751207b060d38ed3a5a9dd2faf35f152f0f46d74f263d
+
+✨ Frontend configuration updated in ./fe/src/data/contracts.json
+```
+
 The script:
 
 - ✅ Automatically builds the contract
@@ -228,7 +243,7 @@ Treasury ID in `contracts.json` is wrong. Use the Treasury command above to find
 
 ### Error: EBuyerCapExceeded (code 5)
 
-Buyer is trying to purchase beyond their limit. With 0-2 trades the limit is 30 IOTA.
+Buyer is trying to purchase beyond their limit. With **1-2 trades** (Newcomer) the limit is 30 IOTA.
 
 ### Error: Client/Server version mismatch
 

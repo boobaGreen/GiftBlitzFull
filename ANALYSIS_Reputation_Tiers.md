@@ -7,22 +7,25 @@ This report verifies whether the "Earn Trust. Level Up." progression system (Ant
 
 The core tier limits are enforced inside the `reputation::get_max_buy_value` function. Let's compare the coded logic with the UI.
 
-### The UI Claims 4 Tiers:
-1. **Newcomer**: 0-2 trades | Limit: €30
-2. **Verified**: 3-6 trades | Limit: €50 
-3. **Pro**: 7-14 trades | Limit: €100
-4. **Veteran**: 15+ trades | Limit: €200
+### The UI Claims 5 Tiers (Human-Friendly 1-indexed):
+1. **Newcomer**: 1-2 trades | Limit: €30
+2. **Verified**: 3-5 trades | Limit: €50 
+3. **Pro**: 6-10 trades | Limit: €100
+4. **Veteran**: 11-25 trades | Limit: €500
+5. **Elite**: 26+ trades | Limit: €1000
 
 ### The Smart Contract Implementation:
 ```move
-    /// Get Max Buy Value based on trades
-    /// Returns value in nanoIOTA (1 IOTA = 1_000_000_000 nano)
-    public fun get_max_buy_value(nft: &ReputationNFT): u64 {
+    /// Get Max Trade Value based on trades (1 IOTA = 1_000_000_000 nano)
+    /// 0-1 trades: 30 IOTA (Human 1-2)
+    /// 2-4 trades: 50 IOTA (Human 3-5)
+    public fun get_max_trade_value(nft: &ReputationNFT): u64 {
         let t = nft.total_trades;
-        if (t <= 2) { return 30_000_000_000 }
-        else if (t <= 6) { return 50_000_000_000 }
-        else if (t <= 14) { return 100_000_000_000 }
-        else { return 200_000_000_000 }
+        if (t <= 1) { return 30_000_000_000 }
+        else if (t <= 4) { return 50_000_000_000 }
+        else if (t <= 9) { return 100_000_000_000 }
+        else if (t <= 24) { return 500_000_000_000 }
+        else { return 1_000_000_000_000 }
     }
 ```
 

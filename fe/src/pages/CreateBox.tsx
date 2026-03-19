@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMarket } from '../hooks/useMarket';
+import { getMaxTradeValue, getTierConfig } from '../types';
 import type { Box, BoxType } from '../types';
-import { Lock, ChevronDown, DollarSign, Hash, Zap, TrendingUp, Shield, AlertTriangle, Clock } from 'lucide-react';
+import { Lock, ChevronDown, DollarSign, Hash, Zap, TrendingUp, Shield, AlertTriangle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CATEGORIES, GIFT_CARDS_DATA } from '../data/giftCards';
 import { useGiftBlitz } from '../hooks/useGiftBlitz';
@@ -33,6 +34,8 @@ const CreateBox: React.FC = () => {
     const calculatedStake = Math.round(numValue * stakeMultiplier);
 
     const selectedCard = GIFT_CARDS_DATA.find(c => c.value === cardType) || GIFT_CARDS_DATA[0];
+    const maxListingValue = getMaxTradeValue(user.tradeCount);
+    const tier = getTierConfig(user.tradeCount);
 
     const isSubmittingRef = React.useRef(false);
 
@@ -233,9 +236,9 @@ const CreateBox: React.FC = () => {
                             <div className="grid md:grid-cols-2 gap-8">
                                 {/* Card Value */}
                                 <div className="space-y-4">
-                                     <div className="flex justify-between items-center ml-1">
+                                    <div className="flex justify-between items-center ml-1">
                                         <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em]">Face Value (€)</label>
-                                        <span className="text-[10px] font-bold text-gray-600">Max €200</span>
+                                        <span className={`text-[10px] font-black uppercase tracking-widest ${tier.color}`}>Max €{maxListingValue}</span>
                                     </div>
                                     <div className="relative group/field">
                                         <div className="absolute left-6 top-1/2 -translate-y-1/2 p-2 rounded-xl bg-white/5 border border-white/10 text-gray-400">
@@ -246,7 +249,7 @@ const CreateBox: React.FC = () => {
                                             value={value}
                                             onChange={(e) => {
                                                 const val = parseFloat(e.target.value);
-                                                if (val > 200) setValue('200');
+                                                if (val > maxListingValue) setValue(maxListingValue.toString());
                                                 else setValue(e.target.value);
                                             }}
                                             placeholder="50.00"
@@ -320,7 +323,8 @@ const CreateBox: React.FC = () => {
                                 const priceIsLessThanValue = numPrice < numValue * 10; // Simple logic adjustment for IOTA vs EUR
                                 const hasSufficientBalance = user.balance >= calculatedStake;
 
-                                const isFormValid = hasCode && hasValidValue && hasValidPrice && priceIsLessThanValue && hasSufficientBalance;
+                                const isListingValueOk = numValue <= maxListingValue;
+                                const isFormValid = hasCode && hasValidValue && hasValidPrice && priceIsLessThanValue && hasSufficientBalance && isListingValueOk;
 
                                 return (
                                     <div className="space-y-6">
@@ -328,6 +332,7 @@ const CreateBox: React.FC = () => {
                                             <div className="grid grid-cols-1 gap-2">
                                                 {!hasCode && <p className="text-[10px] font-bold text-amber-500/60 uppercase tracking-widest flex items-center gap-2"><div className="w-1 h-1 rounded-full bg-amber-500"/> Secret code missing</p>}
                                                 {!hasSufficientBalance && <p className="text-[10px] font-bold text-red-500/60 uppercase tracking-widest flex items-center gap-2"><div className="w-1 h-1 rounded-full bg-red-500"/> Insufficient balance ({calculatedStake.toFixed(0)} IOTA)</p>}
+                                                {!isListingValueOk && <p className="text-[10px] font-bold text-amber-500/60 uppercase tracking-widest flex items-center gap-2"><div className="w-1 h-1 rounded-full bg-amber-500"/> Tier limit exceeded (Your max: €{maxListingValue})</p>}
                                             </div>
                                         )}
 

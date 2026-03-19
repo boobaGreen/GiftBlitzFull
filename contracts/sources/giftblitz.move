@@ -15,6 +15,7 @@ module giftblitz::giftblitz {
     const ETimeNotReached: u64 = 3;
     const EKeyAlreadyRevealed: u64 = 4;
     const EBuyerCapExceeded: u64 = 5;
+    const ESellerCapExceeded: u64 = 6;
 
     // States
     const STATE_OPEN: u8 = 0;
@@ -106,6 +107,7 @@ module giftblitz::giftblitz {
 
     /// Seller creates a new GiftBox
     public entry fun create_box(
+        seller_rep_nft: &ReputationNFT,
         card_brand: String,
         face_value: u64,
         price: u64,
@@ -117,6 +119,10 @@ module giftblitz::giftblitz {
     ) {
         // Validation
         assert!(price > 0 && face_value > 0, EIncorrectStake);
+
+        // Seller Reputation Cap Check: verify seller's reputation allows this listing
+        let max_sell_value = reputation::get_max_trade_value(seller_rep_nft);
+        assert!(price <= max_sell_value, ESellerCapExceeded);
         
         // Seller Stake must be 100% of Face Value (Safety First)
         assert!(coin::value(&stake_coin) == face_value, EIncorrectStake);
@@ -169,7 +175,7 @@ module giftblitz::giftblitz {
         assert!(box.state == STATE_OPEN, EInvalidState);
         
         // Buyer Caps Check: verify buyer's reputation allows this purchase
-        let max_buy_value = reputation::get_max_buy_value(buyer_rep_nft);
+        let max_buy_value = reputation::get_max_trade_value(buyer_rep_nft);
         assert!(box.price <= max_buy_value, EBuyerCapExceeded);
         
         // Buyer MUST pay: Price + 110% Face Value (Stake)

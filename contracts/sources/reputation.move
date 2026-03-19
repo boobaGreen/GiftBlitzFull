@@ -78,17 +78,18 @@ module giftblitz::reputation {
         nft.vault = new_vault;
     }
 
-    /// Get Max Buy Value based on trades
-    /// Returns value in nanoIOTA (1 IOTA = 1_000_000_000 nano)
-    /// 0-2 trades: 30 IOTA
-    /// 3-6 trades: 50 IOTA
-    /// 7-14 trades: 100 IOTA
-    /// 15+ trades: 200 IOTA
-    public fun get_max_buy_value(nft: &ReputationNFT): u64 {
+    /// Get Max Trade Value based on trades (1 IOTA = 1_000_000_000 nano)
+    /// 0-1 trades: 30 IOTA
+    /// 2-4 trades: 50 IOTA
+    /// 5-9 trades: 100 IOTA
+    /// 10-24 trades: 500 IOTA (Veteran)
+    /// 25+ trades: 1000 IOTA (Elite)
+    public fun get_max_trade_value(nft: &ReputationNFT): u64 {
         let t = nft.total_trades;
-        if (t <= 2) { return 30_000_000_000 }
-        else if (t <= 6) { return 50_000_000_000 }
-        else if (t <= 14) { return 100_000_000_000 }
-        else { return 200_000_000_000 }
+        if (t <= 1) { return 30_000_000_000 }
+        else if (t <= 4) { return 50_000_000_000 }
+        else if (t <= 9) { return 100_000_000_000 }
+        else if (t <= 24) { return 500_000_000_000 }
+        else { return 1_000_000_000_000 }
     }
 }
