@@ -719,8 +719,7 @@ const Home: React.FC = () => {
             </h2>
             <p className="text-gray-400 max-w-3xl mx-auto text-lg mb-8">
               Your <b>Soulbound Reputation NFT</b> is your passport. It records
-              your trading history on-chain. Real reliability unlocks real
-              value.
+              your trading history on-chain. Honest behavior unlocks <b>higher purchase limits</b> to prevent systemic fraud.
             </p>
 
             {/* Why it exists explanation */}
@@ -735,8 +734,8 @@ const Home: React.FC = () => {
               <div className="flex items-start text-left gap-3 bg-slate-900/50 backdrop-blur-sm border border-purple-500/20 px-5 py-4 rounded-xl">
                 <div className="mt-1"><Zap className="w-5 h-5 text-purple-400" /></div>
                 <div>
-                  <h4 className="text-white font-bold mb-1">MAD Enforcement</h4>
-                  <p className="text-gray-400 text-sm leading-snug">A single dispute permanently resets your tier to 0. Veterans never risk cheating.</p>
+                  <h4 className="text-white font-bold mb-1">Mutual Reset (MAD)</h4>
+                  <p className="text-gray-400 text-sm leading-snug">Any dispute resets "Total Trades" to zero for BOTH the buyer and seller. Mutually Assured Destruction makes cheating irrational.</p>
                 </div>
               </div>
               <div className="flex items-start text-left gap-3 bg-slate-900/50 backdrop-blur-sm border border-red-500/20 px-5 py-4 rounded-xl">
@@ -794,7 +793,7 @@ const Home: React.FC = () => {
                   {/* Benefit */}
                   <div className="mt-auto">
                     <div className="text-[10px] text-blue-300/70 uppercase tracking-widest mb-1">
-                      Current Limit
+                      Purchase Limit
                     </div>
                     <div className="flex items-baseline gap-2">
                       <span className="text-3xl font-black text-white">
@@ -849,7 +848,7 @@ const Home: React.FC = () => {
                   {/* Benefit */}
                   <div className="mt-auto">
                     <div className="text-[10px] text-cyan-300/70 uppercase tracking-widest mb-1">
-                      Current Limit
+                      Purchase Limit
                     </div>
                     <div className="flex items-baseline gap-2">
                       <span className="text-2xl font-black text-white">
@@ -904,7 +903,7 @@ const Home: React.FC = () => {
                   {/* Benefit */}
                   <div className="mt-auto">
                     <div className="text-[10px] text-indigo-300/70 uppercase tracking-widest mb-1">
-                      Current Limit
+                      Purchase Limit
                     </div>
                     <div className="flex items-baseline gap-2">
                       <span className="text-2xl font-black text-white">
@@ -972,7 +971,7 @@ const Home: React.FC = () => {
                   {/* Benefit */}
                   <div className="mt-auto">
                     <div className="text-[10px] text-purple-300/70 uppercase tracking-widest mb-1">
-                      Current Limit
+                      Purchase Limit
                     </div>
                     <div className="flex items-baseline gap-2">
                       <span className="text-2xl font-black text-white">

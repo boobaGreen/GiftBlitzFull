@@ -58,8 +58,19 @@ const Wiki: React.FC = () => {
                                 <span className="text-purple-400 font-black">110% of Face Value</span>
                             </div>
                         </div>
-                        <div className="pt-4 border-t border-white/10 text-xs text-gray-500 italic">
-                            * Deposits are automatically released by the contract upon successful trade verification.
+                        <div className="pt-4 border-t border-white/10 space-y-3">
+                            <p className="text-xs text-gray-500 italic">
+                                * Deposits are automatically released by the contract upon successful trade verification.
+                            </p>
+                            <div className="p-4 rounded-2xl bg-red-500/5 border border-red-500/10 flex items-start gap-4">
+                                <AlertTriangle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
+                                <div>
+                                    <h5 className="text-red-500 font-bold text-xs uppercase tracking-widest mb-1">Mutual Reset (MAD)</h5>
+                                    <p className="text-[11px] text-gray-500 leading-relaxed">
+                                        Any dispute results in a <b>full reputation wipe</b> for both the buyer and seller. This "Mutually Assured Destruction" protocol makes griefing a suicidal strategy for any high-tier account.
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -101,18 +112,28 @@ const Wiki: React.FC = () => {
                                 <tr>
                                     <th className="px-6 py-4">Tier</th>
                                     <th className="px-6 py-4">Required Trades</th>
-                                    <th className="px-6 py-4">Max Trade</th>
+                                    <th className="px-6 py-4">Max Purchase</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-white/5">
                                 <tr>
-                                    <td className="px-6 py-4 text-white font-bold">Rookie</td>
-                                    <td className="px-6 py-4 text-gray-500">0</td>
-                                    <td className="px-6 py-4 text-cyan-400">€20</td>
+                                    <td className="px-6 py-4 text-white font-bold">Newcomer</td>
+                                    <td className="px-6 py-4 text-gray-500">0 - 2</td>
+                                    <td className="px-6 py-4 text-cyan-400">€30</td>
+                                </tr>
+                                <tr>
+                                    <td className="px-6 py-4 text-white font-bold">Verified</td>
+                                    <td className="px-6 py-4 text-gray-500">3 - 6</td>
+                                    <td className="px-6 py-4 text-cyan-400">€50</td>
+                                </tr>
+                                <tr>
+                                    <td className="px-6 py-4 text-white font-bold">Pro</td>
+                                    <td className="px-6 py-4 text-gray-500">7 - 14</td>
+                                    <td className="px-6 py-4 text-cyan-400">€100</td>
                                 </tr>
                                 <tr>
                                     <td className="px-6 py-4 text-white font-bold">Veteran</td>
-                                    <td className="px-6 py-4 text-gray-500">50</td>
+                                    <td className="px-6 py-4 text-gray-500">15+</td>
                                     <td className="px-6 py-4 text-cyan-400">€200</td>
                                 </tr>
                             </tbody>

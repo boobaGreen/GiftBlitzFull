@@ -29,7 +29,7 @@ Every year, **$899 billion** in gift cards are sold globally (projected $2.3 tri
 
 ### The Solution
 
-GiftBlitz is a **fully decentralized dApp** on IOTA L1 that enables atomic, trustless P2P gift card trades via a **Double Trust Deposit** game theory mechanism. Both buyer and seller lock collateral into a Move smart contract escrow — making fraud **mathematically irrational** (seller who cheats: net loss; buyer who false-disputes: net loss). Gift card codes are delivered via **Proxy Re-Encryption**, ensuring zero-knowledge transfer with no central server.
+GiftBlitz is a **fully decentralized dApp** on IOTA L1 that enables atomic, trustless P2P gift card trades via a **Double Trust Deposit** game theory mechanism. Both buyer and seller lock collateral into a Move smart contract escrow — making fraud **mathematically irrational**. Our **Anti-Griefing System** ensures that any dispute results in a **Mutual Reputation Reset** (both parties back to zero), making malicious behavior professionally suicidal. Gift card codes are delivered via **Proxy Re-Encryption**, ensuring zero-knowledge transfer with no central server.
 
 **Core value proposition**: 1% fee (vs 15-20% centralized), instant settlement, zero counterparty risk, fully on-chain reputation.
 
@@ -37,8 +37,9 @@ GiftBlitz is a **fully decentralized dApp** on IOTA L1 that enables atomic, trus
 
 ## ✨ Key Features
 
-- **Mutual Trust Deposit Escrow**: Seller stakes 100% of face value; buyer stakes 110% — game theory ensures honest behavior is the only rational choice (Nash Equilibrium)
-- **Soulbound Reputation NFT**: Non-transferable on-chain identity tracking trades, volume, and disputes — progressive buyer caps (€30→€50→€100→€200) protect the ecosystem
+- **Mutual Trust Deposit Escrow**: Seller stakes 100% of face value; buyer stakes 110% — game theory ensures honest behavior is the only rational choice (Nash Equilibrium).
+- **Anti-Griefing Protection (MAD)**: Any dispute triggers a **Mutually Assured Destruction** protocol where both the buyer and seller's on-chain trade history is instantly reset to zero.
+- **Soulbound Reputation NFT**: Non-transferable on-chain identity tracking trades, volume, and disputes — progressive buyer caps (€30→€50→€100→€200) protect the ecosystem from systemic volume attacks.
 - **End-to-End Encrypted Delivery**: Gift card codes encrypted with AES-256, keys exchanged via RSA-2048 Proxy Re-Encryption — no plaintext ever on-chain
 - **72h Safety Timeouts**: Automatic refunds if seller doesn't reveal key; auto-finalize if buyer doesn't respond — no funds ever locked forever
 - **1% Platform Fee**: Accumulated in an on-chain Treasury — 15-20× cheaper than centralized alternatives
