@@ -348,6 +348,124 @@ const Home: React.FC = () => {
         </div>
       </section>
 
+      {/* NEW HOW IT WORKS (Animated Flow) */}
+      <section className="py-24 relative overflow-hidden bg-[#020617] border-y border-white/5">
+        <div className="absolute top-0 right-1/2 w-[800px] h-[800px] bg-cyan-900/10 rounded-full blur-[120px] pointer-events-none translate-x-1/2" />
+        
+        <div className="max-w-6xl mx-auto px-4 relative z-10">
+          <div className="text-center mb-20">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-bold uppercase tracking-wider mb-6">
+              The Protocol
+            </div>
+            <h2 className="text-4xl md:text-5xl font-black text-white mb-6">
+              How GiftBlitz Actually Works
+            </h2>
+            <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+              Our <b className="text-white">Asymmetric Escrow</b> makes scamming mathematically impossible. Here is the step-by-step trustless flow.
+            </p>
+          </div>
+
+          <div className="max-w-4xl mx-auto relative">
+            {/* Vertical Line Desktop */}
+            <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-cyan-500/50 via-purple-500/50 to-transparent -translate-x-1/2 rounded-full" />
+
+            {/* STEP 1 */}
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              className="relative flex flex-col md:flex-row items-center mb-16 group"
+            >
+              <div className="md:w-1/2 flex justify-end md:pr-12 mb-6 md:mb-0">
+                <div className="bg-slate-900/80 backdrop-blur-sm p-8 rounded-3xl border border-white/10 group-hover:border-cyan-500/50 transition-colors shadow-2xl text-right relative overflow-hidden w-full">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-3xl" />
+                  <h3 className="text-2xl font-bold text-white mb-3">1. List & Lock (Seller)</h3>
+                  <p className="text-gray-400 leading-relaxed">
+                    The seller encrypts the gift card code using their public key and lists it. To prove they aren't selling a fake, they must lock <b className="text-cyan-400">100% of the Face Value</b> as a dynamic deposit into the Smart Contract.
+                  </p>
+                </div>
+              </div>
+              <div className="absolute left-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-black border-4 border-[#020617] flex items-center justify-center z-10 shadow-[0_0_20px_rgba(6,182,212,0.4)]">
+                <div className="w-8 h-8 rounded-full bg-cyan-500 flex items-center justify-center text-white font-black">1</div>
+              </div>
+              <div className="md:w-1/2 md:pl-12 hidden md:flex items-center text-cyan-500/30">
+                <Lock className="w-16 h-16 group-hover:text-cyan-400 transition-colors animate-pulse" />
+              </div>
+            </motion.div>
+
+            {/* STEP 2 */}
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              className="relative flex flex-col md:flex-row-reverse items-center mb-16 group"
+            >
+              <div className="md:w-1/2 flex justify-start md:pl-12 mb-6 md:mb-0">
+                <div className="bg-slate-900/80 backdrop-blur-sm p-8 rounded-3xl border border-white/10 group-hover:border-purple-500/50 transition-colors shadow-2xl text-left relative overflow-hidden w-full">
+                  <div className="absolute top-0 left-0 w-32 h-32 bg-purple-500/10 rounded-full blur-3xl" />
+                  <h3 className="text-2xl font-bold text-white mb-3">2. Purchase & Stake (Buyer)</h3>
+                  <p className="text-gray-400 leading-relaxed">
+                    A buyer wants the card. They pay the agreed price, BUT they must also lock <b className="text-purple-400">110% of the Face Value</b>. This stops internet trolls from buying cards just to falsely dispute them and ruin the seller's day.
+                  </p>
+                </div>
+              </div>
+              <div className="absolute left-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-black border-4 border-[#020617] flex items-center justify-center z-10 shadow-[0_0_20px_rgba(168,85,247,0.4)]">
+                <div className="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-white font-black">2</div>
+              </div>
+              <div className="md:w-1/2 md:pr-12 hidden md:flex items-center justify-end text-purple-500/30">
+                <Shield className="w-16 h-16 group-hover:text-purple-400 transition-colors animate-pulse" />
+              </div>
+            </motion.div>
+
+            {/* STEP 3 */}
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              className="relative flex flex-col md:flex-row items-center group mb-16"
+            >
+              <div className="md:w-1/2 flex justify-end md:pr-12 mb-6 md:mb-0">
+                <div className="bg-slate-900/80 backdrop-blur-sm p-8 rounded-3xl border border-white/10 group-hover:border-pink-500/50 transition-colors shadow-2xl text-right relative overflow-hidden w-full">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-pink-500/10 rounded-full blur-3xl" />
+                  <h3 className="text-2xl font-bold text-white mb-3">3. Reveal & Swap (Automated)</h3>
+                  <p className="text-gray-400 leading-relaxed">
+                    Once funds are locked, the seller's client automatically re-encrypts the code specifically for the buyer's public key. The buyer decrypts it locally and uses the gift card on the brand's website.
+                  </p>
+                </div>
+              </div>
+              <div className="absolute left-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-black border-4 border-[#020617] flex items-center justify-center z-10 shadow-[0_0_20px_rgba(236,72,153,0.4)]">
+                <div className="w-8 h-8 rounded-full bg-pink-500 flex items-center justify-center text-white font-black">3</div>
+              </div>
+              <div className="md:w-1/2 md:pl-12 hidden md:flex items-center text-pink-500/30">
+                <Zap className="w-16 h-16 group-hover:text-pink-400 transition-colors animate-bounce" />
+              </div>
+            </motion.div>
+
+            {/* STEP 4 */}
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              className="relative flex flex-col md:flex-row-reverse items-center group"
+            >
+              <div className="md:w-1/2 flex justify-start md:pl-12">
+                <div className="bg-gradient-to-br from-green-900/40 to-emerald-900/20 backdrop-blur-sm p-8 rounded-3xl border border-green-500/30 shadow-[0_0_40px_rgba(34,197,94,0.15)] text-left relative overflow-hidden w-full">
+                  <h3 className="text-2xl font-bold text-white mb-3">4. Happy Resolution (Instant)</h3>
+                  <p className="text-gray-400 leading-relaxed">
+                    The buyer clicks "Finalize". The smart contract instantly sends the payment to the seller. <b>Both deposits are returned in full.</b> No waiting, no middlemen, and both users level up their Reputation NFTs.
+                  </p>
+                </div>
+              </div>
+              <div className="absolute left-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-black border-4 border-[#020617] flex items-center justify-center z-10 shadow-[0_0_20px_rgba(34,197,94,0.4)]">
+                <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-white font-black">
+                  <CheckCircle className="w-4 h-4" />
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
       {/* THE SOLUTION - IOTA Architecture */}
       <section className="py-24 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-cyan-900/10 to-transparent pointer-events-none" />
@@ -806,72 +924,6 @@ const Home: React.FC = () => {
                 </div>
               </div>
             </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* HOW IT WORKS (Ultra Clean Flow) */}
-      <section className="py-24 bg-gradient-to-b from-transparent to-black/50">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-black text-white mb-6">
-              How it Works
-            </h2>
-            <p className="text-gray-400 text-lg">
-              Trustless trading in 3 simple steps.
-            </p>
-          </div>
-
-          <div className="relative pt-8 pb-12">
-            {/* Desktop Connecting Line */}
-            <div className="hidden md:block absolute top-[52px] left-[20%] right-[20%] h-0.5 bg-gradient-to-r from-gray-800 via-cyan-900 to-gray-800 border-t border-white/5 border-dashed" />
-
-            <div className="grid md:grid-cols-3 gap-12 text-center">
-              {[
-                {
-                  step: "1",
-                  title: "List & Lock",
-                  desc: "Seller sets price & locks the card code in the smart contract.",
-                  icon: Lock,
-                },
-                {
-                  step: "2",
-                  title: "Dual Deposit",
-                  desc: "Buyer matches the deposit. Funds are held in neutral escrow.",
-                  icon: Shield,
-                },
-                {
-                  step: "3",
-                  title: "Swap & Release",
-                  desc: "Buyer verifies code. Funds release instantly. Reputation grows.",
-                  icon: Zap,
-                },
-              ].map((item, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.2 }}
-                  className="relative z-10 flex flex-col items-center"
-                >
-                  <div className="w-24 h-24 rounded-3xl bg-slate-900 border border-white/10 flex items-center justify-center mb-8 shadow-2xl relative group">
-                    <div className="absolute inset-0 bg-cyan-500/5 rounded-3xl group-hover:bg-cyan-500/10 transition-colors" />
-                    <item.icon className="w-10 h-10 text-cyan-400" />
-                    <div className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-slate-800 border border-white/10 flex items-center justify-center text-xs font-bold text-white shadow-lg">
-                      {item.step}
-                    </div>
-                  </div>
-
-                  <h4 className="text-2xl font-bold text-white mb-3">
-                    {item.title}
-                  </h4>
-                  <p className="text-gray-400 leading-relaxed max-w-xs mx-auto">
-                    {item.desc}
-                  </p>
-                </motion.div>
-              ))}
-            </div>
           </div>
         </div>
       </section>
