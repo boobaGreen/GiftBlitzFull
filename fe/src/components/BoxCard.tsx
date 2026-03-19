@@ -95,7 +95,6 @@ const BoxCard: React.FC<BoxCardProps> = ({ box, onClick }) => {
     };
 
     const btnConfig = getButtonConfig();
-    const BtnIcon = btnConfig.icon;
 
     const handleProfileClick = async (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -133,81 +132,89 @@ const BoxCard: React.FC<BoxCardProps> = ({ box, onClick }) => {
     return (
         <>
             <motion.div
-                whileHover={{ y: -6, scale: 1.02 }}
+                whileHover={{ y: -8, scale: 1.01 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={onClick}
-                className="relative overflow-hidden rounded-2xl cursor-pointer group"
+                className="relative overflow-hidden rounded-[2rem] cursor-pointer group"
                 style={{
-                    background: 'linear-gradient(145deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.95) 100%)',
-                    border: '1px solid rgba(6, 182, 212, 0.2)',
-                    boxShadow: '0 0 20px rgba(6, 182, 212, 0.05), inset 0 1px 0 rgba(255,255,255,0.05)',
+                    background: 'linear-gradient(145deg, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 0.6) 100%)',
+                    border: '1px solid rgba(255, 255, 255, 0.05)',
+                    backdropFilter: 'blur(16px)',
+                    boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
                 }}
             >
-                {/* Glowing border on hover */}
-                <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                    style={{
-                        background: 'linear-gradient(145deg, rgba(6, 182, 212, 0.15), rgba(168, 85, 247, 0.1))',
-                        boxShadow: '0 0 30px rgba(6, 182, 212, 0.2)',
-                    }}
-                />
+                {/* Visual Accent - Top Gradient Beam */}
+                <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-                {/* Lock icon top-right */}
-                <div className="absolute top-3 right-3 p-2 rounded-xl bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-cyan-500/30">
-                    <Lock className="w-5 h-5 text-cyan-400 drop-shadow-[0_0_8px_rgba(6,182,212,0.8)]" />
+                {/* Glowing Background Glow on hover */}
+                <div className="absolute -inset-0.5 rounded-[2rem] bg-gradient-to-br from-cyan-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl -z-10" />
+
+                {/* Lock icon top-right - Modernized */}
+                <div className="absolute top-4 right-4 p-2 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md group-hover:border-cyan-500/30 transition-colors">
+                    <Lock className="w-4 h-4 text-cyan-400/80 group-hover:text-cyan-400 transition-colors" />
                 </div>
 
-                <div className="p-5">
+                <div className="p-6">
                     {/* Brand Section */}
-                    <div className="flex items-center gap-3 mb-4">
-                        <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center p-2 text-2xl">
+                    <div className="flex items-center gap-4 mb-6">
+                        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-white/10 to-transparent border border-white/10 flex items-center justify-center p-3 text-3xl shadow-inner">
                             {brand.icon}
                         </div>
                         <div className="flex-1">
-                            <p className="text-[10px] text-gray-500 uppercase tracking-wider">{brand.label} Gift Card</p>
-                            <h3 className="text-xl font-bold text-white tracking-tight">{brand.label}</h3>
+                            <p className="text-[10px] text-cyan-500/60 font-black uppercase tracking-[0.2em] mb-0.5">{brand.label} Protocol</p>
+                            <h3 className="text-2xl font-black text-white tracking-tight leading-none">{brand.label}</h3>
                         </div>
                     </div>
 
-                    {/* Value & Price */}
-                    <div className="space-y-2 mb-4">
-                        <div className="flex items-center gap-2">
-                            <div className="w-1.5 h-1.5 rounded-full bg-gray-500" />
-                            <span className="text-gray-400 text-sm">Value:</span>
-                            <span className="text-white font-semibold flex items-center gap-1">{(box.value / 1000000000).toFixed(2)} IOTA</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_rgba(6,182,212,0.8)]" />
-                            <span className="text-gray-400 text-sm">Price:</span>
-                            <span className="text-cyan-400 font-bold text-lg">{(box.price / 1000000000).toFixed(2)} IOTA</span>
-                            <span className="ml-auto text-xs px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                                -{discount}%
+                    {/* Value & Price Grid */}
+                    <div className="grid grid-cols-2 gap-4 mb-6">
+                        <div className="p-3 rounded-2xl bg-white/5 border border-white/5">
+                            <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider block mb-1">Face Value</span>
+                            <span className="text-white font-black text-lg flex items-baseline gap-1">
+                                {(box.value / 1000000000).toFixed(0)}
+                                <span className="text-[10px] text-gray-500">IOTA</span>
                             </span>
+                        </div>
+                        <div className="p-3 rounded-2xl bg-cyan-500/5 border border-cyan-500/10 group-hover:border-cyan-500/20 transition-colors">
+                            <span className="text-[10px] text-cyan-500/70 font-bold uppercase tracking-wider block mb-1">Buy Price</span>
+                            <div className="flex items-center justify-between">
+                                <span className="text-cyan-400 font-black text-lg flex items-baseline gap-1">
+                                    {(box.price / 1000000000).toFixed(0)}
+                                    <span className="text-[10px] text-cyan-500/50">IOTA</span>
+                                </span>
+                                <span className="text-[10px] font-black text-emerald-400">-{discount}%</span>
+                            </div>
                         </div>
                     </div>
 
                     {/* Seller & Reputation */}
-                    <div className="flex items-center justify-between pt-3 border-t border-white/5">
+                    <div className="flex items-center justify-between pt-4 border-t border-white/5">
                         <button
                             onClick={handleProfileClick}
-                            className="flex items-center gap-2 hover:bg-white/5 p-1.5 -m-1.5 rounded-lg transition-colors"
-                            title="View seller profile"
+                            className="flex items-center gap-2.5 hover:bg-white/5 p-1.5 -m-1.5 rounded-xl transition-all"
                         >
-                            <Avatar
-                                name={box.seller}
-                                size={28}
-                                variant="marble"
-                                colors={["#06b6d4", "#8b5cf6", "#ec4899", "#1e293b", "#0f172a"]}
-                            />
+                            <div className="p-0.5 rounded-full bg-gradient-to-br from-cyan-400 to-purple-500">
+                                <div className="p-0.5 bg-slate-900 rounded-full">
+                                    <Avatar
+                                        name={box.seller}
+                                        size={28}
+                                        variant="marble"
+                                        colors={["#06b6d4", "#8b5cf6", "#ec4899", "#1e293b", "#0f172a"]}
+                                    />
+                                </div>
+                            </div>
                             <div className="text-left">
-                                <p className="text-white text-sm font-medium">{box.seller.slice(0, 6)}...</p>
-                                <p className={`text-[10px] ${currentTier.color}`}>{currentTier.icon} {currentTier.name}</p>
+                                <p className="text-white text-xs font-black tracking-tight">{box.seller.slice(0, 8)}...</p>
+                                <div className="flex items-center gap-1 group/tier">
+                                     <span className={`text-[9px] font-black uppercase tracking-widest ${currentTier.color}`}>{currentTier.name}</span>
+                                </div>
                             </div>
                         </button>
 
-                        <button className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1 ${btnConfig.bg}`}>
-                            {BtnIcon && <BtnIcon className="w-3 h-3" />}
+                        <div className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${btnConfig.bg}`}>
+                            {btnConfig.icon && <btnConfig.icon className="w-3 h-3 inline-block mr-1 mb-0.5" />}
                             {btnConfig.text}
-                        </button>
+                        </div>
                     </div>
                 </div>
             </motion.div>

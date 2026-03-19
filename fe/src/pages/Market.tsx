@@ -76,173 +76,172 @@ const Market: React.FC = () => {
     }, [boxes, searchTerm, selectedCategory, showSafeOnly, sortBy, valueRange, maxBuyValue]);
 
     return (
-        <div className="space-y-6 pb-24">
-            {/* Search & Controls Row */}
-            <div className="flex flex-col md:flex-row gap-4">
-                {/* Search Bar */}
-                <div className="relative flex-1">
-                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-                    <input
-                        type="text"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        placeholder="Search Secret Boxes..."
-                        className="w-full bg-slate-800/60 border border-white/10 rounded-2xl pl-11 pr-4 py-3.5 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 focus:shadow-[0_0_20px_rgba(6,182,212,0.1)] transition-all"
-                    />
+        <div className="relative space-y-12 pb-24 min-h-screen">
+            {/* Aurora Background Glow - Subdued for functional pages */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] pointer-events-none -z-10">
+                <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500/10 blur-[120px] animate-pulse" />
+                <div className="absolute top-20 right-1/4 w-96 h-96 bg-purple-500/10 blur-[120px] animate-pulse" style={{ animationDelay: '2s' }} />
+            </div>
+
+            {/* Premium Header Section */}
+            <div className="space-y-6">
+                 <div>
+                    <h1 className="text-4xl font-black text-white tracking-tighter mb-2">EXPLORE <span className="text-cyan-400">MARKET</span></h1>
+                    <p className="text-gray-500 font-medium">Secure, anonymous, and instant gift card swaps.</p>
                 </div>
 
-                {/* Filters Toggle */}
-                <button
-                    onClick={() => setShowFilters(!showFilters)}
-                    className={`flex items-center gap-2 px-5 py-3 rounded-2xl border transition-all ${showFilters
-                        ? 'bg-purple-500/10 border-purple-500/50 text-purple-400'
-                        : 'bg-slate-800/60 border-white/10 text-gray-400 hover:border-white/20'
-                        }`}
-                >
-                    <SlidersHorizontal className="w-5 h-5" />
-                    <span className="text-sm font-medium">Filters</span>
-                </button>
-
-                {/* In My Range Toggle with integrated help */}
-                <div className="relative">
-                    <button
-                        onClick={() => setShowSafeOnly(!showSafeOnly)}
-                        onMouseEnter={() => setShowTooltip(true)}
-                        onMouseLeave={() => setShowTooltip(false)}
-                        className={`flex items-center gap-3 px-5 py-3 rounded-2xl border transition-all ${showSafeOnly
-                            ? 'bg-cyan-500/10 border-cyan-500/50 text-cyan-400'
-                            : 'bg-slate-800/60 border-white/10 text-gray-400 hover:border-white/20'
-                            }`}
-                    >
-                        <Shield className={`w-5 h-5 ${showSafeOnly ? 'fill-cyan-400/20' : ''}`} />
-                        <div className="text-left flex-1">
-                            <div className="text-xs font-bold uppercase tracking-wider">In My Range</div>
-                            <div className="text-[10px] opacity-70">Limit: €{maxBuyValue}</div>
+                {/* Search & Controls Container - Glassmorphic */}
+                <div className="p-2 rounded-[2rem] bg-white/5 border border-white/5 backdrop-blur-2xl shadow-2xl">
+                    <div className="flex flex-col lg:flex-row gap-2">
+                        {/* Search Bar */}
+                        <div className="relative flex-1">
+                            <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-cyan-400/50" />
+                            <input
+                                type="text"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                placeholder="Search by brand (e.g. Amazon, Steam)..."
+                                className="w-full bg-slate-950/40 border border-white/5 rounded-2xl pl-14 pr-6 py-4 text-white placeholder-gray-600 focus:outline-none focus:border-cyan-500/30 focus:shadow-[0_0_20px_rgba(6,182,212,0.05)] transition-all font-medium"
+                            />
                         </div>
-                        <HelpCircle className="w-4 h-4 opacity-50" />
-                    </button>
 
-                    {/* Modern Tooltip */}
-                    <AnimatePresence>
-                        {showTooltip && (
-                            <motion.div
-                                initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                                animate={{ opacity: 1, y: 0, scale: 1 }}
-                                exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                                className="absolute top-full right-0 mt-3 w-72 p-5 rounded-2xl bg-[#0f172a]/95 backdrop-blur-xl border border-cyan-500/20 shadow-2xl z-50"
+                        <div className="flex gap-2">
+                            {/* Filters Toggle */}
+                            <button
+                                onClick={() => setShowFilters(!showFilters)}
+                                className={`flex items-center gap-2 px-6 py-4 rounded-2xl border transition-all font-black text-xs uppercase tracking-widest ${showFilters
+                                    ? 'bg-purple-500/20 border-purple-500/50 text-purple-400 shadow-[0_0_20px_rgba(168,85,247,0.2)]'
+                                    : 'bg-slate-950/40 border-white/5 text-gray-500 hover:text-white hover:border-white/10'
+                                    }`}
                             >
-                                <div className="flex items-start gap-3 mb-3">
-                                    <div className="p-2 rounded-lg bg-cyan-500/10">
-                                        <Shield className="w-4 h-4 text-cyan-400" />
+                                <SlidersHorizontal className="w-4 h-4" />
+                                <span>Filters</span>
+                            </button>
+
+                            {/* Safe Buy Toggle */}
+                            <div className="relative">
+                                <button
+                                    onClick={() => setShowSafeOnly(!showSafeOnly)}
+                                    onMouseEnter={() => setShowTooltip(true)}
+                                    onMouseLeave={() => setShowTooltip(false)}
+                                    className={`flex items-center gap-3 px-6 py-4 rounded-2xl border transition-all ${showSafeOnly
+                                        ? 'bg-cyan-500/20 border-cyan-500/50 text-cyan-400 shadow-[0_0_20px_rgba(6,182,212,0.2)]'
+                                        : 'bg-slate-950/40 border-white/5 text-gray-500 hover:text-white hover:border-white/10'
+                                        }`}
+                                >
+                                    <Shield className={`w-4 h-4 ${showSafeOnly ? 'fill-cyan-400/20' : ''}`} />
+                                    <div className="text-left hidden sm:block">
+                                        <div className="text-[10px] font-black uppercase tracking-widest">Safe Buy</div>
+                                        <div className="text-[9px] opacity-50 font-bold">Max €{maxBuyValue}</div>
+                                    </div>
+                                    <HelpCircle className="w-3 h-3 opacity-30" />
+                                </button>
+
+                                {/* Tooltip */}
+                                <AnimatePresence>
+                                    {showTooltip && (
+                                        <motion.div
+                                            initial={{ opacity: 0, scale: 0.95 }}
+                                            animate={{ opacity: 1, scale: 1 }}
+                                            exit={{ opacity: 0, scale: 0.95 }}
+                                            className="absolute top-full right-0 mt-4 w-72 p-6 rounded-3xl bg-slate-950 border border-white/10 shadow-3xl z-50 backdrop-blur-3xl"
+                                        >
+                                            <div className="flex items-center gap-3 mb-3">
+                                                <div className="p-2 rounded-xl bg-cyan-500/10">
+                                                    <Shield className="w-4 h-4 text-cyan-400" />
+                                                </div>
+                                                <h4 className="text-sm font-black text-white uppercase tracking-wider">Trading Limits</h4>
+                                            </div>
+                                            <p className="text-[11px] text-gray-500 leading-relaxed mb-4">
+                                                To prevent fraud, new accounts have a purchase limit. Complete successful trades to unlock higher tiers.
+                                            </p>
+                                            <div className="p-4 rounded-2xl bg-white/5 border border-white/5">
+                                                <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest">
+                                                    <span className="text-gray-500">Current Max:</span>
+                                                    <span className="text-cyan-400">€{maxBuyValue}</span>
+                                                </div>
+                                            </div>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Filter Panel Expansion */}
+                    <AnimatePresence>
+                        {showFilters && (
+                            <motion.div
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: 'auto' }}
+                                exit={{ opacity: 0, height: 0 }}
+                                className="overflow-hidden border-t border-white/5 mt-2"
+                            >
+                                <div className="p-6 grid md:grid-cols-2 gap-8">
+                                    <div>
+                                        <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] mb-4 block">Card Value Range</label>
+                                        <div className="flex flex-wrap gap-2">
+                                            {VALUE_RANGES.map((range, idx) => (
+                                                <button
+                                                    key={idx}
+                                                    onClick={() => setValueRange(idx)}
+                                                    className={`px-4 py-2 rounded-xl text-[11px] font-black transition-all border ${valueRange === idx
+                                                        ? 'bg-cyan-500/10 border-cyan-500/30 text-cyan-400'
+                                                        : 'bg-white/5 border-white/5 text-gray-500 hover:text-white hover:bg-white/10'
+                                                        }`}
+                                                >
+                                                    {range.label}
+                                                </button>
+                                            ))}
+                                        </div>
                                     </div>
                                     <div>
-                                        <h4 className="text-sm font-bold text-white">Anti-Griefing System</h4>
-                                        <p className="text-[10px] text-cyan-400 font-mono uppercase">Protection Active</p>
+                                        <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] mb-4 block">Sort Protocol</label>
+                                        <div className="flex flex-wrap gap-2">
+                                            {SORT_OPTIONS.map((option) => (
+                                                <button
+                                                    key={option.value}
+                                                    onClick={() => setSortBy(option.value)}
+                                                    className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[11px] font-black transition-all border ${sortBy === option.value
+                                                        ? 'bg-purple-500/10 border-purple-500/30 text-purple-400'
+                                                        : 'bg-white/5 border-white/5 text-gray-500 hover:text-white hover:bg-white/10'
+                                                        }`}
+                                                >
+                                                    {option.icon}
+                                                    <span className="uppercase tracking-widest">{option.label}</span>
+                                                </button>
+                                            ))}
+                                        </div>
                                     </div>
                                 </div>
-                                <p className="text-xs text-gray-400 leading-relaxed mb-3">
-                                    To prevent spam and scams, new users have a <strong>Purchase Limit</strong>.
-                                </p>
-                                <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-2">
-                                    <div className="flex justify-between text-xs">
-                                        <span className="text-white">Your Level:</span>
-                                        <span className="text-cyan-400 font-bold">
-                                            {maxBuyValue <= 30 ? 'Newcomer' : maxBuyValue <= 100 ? 'Member' : 'Veteran'}
-                                        </span>
-                                    </div>
-                                    <div className="flex justify-between text-xs">
-                                        <span className="text-white">Max Buy:</span>
-                                        <span className="text-gray-300">€{maxBuyValue}</span>
-                                    </div>
-                                </div>
-                                <p className="text-[10px] text-gray-500 mt-3 italic">
-                                    Complete successful trades to level up and unlock higher limits.
-                                </p>
                             </motion.div>
                         )}
                     </AnimatePresence>
                 </div>
             </div>
 
-            {/* Expanded Filters Panel */}
-            <AnimatePresence>
-                {showFilters && (
-                    <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        className="overflow-hidden"
-                    >
-                        <div className="p-5 rounded-2xl bg-slate-800/40 border border-white/5 space-y-4">
-                            {/* Value Range */}
-                            <div>
-                                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 block">
-                                    Card Value
-                                </label>
-                                <div className="flex flex-wrap gap-2">
-                                    {VALUE_RANGES.map((range, idx) => (
-                                        <button
-                                            key={idx}
-                                            onClick={() => setValueRange(idx)}
-                                            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${valueRange === idx
-                                                ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30'
-                                                : 'bg-black/20 text-gray-400 border border-white/5 hover:bg-black/30'
-                                                }`}
-                                        >
-                                            {range.label}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-
-                            {/* Sort By */}
-                            <div>
-                                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 block">
-                                    Sort By
-                                </label>
-                                <div className="flex flex-wrap gap-2">
-                                    {SORT_OPTIONS.map((option) => (
-                                        <button
-                                            key={option.value}
-                                            onClick={() => setSortBy(option.value)}
-                                            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all ${sortBy === option.value
-                                                ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30'
-                                                : 'bg-black/20 text-gray-400 border border-white/5 hover:bg-black/30'
-                                                }`}
-                                        >
-                                            {option.icon}
-                                            {option.label}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-
-            {/* Category Filter Chips */}
-            <div className="grid grid-cols-5 sm:grid-cols-5 md:grid-cols-10 gap-2">
+            {/* Category Filter Chips - Professional Grid */}
+            <div className="flex flex-wrap gap-2">
                 <button
                     onClick={() => setSelectedCategory(null)}
-                    className={`px-3 py-2 rounded-xl text-sm font-medium transition-all text-center ${selectedCategory === null
-                        ? 'bg-white text-black'
-                        : 'bg-slate-800/60 text-gray-400 border border-white/5 hover:bg-slate-700'
+                    className={`px-6 py-3 rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all border ${selectedCategory === null
+                        ? 'bg-white text-black border-white shadow-[0_0_20px_rgba(255,255,255,0.2)]'
+                        : 'bg-white/5 text-gray-500 border-white/5 hover:border-white/20'
                         }`}
                 >
-                    All
+                    All Assets
                 </button>
                 {CATEGORIES.map(cat => (
                     <button
                         key={cat.id}
                         onClick={() => setSelectedCategory(cat.id === selectedCategory ? null : cat.id)}
-                        className={`flex items-center justify-center gap-1 px-2 py-2 rounded-xl text-xs font-medium transition-all ${selectedCategory === cat.id
-                            ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30'
-                            : 'bg-slate-800/60 text-gray-400 border border-white/5 hover:bg-slate-700'
+                        className={`flex items-center gap-2 px-6 py-3 rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all border ${selectedCategory === cat.id
+                            ? 'bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-white border-cyan-500/40 shadow-[0_00_20px_rgba(6,182,212,0.1)]'
+                            : 'bg-white/5 text-gray-500 border-white/5 hover:border-white/20'
                             }`}
                     >
                         <span>{cat.icon}</span>
-                        <span className={selectedCategory === cat.id ? '' : 'hidden sm:inline'}>{cat.label}</span>
+                        <span>{cat.label}</span>
                     </button>
                 ))}
             </div>

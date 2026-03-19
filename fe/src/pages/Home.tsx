@@ -16,55 +16,93 @@ import {
 
 const Home: React.FC = () => {
   return (
-    <div className="pb-20">
-      {/* HERO SECTION - Minimum Noise, Maximum Impact */}
-      <section className="relative min-h-[85vh] flex flex-col items-center justify-center text-center px-4 overflow-hidden">
-        {/* Subtle Background Glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-cyan-500/10 rounded-full blur-[120px] pointer-events-none" />
+    <div className="pb-20 bg-slate-950 text-white">
+      {/* HERO SECTION - Premium Aurora Design */}
+      <section className="relative min-h-[90vh] flex flex-col items-center justify-center text-center px-4 overflow-hidden bg-slate-950">
+        {/* Animated Aurora Mesh Background */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <motion.div
+            animate={{
+              scale: [1, 1.2, 1],
+              x: [0, 100, 0],
+              y: [0, -50, 0],
+            }}
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+            className="absolute top-[-20%] left-[-10%] w-[70%] h-[70%] bg-cyan-500/10 rounded-full blur-[120px]"
+          />
+          <motion.div
+            animate={{
+              scale: [1.2, 1, 1.2],
+              x: [0, -120, 0],
+              y: [0, 80, 0],
+            }}
+            transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+            className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-purple-500/10 rounded-full blur-[120px]"
+          />
+          <motion.div
+            animate={{
+              opacity: [0.3, 0.6, 0.3],
+            }}
+            transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-[20%] left-[30%] w-[40%] h-[40%] bg-indigo-500/5 rounded-full blur-[100px]"
+          />
+        </div>
 
+        {/* Hero Content */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="relative z-10 max-w-5xl"
+          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+          className="relative z-10 max-w-6xl"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-cyan-400 text-sm font-medium mb-8 backdrop-blur-md">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-cyan-400 text-sm font-semibold mb-10 backdrop-blur-xl shadow-2xl">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
             </span>
-            GiftBlitz MVP Live
+            Empowering the Future of P2P Trade
           </div>
 
-          <h1 className="text-6xl md:text-8xl font-black text-white mb-8 tracking-tight leading-none">
-            Turn Unused Cards <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">
-              Into Liquid Cash.
+          <h1 className="text-7xl md:text-9xl font-black text-white mb-10 tracking-tight leading-[0.9] text-balance">
+            Liquidity for <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-white to-purple-400 animate-gradient-x">
+              Unused Assets.
             </span>
           </h1>
 
-          <p className="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto mb-12 leading-relaxed">
-            The first trustless marketplace secured by Game Theory and IOTA
-            Smart Contracts. No middleman. No scams. Just code.
+          <p className="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto mb-14 leading-relaxed font-medium">
+            The world's first trustless marketplace secured by Game Theory 
+            and IOTA Smart Contracts. <span className="text-white italic">No escrow. No risk. Just logic.</span>
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-8">
             <Link
               to="/market"
-              className="group relative px-8 py-4 bg-white text-black text-lg font-bold rounded-xl overflow-hidden hover:scale-105 transition-transform"
+              className="group relative px-10 py-5 bg-white text-black text-xl font-black rounded-2xl overflow-hidden hover:scale-105 transition-all shadow-[0_0_40px_rgba(255,255,255,0.2)] active:scale-95"
             >
-              <span className="relative z-10 flex items-center gap-2">
+              <span className="relative z-10 flex items-center gap-3">
                 Explore Market{" "}
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform duration-300" />
               </span>
             </Link>
             <Link
               to="/create"
-              className="px-8 py-4 bg-white/5 text-white text-lg font-bold rounded-xl border border-white/10 hover:bg-white/10 transition-colors"
+              className="group px-10 py-5 bg-slate-900/50 text-white text-xl font-bold rounded-2xl border border-white/10 backdrop-blur-md hover:bg-white/10 hover:border-white/20 transition-all active:scale-95"
             >
-              Sell Gift Card
+              Start Selling
             </Link>
           </div>
+        </motion.div>
+
+        {/* Scroll Indicator */}
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 2 }}
+          className="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-gray-500 hidden sm:flex"
+        >
+          <span className="text-[10px] uppercase font-black tracking-[0.3em]">Scroll</span>
+          <div className="w-[1px] h-12 bg-gradient-to-b from-cyan-500 to-transparent" />
         </motion.div>
       </section>
 
@@ -140,115 +178,112 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* THE PROBLEM - VISUAL INFOGRAPHIC */}
-      <section className="py-24 bg-black relative border-y border-white/5 overflow-hidden">
-        {/* Soft Multi-color Glow */}
-        <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[600px] h-[600px] bg-amber-900/10 rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-900/10 rounded-full blur-[120px] pointer-events-none" />
+      {/* THE PROBLEM - MODERN BENTO GRID */}
+      <section className="py-32 bg-slate-950 relative border-y border-white/5 overflow-hidden">
+        {/* Soft Background Aurora */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.03)_0%,transparent_70%)] pointer-events-none" />
 
-        <div className="max-w-6xl mx-auto px-4 relative z-10">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 text-gray-300 text-xs font-bold uppercase tracking-wider mb-6 border border-white/10 backdrop-blur-sm shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 relative z-10">
+          <div className="text-center mb-20">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 text-cyan-400 text-[10px] font-black uppercase tracking-[0.2em] mb-6 border border-cyan-500/20 backdrop-blur-md"
+            >
               The Status Quo is Broken
-            </div>
-            <h2 className="text-4xl md:text-5xl font-black text-white mb-6">
-              Why Gift Cards Suck (Today).
+            </motion.div>
+            <h2 className="text-5xl md:text-7xl font-black text-white mb-8 tracking-tighter">
+              Why Gift Cards <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400 font-serif italic">Suck</span> (Today).
             </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto text-lg leading-relaxed">
-              The current market is fundamentally flawed. It's either unsafe,
-              expensive, or wasteful.
-            </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {/* PAIN 1: TRUST GAP */}
+          <div className="grid grid-cols-1 md:grid-cols-6 gap-4 md:auto-rows-[180px]">
+            {/* PAIN 1: TRUST GAP (Big Card) */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              whileInView={{ opacity: 1, scale: 1, y: 0 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="group p-1 rounded-3xl bg-gradient-to-b from-white/5 to-transparent border border-white/10 hover:border-amber-500/30 transition-all duration-500"
+              className="md:col-span-3 md:row-span-2 group relative p-8 rounded-[2.5rem] bg-slate-900/40 border border-white/5 overflow-hidden hover:border-amber-500/30 transition-all duration-500 flex flex-col md:justify-end gap-6 md:gap-0"
             >
-              <div className="h-full bg-black/60 rounded-[20px] p-8 flex flex-col items-center text-center">
-                <div className="w-16 h-16 rounded-2xl bg-amber-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                  <AlertCircle className="w-8 h-8 text-amber-500" />
-                </div>
-                <h3 className="text-xl font-bold text-white mb-3">
-                  The Trust Dilemma
-                </h3>
-                <p className="text-gray-400 text-sm leading-relaxed mb-8">
-                  "Who sends first?" <br />
-                  If I send the code, you might vanish. If I pay first, you
-                  might send a used code.
+              <div className="md:absolute md:top-8 md:left-8 w-16 h-16 rounded-2xl bg-amber-500/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <AlertCircle className="w-8 h-8 text-amber-500" />
+              </div>
+              <div className="relative z-10">
+                <h3 className="text-3xl font-black text-white mb-4">The Trust Dilemma</h3>
+                <p className="text-gray-400 text-lg leading-relaxed max-w-sm">
+                  "Who sends first?" In a world of strangers, cooperation fails before it even starts. Scammers thrive in the gap between payment and delivery.
                 </p>
-                <div className="mt-auto w-full p-4 rounded-xl bg-amber-500/5 border border-amber-500/20">
-                  <div className="text-[10px] font-bold text-amber-400/80 uppercase tracking-widest mb-1">
-                    Risk Level
-                  </div>
-                  <div className="text-xl font-black text-amber-400">CRITICAL</div>
+                <div className="mt-8 inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-red-500/10 border border-red-500/20 text-red-500 text-[10px] font-bold uppercase">
+                  Risk Level: Critical
                 </div>
               </div>
             </motion.div>
 
-            {/* PAIN 2: BILLIONS LOST */}
+            {/* PAIN 2: TRAPPED VALUE (Wide Card) */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              whileInView={{ opacity: 1, scale: 1, y: 0 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="group p-1 rounded-3xl bg-gradient-to-b from-white/5 to-transparent border border-white/10 hover:border-cyan-500/30 transition-all duration-500 relative overflow-hidden"
+              className="md:col-span-3 md:row-span-1 group relative p-8 rounded-[2.5rem] bg-slate-900/40 border border-white/5 overflow-hidden hover:border-cyan-500/30 transition-all duration-500 flex items-center gap-8"
             >
-              <div className="h-full bg-black/60 rounded-[20px] p-8 flex flex-col items-center text-center relative z-10">
-                <div className="w-16 h-16 rounded-2xl bg-cyan-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                  <TrendingUp className="w-8 h-8 text-cyan-500 rotate-180" />
-                </div>
-                <h3 className="text-xl font-bold text-white mb-3">
-                  Trapped Value
-                </h3>
-                <p className="text-gray-400 text-sm leading-relaxed mb-8">
-                  Unwanted gifts, expiring cards, or a simple need for immediate cash. Billions get trapped because liquidating them is too hard or too risky.
+              <div className="w-16 h-16 shrink-0 rounded-2xl bg-cyan-500/10 flex items-center justify-center group-hover:rotate-12 transition-transform">
+                <TrendingUp className="w-8 h-8 text-cyan-500" />
+              </div>
+              <div>
+                <h3 className="text-xl font-black text-white mb-1">Trapped Value</h3>
+                <p className="text-gray-400 text-sm">
+                  $23 Billion is lost every year to dust, expiry, and unwanted credit.
                 </p>
-                <div className="mt-auto w-full p-4 rounded-xl bg-cyan-500/5 border border-cyan-500/20">
-                  <div className="text-[10px] font-bold text-cyan-400/80 uppercase tracking-widest mb-1">
-                    Global Annual Loss
-                  </div>
-                  <div className="text-xl font-black text-cyan-400">
-                    $23 BILLION
-                  </div>
-                </div>
               </div>
             </motion.div>
 
-            {/* PAIN 3: MIDDLEMAN TAX */}
+            {/* PAIN 3: MIDDLEMAN TAX (Wide Card) */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              whileInView={{ opacity: 1, scale: 1, y: 0 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
-              className="group p-1 rounded-3xl bg-gradient-to-b from-white/5 to-transparent border border-white/10 hover:border-pink-500/30 transition-all duration-500"
+              className="md:col-span-3 md:row-span-1 group relative p-8 rounded-[2.5rem] bg-slate-900/40 border border-white/5 overflow-hidden hover:border-pink-500/30 transition-all duration-500 flex items-center gap-8"
             >
-              <div className="h-full bg-black/60 rounded-[20px] p-8 flex flex-col items-center text-center relative overflow-hidden">
-                <div className="w-16 h-16 rounded-2xl bg-pink-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                  <Shield className="w-8 h-8 text-pink-500" />
-                </div>
-                {/* Visual Fake Scam Badge */}
-                <div className="absolute top-6 right-6 rotate-12 opacity-50">
-                  <div className="px-2 py-1 bg-red-500/20 text-red-400 border border-red-500/30 text-[9px] font-black rounded rotate-12 shadow-lg tracking-widest">
-                    SCAM?
-                  </div>
-                </div>
-                <h3 className="text-xl font-bold text-white mb-3">
-                  The Middleman Tax
-                </h3>
-                <p className="text-gray-400 text-sm leading-relaxed mb-8">
-                  Safe sites charge 30%+ fees to verify. P2P sites are a wild west
-                  minefield of scammers.
+              <div className="w-16 h-16 shrink-0 rounded-2xl bg-pink-500/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Shield className="w-8 h-8 text-pink-500" />
+              </div>
+              <div>
+                <h3 className="text-xl font-black text-white mb-1">The 30% Middleman Tax</h3>
+                <p className="text-gray-400 text-sm">
+                  Centralized sites bleed you dry with fees just to provide basic protection.
                 </p>
-                <div className="mt-auto w-full p-4 rounded-xl bg-pink-500/5 border border-pink-500/20">
-                  <div className="text-[10px] font-bold text-pink-400/80 uppercase tracking-widest mb-1">
-                    Avg. Platform Fee
-                  </div>
-                  <div className="text-xl font-black text-pink-400">~ 30%</div>
+              </div>
+            </motion.div>
+
+            {/* EXTRA STATS (Vertical Card) */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+              className="md:col-span-6 md:row-span-1 group relative p-8 rounded-[2.5rem] bg-gradient-to-r from-slate-900/40 to-cyan-900/10 border border-white/5 flex items-center justify-between"
+            >
+              <div className="flex items-center gap-12">
+                <div className="text-center">
+                  <div className="text-3xl font-black text-white">$23B</div>
+                  <div className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Wasted Annually</div>
                 </div>
+                <div className="w-[1px] h-10 bg-white/10" />
+                <div className="text-center">
+                  <div className="text-3xl font-black text-white">45%</div>
+                  <div className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Scam Rate Peer-to-Peer</div>
+                </div>
+                <div className="w-[1px] h-10 bg-white/10" />
+                <div className="text-center">
+                  <div className="text-3xl font-black text-white">0s</div>
+                  <div className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">GiftBlitz Settlement</div>
+                </div>
+              </div>
+              <div className="hidden lg:block text-right">
+                <p className="text-cyan-400 font-serif italic text-lg">"The protocol is the platform."</p>
               </div>
             </motion.div>
           </div>
@@ -353,14 +388,14 @@ const Home: React.FC = () => {
         <div className="absolute top-0 right-1/2 w-[800px] h-[800px] bg-cyan-900/10 rounded-full blur-[120px] pointer-events-none translate-x-1/2" />
         
         <div className="max-w-6xl mx-auto px-4 relative z-10">
-          <div className="text-center mb-20">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-bold uppercase tracking-wider mb-6">
+          <div className="text-center mb-24 md:mb-32">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-bold uppercase tracking-wider mb-8">
               The Protocol
             </div>
-            <h2 className="text-4xl md:text-5xl font-black text-white mb-6">
+            <h2 className="text-4xl md:text-5xl font-black text-white mb-8">
               How GiftBlitz Actually Works
             </h2>
-            <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-400 max-w-3xl mx-auto px-4">
               Our <b className="text-white">Asymmetric Escrow</b> makes scamming mathematically impossible. Here is the step-by-step trustless flow.
             </p>
           </div>
@@ -377,7 +412,7 @@ const Home: React.FC = () => {
               className="relative flex flex-col md:flex-row items-center mb-16 group"
             >
               <div className="md:w-1/2 flex justify-end md:pr-12 mb-6 md:mb-0">
-                <div className="bg-slate-900/80 backdrop-blur-sm p-8 rounded-3xl border border-white/10 group-hover:border-cyan-500/50 transition-colors shadow-2xl text-right relative overflow-hidden w-full">
+                <div className="bg-slate-900/80 backdrop-blur-sm p-8 rounded-3xl border border-white/10 group-hover:border-cyan-500/50 transition-colors shadow-2xl text-center md:text-right relative overflow-hidden w-full">
                   <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-3xl" />
                   <h3 className="text-2xl font-bold text-white mb-3">1. List & Lock (Seller)</h3>
                   <p className="text-gray-400 leading-relaxed">
@@ -385,7 +420,7 @@ const Home: React.FC = () => {
                   </p>
                 </div>
               </div>
-              <div className="absolute left-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-black border-4 border-[#020617] flex items-center justify-center z-10 shadow-[0_0_20px_rgba(6,182,212,0.4)]">
+              <div className="md:absolute md:left-1/2 md:-translate-x-1/2 w-12 h-12 rounded-full bg-black border-4 border-[#020617] flex items-center justify-center z-20 shadow-[0_0_20px_rgba(6,182,212,0.4)] relative mb-8 md:mb-0 order-first md:order-none">
                 <div className="w-8 h-8 rounded-full bg-cyan-500 flex items-center justify-center text-white font-black">1</div>
               </div>
               <div className="md:w-1/2 md:pl-12 hidden md:flex items-center text-cyan-500/30">
@@ -401,7 +436,7 @@ const Home: React.FC = () => {
               className="relative flex flex-col md:flex-row-reverse items-center mb-16 group"
             >
               <div className="md:w-1/2 flex justify-start md:pl-12 mb-6 md:mb-0">
-                <div className="bg-slate-900/80 backdrop-blur-sm p-8 rounded-3xl border border-white/10 group-hover:border-purple-500/50 transition-colors shadow-2xl text-left relative overflow-hidden w-full">
+                <div className="bg-slate-900/80 backdrop-blur-sm p-8 rounded-3xl border border-white/10 group-hover:border-purple-500/50 transition-colors shadow-2xl text-center md:text-left relative overflow-hidden w-full">
                   <div className="absolute top-0 left-0 w-32 h-32 bg-purple-500/10 rounded-full blur-3xl" />
                   <h3 className="text-2xl font-bold text-white mb-3">2. Purchase & Stake (Buyer)</h3>
                   <p className="text-gray-400 leading-relaxed">
@@ -409,7 +444,7 @@ const Home: React.FC = () => {
                   </p>
                 </div>
               </div>
-              <div className="absolute left-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-black border-4 border-[#020617] flex items-center justify-center z-10 shadow-[0_0_20px_rgba(168,85,247,0.4)]">
+              <div className="md:absolute md:left-1/2 md:-translate-x-1/2 w-12 h-12 rounded-full bg-black border-4 border-[#020617] flex items-center justify-center z-20 shadow-[0_0_20px_rgba(168,85,247,0.4)] relative mb-8 md:mb-0 order-first md:order-none">
                 <div className="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-white font-black">2</div>
               </div>
               <div className="md:w-1/2 md:pr-12 hidden md:flex items-center justify-end text-purple-500/30">
@@ -425,7 +460,7 @@ const Home: React.FC = () => {
               className="relative flex flex-col md:flex-row items-center group mb-16"
             >
               <div className="md:w-1/2 flex justify-end md:pr-12 mb-6 md:mb-0">
-                <div className="bg-slate-900/80 backdrop-blur-sm p-8 rounded-3xl border border-white/10 group-hover:border-pink-500/50 transition-colors shadow-2xl text-right relative overflow-hidden w-full">
+                <div className="bg-slate-900/80 backdrop-blur-sm p-8 rounded-3xl border border-white/10 group-hover:border-pink-500/50 transition-colors shadow-2xl text-center md:text-right relative overflow-hidden w-full">
                   <div className="absolute top-0 right-0 w-32 h-32 bg-pink-500/10 rounded-full blur-3xl" />
                   <h3 className="text-2xl font-bold text-white mb-3">3. Reveal & Swap (Automated)</h3>
                   <p className="text-gray-400 leading-relaxed">
@@ -433,7 +468,7 @@ const Home: React.FC = () => {
                   </p>
                 </div>
               </div>
-              <div className="absolute left-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-black border-4 border-[#020617] flex items-center justify-center z-10 shadow-[0_0_20px_rgba(236,72,153,0.4)]">
+              <div className="md:absolute md:left-1/2 md:-translate-x-1/2 w-12 h-12 rounded-full bg-black border-4 border-[#020617] flex items-center justify-center z-20 shadow-[0_0_20px_rgba(236,72,153,0.4)] relative mb-8 md:mb-0 order-first md:order-none">
                 <div className="w-8 h-8 rounded-full bg-pink-500 flex items-center justify-center text-white font-black">3</div>
               </div>
               <div className="md:w-1/2 md:pl-12 hidden md:flex items-center text-pink-500/30">
@@ -449,14 +484,14 @@ const Home: React.FC = () => {
               className="relative flex flex-col md:flex-row-reverse items-center group"
             >
               <div className="md:w-1/2 flex justify-start md:pl-12">
-                <div className="bg-gradient-to-br from-green-900/40 to-emerald-900/20 backdrop-blur-sm p-8 rounded-3xl border border-green-500/30 shadow-[0_0_40px_rgba(34,197,94,0.15)] text-left relative overflow-hidden w-full">
+                <div className="bg-gradient-to-br from-green-900/40 to-emerald-900/20 backdrop-blur-sm p-8 rounded-3xl border border-green-500/30 shadow-[0_0_40px_rgba(34,197,94,0.15)] text-center md:text-left relative overflow-hidden w-full">
                   <h3 className="text-2xl font-bold text-white mb-3">4. Happy Resolution (Instant)</h3>
                   <p className="text-gray-400 leading-relaxed">
                     The buyer clicks "Finalize". The smart contract instantly sends the payment to the seller. <b>Both deposits are returned in full.</b> No waiting, no middlemen, and both users level up their Reputation NFTs.
                   </p>
                 </div>
               </div>
-              <div className="absolute left-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-black border-4 border-[#020617] flex items-center justify-center z-10 shadow-[0_0_20px_rgba(34,197,94,0.4)]">
+              <div className="md:absolute md:left-1/2 md:-translate-x-1/2 w-12 h-12 rounded-full bg-black border-4 border-[#020617] flex items-center justify-center z-20 shadow-[0_0_20px_rgba(34,197,94,0.4)] relative mb-8 md:mb-0 order-first md:order-none">
                 <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-white font-black">
                   <CheckCircle className="w-4 h-4" />
                 </div>

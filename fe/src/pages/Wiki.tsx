@@ -1,188 +1,238 @@
-import React from 'react';
-import { Book, Shield, Zap, Clock, AlertTriangle, Award, Users } from 'lucide-react';
+import React, { useState } from 'react';
+import { Book, Shield, Zap, Clock, AlertTriangle, Award, ChevronRight, Code, Info } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const Wiki: React.FC = () => {
+    const [activeSection, setActiveSection] = useState('basics');
+
     const sections = [
         {
             id: 'basics',
             title: 'Protocol Core',
-            icon: <Book className="w-5 h-5 text-cyan-400" />,
-            content: "GiftBlitz is a trustless P2P gift card exchange built on IOTA. It solves the 'double-spend' problem of gift cards without requiring a central authority or escrow."
+            icon: <Book className="w-4 h-4" />,
+            description: 'The foundation of trustless gift card exchange.',
+            content: (
+                <div className="space-y-6">
+                    <p className="text-gray-400 text-lg leading-relaxed">
+                        GiftBlitz is a decentralized, peer-to-peer protocol built on the IOTA Tangle. It eliminates the need for centralized intermediaries by using game theory to secure transactions.
+                    </p>
+                    <div className="grid md:grid-cols-2 gap-4">
+                        <div className="p-6 rounded-3xl bg-slate-900/50 border border-white/5 shadow-xl">
+                            <h4 className="text-white font-bold mb-2 flex items-center gap-2">
+                                <Code className="w-4 h-4 text-cyan-400" /> Layer 1 Security
+                            </h4>
+                            <p className="text-sm text-gray-500">Built on IOTA's fee-less infrastructure for micro-transactions.</p>
+                        </div>
+                        <div className="p-6 rounded-3xl bg-slate-900/50 border border-white/5 shadow-xl">
+                            <h4 className="text-white font-bold mb-2 flex items-center gap-2">
+                                <Shield className="w-4 h-4 text-purple-400" /> Trustless Escrow
+                            </h4>
+                            <p className="text-sm text-gray-500">Atomic swaps ensured by smart contract logic, not humans.</p>
+                        </div>
+                    </div>
+                </div>
+            )
         },
         {
             id: 'trust-deposits',
-            title: 'Trust Deposits',
-            icon: <Shield className="w-5 h-5 text-purple-400" />,
-            content: "Both buyers and sellers lock a 'Trust Deposit' (Seller: 100% of Face Value, Buyer: 110% of Face Value) into the smart contract. If the trade succeeds, deposits are returned."
+            title: 'Game Theory & Deposits',
+            icon: <Shield className="w-4 h-4" />,
+            description: 'Mathematical guarantees against fraud.',
+            content: (
+                <div className="space-y-6">
+                    <p className="text-gray-400 text-lg leading-relaxed">
+                        To ensure honest behavior, both parties lock collateral into the contract. This creates a <span className="text-white font-bold">Nash Equilibrium</span> where cheating is always a net loss.
+                    </p>
+                    <div className="p-8 rounded-[2rem] bg-gradient-to-br from-slate-900 to-black border border-white/5 space-y-6">
+                        <div className="flex justify-between items-center text-sm font-black uppercase tracking-widest text-gray-500 px-2">
+                            <span>Role</span>
+                            <span>Collateral (%)</span>
+                        </div>
+                        <div className="space-y-3">
+                            <div className="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5">
+                                <span className="text-white font-bold">Seller</span>
+                                <span className="text-cyan-400 font-black">100% of Face Value</span>
+                            </div>
+                            <div className="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5">
+                                <span className="text-white font-bold">Buyer</span>
+                                <span className="text-purple-400 font-black">110% of Face Value</span>
+                            </div>
+                        </div>
+                        <div className="pt-4 border-t border-white/10 text-xs text-gray-500 italic">
+                            * Deposits are automatically released by the contract upon successful trade verification.
+                        </div>
+                    </div>
+                </div>
+            )
         },
         {
-            id: 'timeout-reveal',
-            title: '72-Hour Reveal',
-            icon: <Clock className="w-5 h-5 text-orange-400" />,
-            content: "Once a buyer joins, the seller has 72 hours to reveal the encrypted key. Failure results in the seller losing 50% of their stake as compensation to the buyer."
+            id: 'timeouts',
+            title: 'The 72-Hour Rule',
+            icon: <Clock className="w-4 h-4" />,
+            description: 'Strict liveness guarantees.',
+            content: (
+                <div className="space-y-6">
+                    <p className="text-gray-400 text-lg leading-relaxed">
+                        GiftBlitz enforces a strict 72-hour window for the seller to reveal the encryption keys. This prevents malicious actors from "hanging" a buyer's liquidity indefinitely.
+                    </p>
+                    <div className="flex items-start gap-4 p-6 rounded-3xl bg-orange-500/5 border border-orange-500/10">
+                        <AlertTriangle className="w-6 h-6 text-orange-500 shrink-0" />
+                        <div>
+                            <h4 className="text-orange-500 font-bold mb-1 uppercase text-xs tracking-widest">Penalties</h4>
+                            <p className="text-sm text-gray-400">If the seller fails to reveal the key within the window, their 100% deposit is slashed: 50% to the buyer and 50% to the protocol treasury.</p>
+                        </div>
+                    </div>
+                </div>
+            )
         },
         {
             id: 'reputation',
-            title: 'Hacker Reputation',
-            icon: <Award className="w-5 h-5 text-green-400" />,
-            content: "Your Reputation NFT tracks your trade history. Higher reputation unlocks larger trade caps (up to €200 Max). The protocol charges a minimal 1% fee on successful sales for maintenance."
-        }
-    ];
-
-    const flows = [
-        {
-            title: "1. Encrypt & List",
-            desc: "Seller encrypts the code with a symmetric key and lists it. Only the seller knows the key.",
-            status: "complete"
-        },
-        {
-            title: "2. Lock & Re-Encrypt",
-            desc: "Buyer joins and locks funds. Protocol re-encrypts the key specifically for the buyer.",
-            status: "active"
-        },
-        {
-            title: "3. Verify & Release",
-            desc: "Buyer decrypts and validates the code. On success, funds are released to the seller.",
-            status: "pending"
+            title: 'Reputation NFTs',
+            icon: <Award className="w-4 h-4" />,
+            description: 'Scaling your trading limits.',
+            content: (
+                <div className="space-y-6">
+                    <p className="text-gray-400 text-lg leading-relaxed">
+                        Every user holds a non-transferable Soulbound Passport. Successful trades burn "Experience Points" into the NFT, unlocking higher liquidity tiers.
+                    </p>
+                    <div className="overflow-hidden rounded-3xl border border-white/5 bg-slate-900/30">
+                        <table className="w-full text-left text-sm">
+                            <thead className="bg-white/5 text-[10px] uppercase font-black tracking-widest text-gray-500">
+                                <tr>
+                                    <th className="px-6 py-4">Tier</th>
+                                    <th className="px-6 py-4">Required Trades</th>
+                                    <th className="px-6 py-4">Max Trade</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-white/5">
+                                <tr>
+                                    <td className="px-6 py-4 text-white font-bold">Rookie</td>
+                                    <td className="px-6 py-4 text-gray-500">0</td>
+                                    <td className="px-6 py-4 text-cyan-400">€20</td>
+                                </tr>
+                                <tr>
+                                    <td className="px-6 py-4 text-white font-bold">Veteran</td>
+                                    <td className="px-6 py-4 text-gray-500">50</td>
+                                    <td className="px-6 py-4 text-cyan-400">€200</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            )
         }
     ];
 
     return (
-        <div className="max-w-5xl mx-auto px-4 py-12 pb-24 space-y-16">
-            {/* Hero Section */}
-            <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="text-center space-y-4"
-            >
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-bold uppercase tracking-widest mb-4">
-                    <Book className="w-3 h-3" /> Technical Manual v1.0
-                </div>
-                <h1 className="text-5xl font-black text-white tracking-tight">
-                    HACKER <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">WIKI</span>
-                </h1>
-                <p className="text-gray-400 max-w-2xl mx-auto text-lg">
-                    Understand the game theory, encryption mechanics, and protocol rules that make GiftBlitz the most secure way to trade digital value.
-                </p>
-            </motion.div>
-
-            {/* Quick Navigation Cards */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {sections.map((section, i) => (
-                    <motion.div
-                        key={section.id}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: i * 0.1 }}
-                        className="p-6 rounded-3xl bg-slate-900/50 border border-white/5 hover:border-cyan-500/30 transition-all group"
+        <div className="min-h-screen bg-slate-950 text-slate-200 selection:bg-cyan-500/30">
+            {/* Header / Nav */}
+            <div className="sticky top-0 z-50 w-full border-b border-white/5 bg-slate-950/80 backdrop-blur-xl">
+                <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-400 to-purple-500 flex items-center justify-center">
+                            <Zap className="w-4 h-4 text-white fill-white" />
+                        </div>
+                        <span className="font-black text-white tracking-widest text-xl">WIKI<span className="text-cyan-400">.</span></span>
+                    </div>
+                    <button 
+                        onClick={() => window.history.back()}
+                        className="text-xs font-bold text-gray-500 hover:text-white transition-colors flex items-center gap-2"
                     >
-                        <div className="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                            {section.icon}
-                        </div>
-                        <h3 className="text-lg font-bold text-white mb-2">{section.title}</h3>
-                        <p className="text-gray-500 text-sm leading-relaxed">
-                            {section.content}
-                        </p>
-                    </motion.div>
-                ))}
+                        CLOSE MANUAL <ChevronRight className="w-3 h-3" />
+                    </button>
+                </div>
             </div>
 
-            {/* The 72-Hour Rule - Visualized */}
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
-                <div className="space-y-6">
-                    <div className="flex items-center gap-3">
-                        <div className="p-2 rounded-xl bg-orange-500/20 border border-orange-500/30">
-                            <Clock className="w-6 h-6 text-orange-400" />
-                        </div>
-                        <h2 className="text-3xl font-bold text-white">The 72-Hour Protocol</h2>
-                    </div>
-                    <p className="text-gray-400 leading-relaxed">
-                        To prevent "Ghost" sellers, the protocol enforces a strict timeout on every action. 
-                        Once a buyer commits capital, the seller is bound by a smart contract time-lock.
-                    </p>
-                    <div className="space-y-4">
-                        <div className="p-4 rounded-2xl bg-slate-900 border border-white/5 flex gap-4">
-                            <AlertTriangle className="w-6 h-6 text-orange-400 shrink-0" />
-                            <div>
-                                <h4 className="text-white font-bold text-sm">Seller Timeout</h4>
-                                <p className="text-xs text-gray-500">
-                                    Missed the 72h reveal window? 50% of your trust deposit is confiscated by the Protocol Treasury, and the other 50% is sent to the buyer as compensation.
-                                </p>
+            <div className="max-w-7xl mx-auto px-6 pt-12">
+                <div className="flex gap-16">
+                    {/* Sidebar */}
+                    <aside className="hidden lg:block w-72 shrink-0 h-[calc(100vh-160px)] sticky top-28 overflow-y-auto pr-4 scrollbar-hide">
+                        <div className="space-y-8">
+                            <div className="space-y-1">
+                                <h3 className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] px-4 mb-4">Introduction</h3>
+                                {sections.map(s => (
+                                    <button
+                                        key={s.id}
+                                        onClick={() => {
+                                            setActiveSection(s.id);
+                                            document.getElementById(s.id)?.scrollIntoView({ behavior: 'smooth' });
+                                        }}
+                                        className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all group
+                                            ${activeSection === s.id ? 'bg-white/5 text-white' : 'text-gray-500 hover:text-gray-300'}`}
+                                    >
+                                        <div className={`transition-colors ${activeSection === s.id ? 'text-cyan-400' : 'text-gray-600 group-hover:text-gray-400'}`}>
+                                            {s.icon}
+                                        </div>
+                                        <span className="text-sm font-bold">{s.title}</span>
+                                    </button>
+                                ))}
                             </div>
-                        </div>
-                        <div className="p-4 rounded-2xl bg-slate-900 border border-white/5 flex gap-4">
-                            <Zap className="w-6 h-6 text-green-400 shrink-0" />
-                            <div>
-                                <h4 className="text-white font-bold text-sm">Auto-Finalization</h4>
-                                <p className="text-xs text-gray-500">
-                                    If the buyer doesn't confirm within 72h of the reveal, the seller can trigger auto-finalization to claim the funds.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                {/* Visual Flow Representation */}
-                <div className="relative">
-                    <div className="absolute inset-0 bg-cyan-500/10 blur-3xl rounded-full" />
-                    <div className="relative p-8 rounded-[40px] bg-slate-900/80 border border-white/10 backdrop-blur-xl space-y-8">
-                        {flows.map((step, i) => (
-                            <div key={i} className="flex gap-6 items-start">
-                                <div className="flex flex-col items-center">
-                                    <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center font-bold text-xs
-                                        ${step.status === 'complete' ? 'bg-green-500/20 border-green-500 text-green-400' :
-                                          step.status === 'active' ? 'bg-cyan-500/20 border-cyan-500 text-cyan-400' :
-                                          'bg-slate-800 border-white/10 text-gray-500'}`}>
-                                        {i + 1}
+                            <div className="p-6 rounded-2xl bg-gradient-to-br from-cyan-500/10 to-transparent border border-cyan-500/10">
+                                <Info className="w-5 h-5 text-cyan-500 mb-3" />
+                                <h4 className="text-xs font-bold text-white mb-2">Technical Support</h4>
+                                <p className="text-[10px] text-gray-500 leading-relaxed">
+                                    Need deeper integration details? Access our protocol level API specs on GitHub.
+                                </p>
+                            </div>
+                        </div>
+                    </aside>
+
+                    {/* Main Content */}
+                    <main className="flex-1 pb-32">
+                        <section className="max-w-3xl space-y-24">
+                            {sections.map((s, i) => (
+                                <motion.div
+                                    key={s.id}
+                                    id={s.id}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ margin: "-100px" }}
+                                    onViewportEnter={() => setActiveSection(s.id)}
+                                    className="space-y-6 pt-8 border-t border-white/5 first:border-0"
+                                >
+                                    <div className="space-y-2">
+                                        <div className="flex items-center gap-2 text-cyan-500 text-[10px] font-black uppercase tracking-[0.3em]">
+                                            {s.icon} Section 0{i+1}
+                                        </div>
+                                        <h2 className="text-4xl font-black text-white tracking-tight">{s.title}</h2>
+                                        <p className="text-gray-500 font-medium italic">{s.description}</p>
                                     </div>
-                                    {i < flows.length - 1 && <div className="w-[2px] h-12 bg-white/5 mt-2" />}
-                                </div>
-                                <div className="space-y-1">
-                                    <h4 className={`font-bold ${step.status === 'pending' ? 'text-gray-500' : 'text-white'}`}>{step.title}</h4>
-                                    <p className="text-sm text-gray-400 leading-snug">{step.desc}</p>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </div>
+                                    <div className="pt-4">
+                                        {s.content}
+                                    </div>
+                                </motion.div>
+                            ))}
 
-            {/* Game Theory Section */}
-            <div className="p-12 rounded-[40px] bg-gradient-to-br from-slate-900 to-black border border-white/5 relative overflow-hidden text-center space-y-8">
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" />
-                <Users className="w-12 h-12 text-purple-400 mx-auto" />
-                <div className="max-w-3xl mx-auto space-y-4">
-                    <h2 className="text-3xl font-bold text-white">Trust via Mutually Assured Destruction</h2>
-                    <p className="text-gray-400">
-                        The "Dispute" mechanism is the ultimate deterrent. If a seller sends a fake code, the buyer can <strong>CONFISCATE</strong> both stakes to the Protocol Treasury. 
-                        Additionally, triggering a dispute instantly <strong>resets the Reputation Tier of both parties to 0</strong>. Since the seller deposits 100% of the Face Value, attempting to double-spend results in a guaranteed net loss and the destruction of their trading privileges.
-                    </p>
-                    <div className="flex flex-wrap justify-center gap-8 mt-8">
-                        <div className="text-center">
-                            <div className="text-2xl font-bold text-white">110%</div>
-                            <div className="text-xs text-gray-500 uppercase tracking-widest">Trust Stake</div>
-                        </div>
-                        <div className="text-center">
-                            <div className="text-2xl font-bold text-white">0.0s</div>
-                            <div className="text-xs text-gray-500 uppercase tracking-widest">Escrow Latency</div>
-                        </div>
-                        <div className="text-center">
-                            <div className="text-2xl font-bold text-white">PRE</div>
-                            <div className="text-xs text-gray-500 uppercase tracking-widest">Privacy Arch</div>
-                        </div>
-                    </div>
+                            {/* Protocol Flow / Visual List */}
+                            <motion.div 
+                                className="p-12 rounded-[3.5rem] bg-slate-900/30 border border-white/10 relative overflow-hidden"
+                                initial={{ opacity: 0 }}
+                                whileInView={{ opacity: 1 }}
+                            >
+                                <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/5 blur-[100px] -z-10" />
+                                <h3 className="text-2xl font-black text-white mb-8">Protocol Workflow</h3>
+                                <div className="space-y-8">
+                                    {[
+                                        { t: 'Encrypt & List', d: 'Seller generates a PRE (Proxy Re-Encryption) key and locks the asset.' },
+                                        { t: 'Multi-party Reveal', d: 'Smart contract verified inputs and triggers the re-encryption fragment.' },
+                                        { t: 'Decryption', d: 'Buyer recovers the plaintext key and validates the gift card code.' }
+                                    ].map((step, idx) => (
+                                        <div key={idx} className="flex gap-6">
+                                            <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-xs font-black text-cyan-400 border border-white/5">
+                                                {idx + 1}
+                                            </div>
+                                            <div className="flex-1">
+                                                <h4 className="text-white font-bold">{step.t}</h4>
+                                                <p className="text-sm text-gray-500">{step.d}</p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </motion.div>
+                        </section>
+                    </main>
                 </div>
-            </div>
-
-            {/* Footer CTA */}
-            <div className="text-center">
-                <button 
-                    onClick={() => window.history.back()}
-                    className="px-8 py-3 rounded-2xl bg-white/5 text-gray-400 border border-white/10 hover:bg-white/10 transition-all font-bold"
-                >
-                    Back to Terminal
-                </button>
             </div>
         </div>
     );
