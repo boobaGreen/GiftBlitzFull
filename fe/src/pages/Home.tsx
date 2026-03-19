@@ -130,8 +130,7 @@ const Home: React.FC = () => {
                   Trapped Value
                 </h3>
                 <p className="text-gray-400 text-sm leading-relaxed mb-8">
-                  Unused cards collect dust in drawers because liquidating them
-                  is too hard or too risky.
+                  Unwanted gifts, expiring cards, or a simple need for immediate cash. Billions get trapped because liquidating them is too hard or too risky.
                 </p>
                 <div className="mt-auto w-full p-4 rounded-xl bg-cyan-500/5 border border-cyan-500/20">
                   <div className="text-[10px] font-bold text-cyan-400/80 uppercase tracking-widest mb-1">
@@ -176,6 +175,99 @@ const Home: React.FC = () => {
                   <div className="text-xl font-black text-pink-400">~ 30%</div>
                 </div>
               </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* WEB2 COMPETITOR COMPARISON TABLE */}
+      <section className="py-24 relative bg-black border-y border-white/5 overflow-hidden">
+        <div className="absolute top-0 right-1/4 w-[400px] h-[400px] bg-red-900/10 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute bottom-0 left-1/4 w-[400px] h-[400px] bg-cyan-900/10 rounded-full blur-[100px] pointer-events-none" />
+
+        <div className="max-w-5xl mx-auto px-4 relative z-10">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-black text-white mb-6">
+              GiftBlitz vs Traditional Web2
+            </h2>
+            <p className="text-gray-400 max-w-2xl mx-auto text-lg">
+              Why use centralized marketplaces like Raise or CardCash when they steal your money and time?
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            {/* TRADITIONAL WEB2 */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="bg-[#1a0505] p-8 rounded-3xl border border-red-900/50 relative overflow-hidden group"
+            >
+              <div className="absolute top-0 right-0 w-32 h-32 bg-red-500/10 blur-3xl transition-all duration-500 group-hover:bg-red-500/20" />
+              <h3 className="text-2xl font-black text-red-500 mb-6 flex items-center gap-3">
+                <AlertCircle className="w-6 h-6" /> Web2 (Raise, CardCash)
+              </h3>
+              
+              <ul className="space-y-6">
+                <li className="flex items-start gap-4">
+                  <div className="min-w-[40px] h-10 rounded-full bg-red-500/10 flex items-center justify-center text-red-500 font-black">X</div>
+                  <div>
+                    <h4 className="text-white font-bold mb-1">Massive Middleman Fees</h4>
+                    <p className="text-red-200/60 text-sm">They take 15% to 30% of your gift card's value just for verifying.</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-4">
+                  <div className="min-w-[40px] h-10 rounded-full bg-red-500/10 flex items-center justify-center text-red-500 font-black">X</div>
+                  <div>
+                    <h4 className="text-white font-bold mb-1">Slow Verification</h4>
+                    <p className="text-red-200/60 text-sm">You wait days or even weeks for them to manually check the code and send your funds.</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-4">
+                  <div className="min-w-[40px] h-10 rounded-full bg-red-500/10 flex items-center justify-center text-red-500 font-black">X</div>
+                  <div>
+                    <h4 className="text-white font-bold mb-1">Limited Brands</h4>
+                    <p className="text-red-200/60 text-sm">They only accept massive global brands. Have a card for a local spa or niche online store? Useless.</p>
+                  </div>
+                </li>
+              </ul>
+            </motion.div>
+
+            {/* GIFTBLITZ */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="bg-gradient-to-br from-cyan-900/20 to-purple-900/20 p-8 rounded-3xl border border-cyan-500/30 relative overflow-hidden group shadow-2xl shadow-cyan-900/20"
+            >
+              <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/20 blur-3xl transition-all duration-500 group-hover:bg-cyan-500/30" />
+              <h3 className="text-2xl font-black text-cyan-400 mb-6 flex items-center gap-3">
+                <Zap className="w-6 h-6" /> GiftBlitz (Web3)
+              </h3>
+              
+              <ul className="space-y-6">
+                <li className="flex items-start gap-4">
+                  <div className="min-w-[40px] h-10 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400 font-black">✓</div>
+                  <div>
+                    <h4 className="text-white font-bold mb-1">Ultra-Low 1% Fee</h4>
+                    <p className="text-cyan-200/60 text-sm">Virtually free. Completely peer-to-peer. Our Smart Contract takes practically nothing.</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-4">
+                  <div className="min-w-[40px] h-10 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400 font-black">✓</div>
+                  <div>
+                    <h4 className="text-white font-bold mb-1">Instant Execution</h4>
+                    <p className="text-cyan-200/60 text-sm">No humans in the middle. The Smart Escrow releases funds instantly upon code validation.</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-4">
+                  <div className="min-w-[40px] h-10 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400 font-black">✓</div>
+                  <div>
+                    <h4 className="text-white font-bold mb-1">Any Brand Globally</h4>
+                    <p className="text-cyan-200/60 text-sm">If it has a verifiable digital pin or value, you can sell it. From Airlines to local barbers.</p>
+                  </div>
+                </li>
+              </ul>
             </motion.div>
           </div>
         </div>
@@ -280,9 +372,9 @@ const Home: React.FC = () => {
             <h2 className="text-4xl md:text-5xl font-black text-white mb-6">
               Why We Beat the Competition.
             </h2>
-            <p className="text-gray-400 max-w-3xl mx-auto text-lg">
-              Competitors use easily exploited flat fees or UX-killing 150% deposits. 
-              GiftBlitz introduces a perfectly balanced **Asymmetric Deposit Model** tied to Face Value. 
+            <p className="text-gray-400 max-w-3xl mx-auto text-lg leading-relaxed">
+              Web3 competitors are few, but they still rely on flawed models like easily exploited flat fees or UX-killing 150% deposits. 
+              GiftBlitz introduces a perfectly balanced <b className="text-white">Asymmetric Deposit Model</b> tied to Face Value. 
               Cheating mathematically guarantees a net loss.
             </p>
           </div>
