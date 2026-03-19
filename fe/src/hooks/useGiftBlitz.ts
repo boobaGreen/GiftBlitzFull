@@ -132,7 +132,7 @@ export const useGiftBlitz = () => {
                 ],
             });
 
-            const result = await signAndExecute({ transaction: tx });
+            const result = await signAndExecute({ transaction: tx as any });
             
             console.log("Box created successfully with stateless key derivation.");
 
@@ -172,7 +172,7 @@ export const useGiftBlitz = () => {
 
         console.log(`Joining box ${boxId} with total payment ${totalRequired}...`);
         try {
-            const result = await signAndExecute({ transaction: tx });
+            const result = await signAndExecute({ transaction: tx as any });
             console.log("Join transaction submitted:", result.digest);
             if (result.digest) {
                 console.log(`Explorer link: https://explorer.rebased.iota.org/txblock/${result.digest}?network=testnet`);
@@ -269,7 +269,7 @@ export const useGiftBlitz = () => {
             ],
         });
 
-        return signAndExecute({ transaction: tx });
+        return signAndExecute({ transaction: tx as any });
     }, [account, signAndExecute, PACKAGE_ID, MODULE, getReputationNFT, iotaClient, signPersonalMessage]);
 
     /**
@@ -288,7 +288,7 @@ export const useGiftBlitz = () => {
             ],
         });
 
-        return signAndExecute({ transaction: tx });
+        return signAndExecute({ transaction: tx as any });
     }, [account, signAndExecute, PACKAGE_ID, MODULE, TREASURY_ID]);
 
     /**
@@ -314,7 +314,7 @@ export const useGiftBlitz = () => {
             ],
         });
 
-        return signAndExecute({ transaction: tx });
+        return signAndExecute({ transaction: tx as any });
     }, [account, signAndExecute, PACKAGE_ID, MODULE, TREASURY_ID, getReputationNFT]);
 
 
@@ -346,7 +346,7 @@ export const useGiftBlitz = () => {
             ],
         });
 
-        return signAndExecute({ transaction: tx });
+        return signAndExecute({ transaction: tx as any });
     }, [account, signAndExecute, PACKAGE_ID, signPersonalMessage]);
 
     /**
@@ -438,7 +438,7 @@ export const useGiftBlitz = () => {
             ],
         });
 
-        return signAndExecute({ transaction: tx });
+        return signAndExecute({ transaction: tx as any });
     }, [account, signAndExecute, PACKAGE_ID, signPersonalMessage]);
 
     /**
@@ -455,7 +455,7 @@ export const useGiftBlitz = () => {
             ],
         });
 
-        return signAndExecute({ transaction: tx });
+        return signAndExecute({ transaction: tx as any });
     }, [account, signAndExecute, PACKAGE_ID, MODULE]);
 
     /**
@@ -474,7 +474,7 @@ export const useGiftBlitz = () => {
             ],
         });
 
-        return signAndExecute({ transaction: tx });
+        return signAndExecute({ transaction: tx as any });
     }, [account, signAndExecute, PACKAGE_ID, MODULE, TREASURY_ID]);
 
     /**
@@ -493,7 +493,7 @@ export const useGiftBlitz = () => {
             ],
         });
 
-        return signAndExecute({ transaction: tx });
+        return signAndExecute({ transaction: tx as any });
     }, [account, signAndExecute, PACKAGE_ID, MODULE, TREASURY_ID]);
 
 
@@ -513,7 +513,7 @@ export const useGiftBlitz = () => {
             ],
         });
 
-        return signAndExecute({ transaction: tx });
+        return signAndExecute({ transaction: tx as any });
     }, [account, signAndExecute, PACKAGE_ID, MODULE, TREASURY_ID]);
 
 
