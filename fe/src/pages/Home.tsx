@@ -9,6 +9,9 @@ import {
   AlertCircle,
   Zap,
   TrendingUp,
+  Gift,
+  Timer,
+  Wallet,
 } from "lucide-react";
 
 const Home: React.FC = () => {
@@ -63,6 +66,78 @@ const Home: React.FC = () => {
             </Link>
           </div>
         </motion.div>
+      </section>
+
+      {/* THE RELATABLE PROBLEM - Trapped Value Infographic */}
+      <section className="py-20 relative bg-[#020617] border-b border-white/5 overflow-hidden">
+        {/* Subtle mesh gradient background */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.1),rgba(255,255,255,0))] pointer-events-none" />
+
+        <div className="max-w-6xl mx-auto px-4 relative z-10">
+          <div className="text-center mb-14">
+            <h2 className="text-3xl md:text-4xl font-black text-white mb-4">
+              You Have a Gift Card. Why Haven't You Used It?
+            </h2>
+            <p className="text-gray-400 max-w-2xl mx-auto text-lg">
+              You're not alone. Over <b className="text-white">$23 Billion</b> gets trapped every single year.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6 relative">
+            {/* Connecting dashed line (desktop) */}
+            <div className="hidden md:block absolute top-[45%] left-10 right-10 h-[2px] border-t-2 border-dashed border-white/10 -z-10" />
+
+            {/* REASON 1: UNWANTED */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="bg-slate-900/80 backdrop-blur-xl p-8 rounded-3xl border border-white/10 hover:border-pink-500/30 transition-all flex flex-col items-center text-center shadow-xl"
+            >
+              <div className="w-20 h-20 rounded-full bg-pink-500/10 border border-pink-500/20 flex items-center justify-center mb-6 text-pink-500 shadow-[0_0_30px_rgba(236,72,153,0.15)]">
+                <Gift className="w-10 h-10" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-3">The Unwanted Gift</h3>
+              <p className="text-gray-400 text-sm leading-relaxed">
+                It was a nice thought from your aunt, but you'll literally never shop at that store. Now it just sits in a drawer collecting dust.
+              </p>
+            </motion.div>
+
+            {/* REASON 2: EXPIRING */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="bg-slate-900/80 backdrop-blur-xl p-8 rounded-3xl border border-white/10 hover:border-amber-500/30 transition-all flex flex-col items-center text-center shadow-xl"
+            >
+              <div className="w-20 h-20 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center mb-6 text-amber-500 shadow-[0_0_30px_rgba(245,158,11,0.15)]">
+                <Timer className="w-10 h-10" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-3">The Ticking Clock</h3>
+              <p className="text-gray-400 text-sm leading-relaxed">
+                You just got an email: it expires in 30 days. You're about to force yourself to buy something you don't even need just to not waste it.
+              </p>
+            </motion.div>
+
+            {/* REASON 3: CASH */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="bg-slate-900/80 backdrop-blur-xl p-8 rounded-3xl border border-white/10 hover:border-green-500/30 transition-all flex flex-col items-center text-center shadow-xl"
+            >
+              <div className="w-20 h-20 rounded-full bg-green-500/10 border border-green-500/20 flex items-center justify-center mb-6 text-green-500 shadow-[0_0_30px_rgba(34,197,94,0.15)]">
+                <Wallet className="w-10 h-10" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-3">The Cash Need</h3>
+              <p className="text-gray-400 text-sm leading-relaxed">
+                Store credit is nice, but rent, groceries, and crypto investments require liquid cash. You'd rather have real money right now.
+              </p>
+            </motion.div>
+          </div>
+        </div>
       </section>
 
       {/* THE PROBLEM - VISUAL INFOGRAPHIC */}
