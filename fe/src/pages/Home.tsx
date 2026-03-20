@@ -607,48 +607,69 @@ const Home: React.FC = () => {
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-8">
+          <div className="grid lg:grid-cols-2 gap-12">
             {/* SELLER FRAUD FAILS */}
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              className="relative group p-1 rounded-3xl bg-gradient-to-b from-red-500/20 to-transparent border border-red-500/30 overflow-hidden"
+              className="relative group pt-4"
             >
-              <div className="absolute top-0 right-0 p-4 opacity-10">
-                <Shield className="w-32 h-32 text-red-500" />
+              {/* The "Banned" Overlay Stamp */}
+              <div className="absolute -top-4 -right-4 z-20 bg-red-600 text-white text-[10px] font-black px-3 py-1.5 rounded-lg rotate-12 shadow-2xl border-2 border-white/20 animate-bounce">
+                FRAUD BLOCKED
               </div>
-              <div className="relative h-full bg-black/80 backdrop-blur-xl p-8 rounded-[20px] flex flex-col">
-                <div className="mb-6">
-                  <h3 className="text-2xl font-black text-white mb-2 flex items-center gap-3">
-                    <span className="w-3 h-3 rounded-full bg-red-500 animate-pulse" />
-                    Seller Frauds Fail
-                  </h3>
-                  <p className="text-red-200/60 text-sm">
-                    Seller tries to sell a fake code, an already used card, or "double-spends" it on another platform simultaneously.
+
+              <div className="glass-card h-full flex flex-col border-red-500/20 group-hover:border-red-500/40 transition-all duration-500 relative overflow-hidden">
+                {/* Background Glow */}
+                <div className="absolute -top-20 -right-20 w-40 h-40 bg-red-600/10 blur-[100px]" />
+                
+                <div className="mb-8">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-12 h-12 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center">
+                      <Shield className="w-6 h-6 text-red-500" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-black text-white leading-tight">Seller Attempt: Double-Spend</h3>
+                      <p className="text-red-400/60 text-[10px] font-black uppercase tracking-widest mt-0.5">Scenario: Fake code or already used</p>
+                    </div>
+                  </div>
+                  <p className="text-gray-400 text-sm leading-relaxed italic">
+                    "I'll sell a $100 Amazon card, but I'll use it myself first or provide a fake code to steal the buyer's payment."
                   </p>
                 </div>
 
-                <div className="space-y-4 mb-8 font-mono text-sm">
-                  <div className="flex justify-between items-center p-3 rounded-lg bg-white/5 border border-white/10">
-                    <span className="text-gray-400">Our Deposit Rule:</span>
-                    <span className="text-white font-bold">100% Face Value</span>
+                {/* The "Ledger" UI */}
+                <div className="bg-[#050505] rounded-2xl border border-white/5 p-4 mb-8 space-y-3 font-mono">
+                  <div className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-2 border-b border-white/5 pb-2">Asymmetric Ledger Simulation</div>
+                  
+                  <div className="flex items-center justify-between group/row">
+                    <div className="flex items-center gap-2">
+                      <div className="w-1 h-1 rounded-full bg-green-500" />
+                      <span className="text-xs text-gray-400">Gain (Card Used/Fake)</span>
+                    </div>
+                    <span className="text-sm font-black text-green-400">+$80.00</span>
                   </div>
-                  <div className="flex justify-between items-center p-3 rounded-lg bg-green-500/10 border border-green-500/20">
-                    <span className="text-gray-400">Gain from other site:</span>
-                    <span className="text-green-400 font-bold">+80% Price</span>
+
+                  <div className="flex items-center justify-between group/row">
+                    <div className="flex items-center gap-2">
+                      <div className="w-1 h-1 rounded-full bg-red-500" />
+                      <span className="text-xs text-gray-400">Locked Deposit (Burned)</span>
+                    </div>
+                    <span className="text-sm font-black text-red-500">-$100.00</span>
                   </div>
-                  <div className="flex justify-between items-center p-3 rounded-lg bg-red-500/10 border border-red-500/20">
-                    <span className="text-gray-400">Penalty on GiftBlitz:</span>
-                    <span className="text-red-400 font-bold">-100% Face Value</span>
+                  <div className="pt-2 border-t border-white/10 flex items-center justify-between">
+                    <span className="text-xs text-white font-bold uppercase">Transaction Delta</span>
+                    <div className="text-right">
+                      <div className="text-lg font-black text-red-500">-$20.00</div>
+                      <div className="text-[9px] text-red-400/50 font-black uppercase">Mathematical Loss</div>
+                    </div>
                   </div>
                 </div>
 
-                <div className="mt-auto p-4 rounded-xl bg-red-500/10 border border-red-500/30">
-                  <div className="text-xs text-red-400 uppercase font-black tracking-widest mb-1">Net Result:</div>
-                  <div className="text-2xl text-white font-black">-20% NET LOSS</div>
-                  <p className="text-xs text-red-300 mt-2">
-                    Competitors (like <b className="text-white">Ruxaby</b> or <b className="text-white">Paxful</b>) use flat deposits (e.g. $50), making this attack +$30 profitable on high-value cards.
+                <div className="mt-auto px-4 py-3 rounded-xl bg-red-950/20 border border-red-900/40 text-center">
+                  <p className="text-xs text-red-200">
+                    <span className="font-bold text-red-400">Verdict:</span> At a $100 face value, the attacker loses <span className="font-bold text-white">$20</span> vs competitors where they would net a profit.
                   </p>
                 </div>
               </div>
@@ -656,45 +677,67 @@ const Home: React.FC = () => {
 
             {/* BUYER GRIEFING FAILS */}
             <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              className="relative group p-1 rounded-3xl bg-gradient-to-b from-blue-500/20 to-transparent border border-blue-500/30 overflow-hidden"
+              className="relative group pt-4"
             >
-              <div className="absolute top-0 right-0 p-4 opacity-10">
-                <Lock className="w-32 h-32 text-blue-500" />
+              {/* The "Protected" Overlay Stamp */}
+              <div className="absolute -top-4 -right-4 z-20 bg-cyan-600 text-white text-[10px] font-black px-3 py-1.5 rounded-lg rotate-12 shadow-2xl border-2 border-white/20 animate-bounce">
+                SELLER PROTECTED
               </div>
-              <div className="relative h-full bg-black/80 backdrop-blur-xl p-8 rounded-[20px] flex flex-col">
-                <div className="mb-6">
-                  <h3 className="text-2xl font-black text-white mb-2 flex items-center gap-3">
-                    <span className="w-3 h-3 rounded-full bg-blue-500 animate-pulse" />
-                    Buyer Griefing Fails
-                  </h3>
-                  <p className="text-blue-200/60 text-sm">
-                    Trolls attempt to burn honest sellers' deposits by falsely disputing.
+
+              <div className="glass-card h-full flex flex-col border-cyan-500/20 group-hover:border-cyan-500/40 transition-all duration-500 relative overflow-hidden">
+                {/* Background Glow */}
+                <div className="absolute -top-20 -right-20 w-40 h-40 bg-cyan-600/10 blur-[100px]" />
+                
+                <div className="mb-8">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center">
+                      <Lock className="w-6 h-6 text-cyan-500" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-black text-white leading-tight">Buyer Attempt: Griefing</h3>
+                      <p className="text-cyan-400/60 text-[10px] font-black uppercase tracking-widest mt-0.5">Scenario: Falsely disputing valid code</p>
+                    </div>
+                  </div>
+                  <p className="text-gray-400 text-sm leading-relaxed italic">
+                    "I'll buy the $100 card, use it, and then falsely claim it was already empty to get a refund."
                   </p>
                 </div>
 
-                <div className="space-y-4 mb-8 font-mono text-sm">
-                  <div className="flex justify-between items-center p-3 rounded-lg bg-white/5 border border-white/10">
-                    <span className="text-gray-400">Our Deposit Rule:</span>
-                    <span className="text-white font-bold">110% Face Value</span>
+                {/* The "Ledger" UI */}
+                <div className="bg-[#050505] rounded-2xl border border-white/5 p-4 mb-8 space-y-3 font-mono">
+                  <div className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-2 border-b border-white/5 pb-2">Griefing Cost simulation</div>
+                  
+                  <div className="flex items-center justify-between group/row">
+                    <div className="flex items-center gap-2">
+                      <div className="w-1 h-1 rounded-full bg-green-500" />
+                      <span className="text-xs text-gray-400">Refund Amount</span>
+                    </div>
+                    <span className="text-sm font-black text-green-400">+$80.00</span>
                   </div>
-                  <div className="flex justify-between items-center p-3 rounded-lg bg-green-500/10 border border-green-500/20">
-                    <span className="text-gray-400">Price Refunded:</span>
-                    <span className="text-green-400 font-bold">+80% Price</span>
+
+                  <div className="flex items-center justify-between group/row">
+                    <div className="flex items-center gap-2">
+                      <div className="w-1 h-1 rounded-full bg-red-500" />
+                      <span className="text-xs text-gray-400">Stake Burned (110%)</span>
+                    </div>
+                    <span className="text-sm font-black text-red-500">-$110.00</span>
                   </div>
-                  <div className="flex justify-between items-center p-3 rounded-lg bg-red-500/10 border border-red-500/20">
-                    <span className="text-gray-400">Deposit Burned:</span>
-                    <span className="text-red-400 font-bold">-110% Face Value</span>
+
+                  <div className="pt-2 border-t border-white/10 flex items-center justify-between">
+                    <span className="text-xs text-white font-bold uppercase">Transaction Delta</span>
+                    <div className="text-right">
+                      <div className="text-lg font-black text-red-500">-$30.00</div>
+                      <div className="text-[9px] text-red-400/50 font-black uppercase">Net Financial Loss</div>
+                    </div>
                   </div>
                 </div>
 
-                <div className="mt-auto p-4 rounded-xl bg-blue-500/10 border border-blue-500/30">
-                  <div className="text-xs text-blue-400 uppercase font-black tracking-widest mb-1">Net Result:</div>
-                  <div className="text-2xl text-white font-black">-30% NET LOSS</div>
-                  <p className="text-xs text-blue-300 mt-2">
-                    Competitors (like <b className="text-white">Gift101</b>) demand a 150% deposit, destroying the user experience. We achieve mathematical safety at 110%.
+                <div className="mt-auto px-4 py-3 rounded-xl bg-cyan-950/20 border border-cyan-900/40 text-center">
+                  <p className="text-xs text-cyan-200">
+                    <span className="font-bold text-cyan-400">Verdict:</span> Even with a full refund of the price, the 110% stake ensures the griefing attempt is <span className="font-bold text-white">net-negative</span>.
                   </p>
                 </div>
               </div>
