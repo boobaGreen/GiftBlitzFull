@@ -72,7 +72,7 @@ export const useGiftBlitz = () => {
             // 1. REQUIRE existing profile for seller caps check (Mirror Protocol)
             const myNft = await getReputationNFT(account.address);
             if (!myNft) {
-                throw new Error("You must create a profile first before listing a gift card. Go to Profile page and click 'Create Profile'.");
+                throw new Error("You must initialize your Citizen Passport first before listing a gift card. Please complete the Identity Setup on this page.");
             }
 
             // 2. Generate Salt (32 bytes)

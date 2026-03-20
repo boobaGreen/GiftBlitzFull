@@ -155,16 +155,16 @@ const Profile: React.FC = () => {
                             <div className="flex-1 text-center md:text-left space-y-4">
                                 <div className="space-y-1">
                                     <h1 className="text-4xl font-black text-white tracking-tighter uppercase">
-                                        Agent <span className="text-cyan-400">ID://</span> {user.address.slice(0, 6)}...{user.address.slice(-4)}
+                                        <span className="text-cyan-400">PASSPORT://</span> {user.address.slice(0, 6)}...{user.address.slice(-4)}
                                     </h1>
                                     <div className="flex flex-wrap justify-center md:justify-start gap-3">
                                         <div className="flex items-center gap-2 px-3 py-1 rounded-lg bg-white/5 border border-white/5 text-[10px] font-bold text-gray-500 uppercase tracking-widest">
                                             <Shield className="w-3 h-3 text-cyan-400" />
-                                            Identity Validated
+                                            Active Citizen
                                         </div>
                                         <div className="flex items-center gap-2 px-3 py-1 rounded-lg bg-white/5 border border-white/5 text-[10px] font-bold text-gray-500 uppercase tracking-widest">
                                             <Package className="w-3 h-3 text-purple-400" />
-                                            {allMyRelatedBoxes.length} Protocols
+                                            {allMyRelatedBoxes.length} Trade Protocols
                                         </div>
                                     </div>
                                 </div>
@@ -173,10 +173,10 @@ const Profile: React.FC = () => {
                                 <div className="p-6 rounded-[2rem] bg-white/5 border border-white/5 space-y-4">
                                     <div className="flex justify-between items-end">
                                         <div>
-                                            <span className="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em] block mb-1">Reputation Progress</span>
-                                            <span className="text-xl font-black text-white">{progressToNextTier}% <span className="text-gray-600 text-sm">to {tierConfig.nextTier || 'MAX'}</span></span>
+                                            <span className="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em] block mb-1">Reputation Engine</span>
+                                            <span className="text-xl font-black text-white">{progressToNextTier}% <span className="text-gray-600 text-sm">to {tierConfig.nextTier || 'MAX Tier'}</span></span>
                                         </div>
-                                        <span className="text-[10px] font-black text-cyan-400 uppercase tracking-widest">{progressValue} / {totalNeededInCurrentTier} Trades</span>
+                                        <span className="text-[10px] font-black text-cyan-400 uppercase tracking-widest">{progressValue} / {totalNeededInCurrentTier} Successes</span>
                                     </div>
                                     <div className="h-2 w-full bg-slate-900 rounded-full overflow-hidden p-0.5 border border-white/5">
                                         <motion.div 
@@ -195,10 +195,10 @@ const Profile: React.FC = () => {
                 {/* Bento Stats Grid */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                     {[
-                        { label: 'Total Volume', val: `${(user.volume / 1_000_000_000).toFixed(0)}`, unit: 'IOTA', icon: TrendingUp, color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
-                        { label: 'Success Rate', val: '100', unit: '%', icon: Shield, color: 'text-cyan-400', bg: 'bg-cyan-500/10' },
-                        { label: 'Trust Stake', val: '240.00', unit: 'IOTA', icon: Package, color: 'text-purple-400', bg: 'bg-purple-500/10' },
-                        { label: 'Active Alerts', val: urgentActions.length.toString(), unit: '!', icon: AlertTriangle, color: urgentActions.length > 0 ? 'text-amber-400' : 'text-gray-500', bg: urgentActions.length > 0 ? 'bg-amber-500/10' : 'bg-white/5' },
+                        { label: 'Trade Volume', val: `${(user.volume / 1_000_000_000).toFixed(0)}`, unit: 'IOTA', icon: TrendingUp, color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
+                        { label: 'Integrity Rating', val: '100', unit: '%', icon: Shield, color: 'text-cyan-400', bg: 'bg-cyan-500/10' },
+                        { label: 'Network Stake', val: '240.00', unit: 'IOTA', icon: Package, color: 'text-purple-400', bg: 'bg-purple-500/10' },
+                        { label: 'System Alerts', val: urgentActions.length.toString(), unit: '!', icon: AlertTriangle, color: urgentActions.length > 0 ? 'text-amber-400' : 'text-gray-500', bg: urgentActions.length > 0 ? 'bg-amber-500/10' : 'bg-white/5' },
                     ].map((stat, i) => (
                         <motion.div
                             key={i}
@@ -229,13 +229,13 @@ const Profile: React.FC = () => {
                                 <div className="p-2 rounded-lg bg-cyan-500/10 border border-cyan-500/20">
                                     <Shield className={`w-5 h-5 ${keyMatch === true ? 'text-cyan-400' : 'text-amber-400'}`} />
                                 </div>
-                                <h3 className="text-xs font-black text-white uppercase tracking-widest">Protocol Identity</h3>
+                                <h3 className="text-xs font-black text-white uppercase tracking-widest">Security Vault</h3>
                             </div>
                             
                             <p className="text-[11px] text-gray-500 font-medium leading-relaxed">
                                 {keyMatch === true 
-                                    ? "Your identity is secured and synchronized with the Reputation Vault." 
-                                    : "Identity mismatch detected. Please synchronize your session keys."}
+                                    ? "Your Citizen Passport is secured. Advanced encryption keys are stored in the on-chain vault." 
+                                    : "Identity session is currently local. Synchronize with the blockchain to enable cross-device recovery."}
                             </p>
 
                             <div className="space-y-3">
@@ -248,7 +248,7 @@ const Profile: React.FC = () => {
                                         {isSyncing ? (
                                             <div className="w-4 h-4 border-2 border-slate-900 border-t-transparent rounded-full animate-spin" />
                                         ) : (
-                                            <>Sync Session Keys {"->"}</>
+                                            <>Recover Security Keys {"->"}</>
                                         )}
                                     </button>
                                 )}
@@ -262,15 +262,15 @@ const Profile: React.FC = () => {
                                         {isUpdatingVault ? (
                                             <div className="w-4 h-4 border-2 border-slate-900 border-t-transparent rounded-full animate-spin" />
                                         ) : (
-                                            <>Initiate Vault {"->"}</>
+                                            <>Secure On-Chain Vault {"->"}</>
                                         )}
                                     </button>
                                 )}
 
                                 {keyMatch === true && (
-                                    <div className="py-4 rounded-2xl bg-white/5 border border-white/5 text-[10px] font-black text-cyan-400 uppercase tracking-widest flex items-center justify-center gap-2">
-                                        <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-                                        Identity Secured
+                                    <div className="py-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-[10px] font-black text-emerald-400 uppercase tracking-widest flex items-center justify-center gap-2">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                                        Vault Secured
                                     </div>
                                 )}
                             </div>

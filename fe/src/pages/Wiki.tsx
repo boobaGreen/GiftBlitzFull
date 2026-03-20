@@ -98,13 +98,13 @@ const Wiki: React.FC = () => {
         },
         {
             id: 'reputation',
-            title: 'Reputation NFTs',
+            title: 'Citizen Passport',
             icon: <Award className="w-4 h-4" />,
-            description: 'Scaling your trade limits.',
+            description: 'Your identity on the IOTA network.',
             content: (
                 <div className="space-y-6">
                     <p className="text-gray-400 text-lg leading-relaxed">
-                        Every user holds a non-transferable Soulbound Passport. Successful trades burn "Experience Points" into the NFT, unlocking higher liquidity tiers.
+                        Every user holds a non-transferable Soulbound Passport. Successful trades earn "Integrity Points" for your Passport, unlocking higher liquidity tiers and advanced security features.
                     </p>
                     <div className="overflow-hidden rounded-3xl border border-white/5 bg-slate-900/30">
                         <table className="w-full text-left text-sm">

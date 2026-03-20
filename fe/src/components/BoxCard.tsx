@@ -273,10 +273,10 @@ const BoxCard: React.FC<BoxCardProps> = ({ box, onClick }) => {
                                     {displayStats.tier.icon} {displayStats.tier.name}
                                 </div>
 
-                                {/* Soulbound NFT Badge */}
+                                {/* Citizen Passport Badge */}
                                 <div className="mt-4 p-3 rounded-xl bg-gradient-to-r from-purple-500/10 to-cyan-500/10 border border-purple-500/20">
-                                    <p className="text-[10px] text-purple-400 uppercase tracking-wider mb-1">🔗 Soulbound NFT</p>
-                                    <p className="text-gray-400 text-xs">Non-transferable reputation token</p>
+                                    <p className="text-[10px] text-purple-400 uppercase tracking-wider mb-1">🔗 Citizen Passport</p>
+                                    <p className="text-gray-400 text-xs">Soulbound identity on the IOTA network</p>
                                 </div>
 
                                 {/* Stats Grid */}

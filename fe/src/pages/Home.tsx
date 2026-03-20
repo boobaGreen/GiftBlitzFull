@@ -534,7 +534,7 @@ const Home: React.FC = () => {
                 sold, or faked. It proves you are trustworthy on-chain.
               </p>
               <span className="text-xs font-bold text-cyan-500 uppercase tracking-wider">
-                Reputation NFT
+                Citizen Passport
               </span>
             </motion.div>
 
@@ -718,7 +718,7 @@ const Home: React.FC = () => {
               Earn Trust. Level Up.
             </h2>
             <p className="text-gray-400 max-w-3xl mx-auto text-lg mb-8">
-              Your <b>Soulbound Reputation NFT</b> is your passport. It records
+              Your <b>Soulbound Citizen Passport</b> is your identity. It records
               your trading history on-chain. Honest behavior unlocks <b>higher trade limits</b> to prevent systemic fraud.
             </p>
 
