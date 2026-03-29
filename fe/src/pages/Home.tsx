@@ -180,6 +180,65 @@ const Home: React.FC = () => {
         </div>
       </section>
 
+      {/* GLOBAL WALKTHROUGH VIDEO SECTION */}
+      <section className="py-32 relative bg-slate-950 border-y border-white/5 overflow-hidden font-sans">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,rgba(168,85,247,0.05)_0%,transparent_70%)] pointer-events-none" />
+        
+        <div className="max-w-6xl mx-auto px-4 relative z-10 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-purple-400 text-xs font-black uppercase tracking-widest mb-10 backdrop-blur-xl"
+          >
+            <Play className="w-3 h-3 fill-current" /> See it in action
+          </motion.div>
+          
+          <h2 className="text-5xl md:text-7xl font-black text-white mb-8 tracking-tighter">
+            Platform <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">Walkthrough.</span>
+          </h2>
+          
+          <p className="text-xl text-gray-400 max-w-3xl mx-auto mb-16 leading-relaxed">
+            Discover how GiftBlitz secures your trades in under 5 minutes. From listing to instant settlement, witness the power of trustless P2P exchange.
+          </p>
+          
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="relative group lg:max-w-5xl mx-auto"
+          >
+            {/* Video Glow Effect */}
+            <div className="absolute -inset-4 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 rounded-[3rem] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+            
+            <div className="relative aspect-video w-full rounded-[2.5rem] overflow-hidden border border-white/10 bg-black shadow-2xl">
+              <iframe 
+                className="w-full h-full"
+                src="https://www.youtube.com/embed/ogJe7Zjr3RQ?autoplay=0&rel=0&showinfo=0" 
+                title="GiftBlitz Official Walkthrough"
+                frameBorder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                allowFullScreen
+              ></iframe>
+            </div>
+            
+            {/* Technical Stamp */}
+            <div className="absolute -bottom-6 -right-6 hidden md:flex items-center gap-3 px-6 py-4 rounded-2xl bg-slate-900 border border-white/10 shadow-2xl backdrop-blur-xl z-20">
+              <div className="w-10 h-10 rounded-full bg-cyan-500/10 flex items-center justify-center text-cyan-400">
+                <MonitorPlay className="w-5 h-5" />
+              </div>
+              <div className="text-left">
+                <div className="text-[10px] text-gray-500 font-extrabold uppercase tracking-widest">Format</div>
+                <div className="text-sm font-black text-white">4K Technical Demo</div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+
+
       {/* THE PROBLEM - MODERN BENTO GRID */}
       <section className="py-32 bg-slate-950 relative border-y border-white/5 overflow-hidden">
         {/* Soft Background Aurora */}
@@ -503,62 +562,6 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* GLOBAL WALKTHROUGH VIDEO SECTION */}
-      <section className="py-32 relative bg-slate-950 border-y border-white/5 overflow-hidden font-sans">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,rgba(168,85,247,0.05)_0%,transparent_70%)] pointer-events-none" />
-        
-        <div className="max-w-6xl mx-auto px-4 relative z-10 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-purple-400 text-xs font-black uppercase tracking-widest mb-10 backdrop-blur-xl"
-          >
-            <Play className="w-3 h-3 fill-current" /> See it in action
-          </motion.div>
-          
-          <h2 className="text-5xl md:text-7xl font-black text-white mb-8 tracking-tighter">
-            Platform <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">Walkthrough.</span>
-          </h2>
-          
-          <p className="text-xl text-gray-400 max-w-3xl mx-auto mb-16 leading-relaxed">
-            Discover how GiftBlitz secures your trades in under 5 minutes. From listing to instant settlement, witness the power of trustless P2P exchange.
-          </p>
-          
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="relative group lg:max-w-5xl mx-auto"
-          >
-            {/* Video Glow Effect */}
-            <div className="absolute -inset-4 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 rounded-[3rem] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-            
-            <div className="relative aspect-video w-full rounded-[2.5rem] overflow-hidden border border-white/10 bg-black shadow-2xl">
-              <iframe 
-                className="w-full h-full"
-                src="https://www.youtube.com/embed/ogJe7Zjr3RQ?autoplay=0&rel=0&showinfo=0" 
-                title="GiftBlitz Official Walkthrough"
-                frameBorder="0" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                allowFullScreen
-              ></iframe>
-            </div>
-            
-            {/* Technical Stamp */}
-            <div className="absolute -bottom-6 -right-6 hidden md:flex items-center gap-3 px-6 py-4 rounded-2xl bg-slate-900 border border-white/10 shadow-2xl backdrop-blur-xl z-20">
-              <div className="w-10 h-10 rounded-full bg-cyan-500/10 flex items-center justify-center text-cyan-400">
-                <MonitorPlay className="w-5 h-5" />
-              </div>
-              <div className="text-left">
-                <div className="text-[10px] text-gray-500 font-extrabold uppercase tracking-widest">Format</div>
-                <div className="text-sm font-black text-white">4K Technical Demo</div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
 
       {/* THE SOLUTION - IOTA Architecture */}
       <section className="py-24 relative overflow-hidden">
