@@ -1,6 +1,6 @@
 # 🚀 GiftBlitz – Hackathon Submission Draft
 
-> **MasterZ × IOTA Hackathon** — Deadline: March 31, 2026
+> **Hackathon IOTA 2026 Europe (MasterZ × IOTA)** — Deadline: March 31, 2026
 > Use this as a reference to fill out the [submission form](https://forms.gle/9QcdekU2mzbcCs2eA).
 
 ---
@@ -132,8 +132,8 @@ Two Move modules (~540 lines total) implement the entire trading protocol:
 
 | Item                      | Link                                                          |
 | ------------------------- | ------------------------------------------------------------- |
-| **Live Demo**             | https://gift-blitz-full.vercel.app/                           |
-| **Video Walkthrough**     | `[TODO: Record 5-min demo video and add YouTube link]`       |
+| **Live Demo**             | https://giftblitz.claudiodallara.it                           |
+| **Video Walkthrough**     | https://youtu.be/ogJe7Zjr3RQ                                  |
 | **Smart Contract Explorer** | [IOTA Explorer — Package](https://explorer.iota.org/testnet/object/0xd30abab51e9b8edfee630a96dc11ba943698547bd9a3c1e9f79f875595d0a2f3) |
 | **Treasury Object**       | [IOTA Explorer — Treasury](https://explorer.iota.org/testnet/object/0xe15edb5d2b3f288033cab0c8468c71c88eef41eaca78c7932f152788d817a1a1) |
 
@@ -194,8 +194,8 @@ bash publish_testnet.sh
 
 ## ⏩ Checklist Before Submitting
 
-- [ ] Live demo deployed and accessible
-- [ ] 5-min video walkthrough recorded & uploaded to YouTube
+- [x] Live demo deployed and accessible
+- [x] 5-min video walkthrough recorded & uploaded to YouTube
 - [ ] GitHub repo is public with clean README
 - [ ] Smart contracts verified on IOTA Explorer
 - [ ] Team information filled in
