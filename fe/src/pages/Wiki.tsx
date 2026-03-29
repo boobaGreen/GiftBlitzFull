@@ -1,34 +1,11 @@
 import React, { useState } from 'react';
-import { Book, Shield, Zap, Clock, AlertTriangle, Award, ChevronRight, Code, Info, Video } from 'lucide-react';
+import { Book, Shield, Zap, Clock, AlertTriangle, Award, ChevronRight, Code, Info } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const Wiki: React.FC = () => {
     const [activeSection, setActiveSection] = useState('basics');
 
     const sections = [
-        {
-            id: 'walkthrough',
-            title: 'Video Tutorial',
-            icon: <Video className="w-4 h-4" />,
-            description: 'A complete 5-minute walkthrough of the GiftBlitz platform.',
-            content: (
-                <div className="space-y-6">
-                    <p className="text-gray-400 text-lg leading-relaxed">
-                        Watch our official walkthrough to see how GiftBlitz handles trustless exchanges, reputation building, and secure code delivery on the IOTA network.
-                    </p>
-                    <div className="aspect-video w-full rounded-[2rem] overflow-hidden border border-white/10 bg-black shadow-2xl">
-                        <iframe 
-                            className="w-full h-full"
-                            src="https://www.youtube.com/embed/ogJe7Zjr3RQ" 
-                            title="GiftBlitz Walkthrough"
-                            frameBorder="0" 
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                            allowFullScreen
-                        ></iframe>
-                    </div>
-                </div>
-            )
-        },
         {
             id: 'basics',
             title: 'Protocol Core',
