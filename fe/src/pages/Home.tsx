@@ -230,7 +230,7 @@ const Home: React.FC = () => {
               </div>
               <div className="text-left">
                 <div className="text-[10px] text-gray-500 font-extrabold uppercase tracking-widest">Format</div>
-                <div className="text-sm font-black text-white">4K Technical Demo</div>
+                <div className="text-sm font-black text-white">1080p Technical Demo</div>
               </div>
             </div>
           </motion.div>
