@@ -69,13 +69,48 @@ In 6 settimane ho costruito:
 → Upgrade design premium
 → Percorso verso il mainnet
 
+———
+
+🤝 CERCO COMPAGNI DI VIAGGIO
+
+Ho costruito la tecnologia da solo — smart contract, frontend, 
+crittografia, deploy. Ma per trasformare un prototipo in un 
+prodotto vero servono competenze che vanno oltre il codice.
+
+Sto cercando persone con la voglia di costruire qualcosa di 
+concreto nel Web3 — non un altro token, ma un prodotto che 
+risolve un problema da $23 miliardi.
+
+Cerco soprattutto:
+
+→ 📣 Marketing & Growth — social media, community building, 
+  content strategy, SEO. Chi sa far parlare di un prodotto.
+→ 🎨 Design — UI/UX, branding, motion design. Chi sa 
+  trasformare un buon prodotto in un'esperienza memorabile.
+→ 📋 Operations & Legal — aspetti burocratici, compliance, 
+  struttura societaria, grant applications. Chi sa navigare 
+  il lato business di una startup.
+→ 💼 Business Development — partnership con brand, relazioni 
+  con investitori, pitch. Chi sa aprire porte.
+
+Bonus (ma non priorità — lo sviluppo lo gestisco io):
+→ 🔧 Dev Frontend o Blockchain (Move/Solidity)
+
+Non serve che tu sappia tutto di blockchain o di crypto.
+Serve che tu abbia voglia di sporcarti le mani su un 
+progetto reale, con un prodotto reale, già funzionante.
+
+📩 Scrivimi in DM o commenta — leggo tutto.
+
+———
+
 Se credi che la fiducia debba essere matematica e non emotiva,
 seguimi per gli aggiornamenti del progetto.
 
 Oppure prova tu stesso → [link testnet]
 
 #Web3 #Blockchain #IOTA #GameTheory #Startup #GiftCards 
-#DeFi #SmartContracts #BuildInPublic #Hackathon
+#DeFi #SmartContracts #BuildInPublic #Hackathon #CoFounder #Hiring
 ```
 
 ---
@@ -370,14 +405,52 @@ Bottom: thin gradient line cyan→purple.
 Style: Clean vertical roadmap, like a startup pitch deck.
 ```
 
-### SLIDE 8 — CTA (Closing)
+### SLIDE 8 — Cerco Compagni di Viaggio
+
+```
+Prompt immagine:
+
+Create a dark-themed "Join Us" CTA slide, 1080x1350px.
+Background: Dark navy (#020617) with a very subtle aurora effect 
+(soft cyan and purple light wisps in the upper portion).
+
+Top section:
+- Large bold white text: "CERCO COMPAGNI"
+- Next line, in gradient text (cyan→purple): "DI VIAGGIO"
+
+Center section — 5 role cards stacked vertically, each a slim 
+horizontal bar with dark slate background and a colored left accent:
+
+Bar 1 (cyan accent): "📣 Marketing & Growth"
+Bar 2 (purple accent): "🎨 Design (UI/UX & Branding)"
+Bar 3 (blue accent): "📋 Operations & Legal"
+Bar 4 (amber accent): "💼 Business Development"
+Bar 5 (muted gray accent, smaller text): "🔧 Dev (Bonus)"
+
+Below the bars, with spacing:
+- White italic text: "Non serve sapere tutto di blockchain."
+- Bold white: "Serve voglia di costruire."
+
+Below, after a thin cyan divider line:
+- Cyan text: "Scrivimi in DM →"
+- White bold: "GiftBlitz"
+- Small gray: "Liquidity for Unused Assets"
+
+Bottom: logos row showing "Built on IOTA" and "MasterZ Hackathon 2026"
+Thin gradient line cyan→purple at very bottom.
+
+Style: Powerful closing with clear call-to-action for collaborators. 
+Cinematic feel, generous whitespace, premium.
+```
+
+### SLIDE 9 — CTA Finale (Closing)
 
 ```
 Prompt immagine:
 
 Create a dark-themed closing CTA slide, 1080x1350px.
-Background: Dark navy (#020617) with a very subtle aurora effect 
-(soft cyan and purple light wisps in the upper portion).
+Background: Dark navy (#020617) with a centered soft radial glow 
+(mix of cyan and purple, very subtle).
 
 Center of the image (vertically centered):
 
@@ -395,7 +468,7 @@ Below, after a thin cyan divider line:
 
 Below:
 - Cyan text: "Seguimi per gli aggiornamenti →"
-- Small gray: "Link al progetto in commenti 👇"
+- Small gray: "Link al progetto nei commenti 👇"
 
 Bottom: logos row showing "Built on IOTA" and "MasterZ Hackathon 2026"
 Thin gradient line cyan→purple at very bottom.
