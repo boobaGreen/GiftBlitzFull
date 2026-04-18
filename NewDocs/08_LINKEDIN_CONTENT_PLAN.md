@@ -13,101 +13,116 @@
 ## ✍️ TESTO DEL POST
 
 ```
-🏆 Top 30 su 66 progetti al MasterZ × IOTA Hackathon 2026.
+🏆 #13 out of 66 projects at the MasterZ × IOTA Hackathon 2026.
 
-6 settimane fa avevo un'idea.
-Oggi ho un prodotto funzionante sulla blockchain.
+6 weeks ago I had an idea.
+Today I have a working product on the blockchain.
 
-Ecco cosa ho costruito — e perché.
-
-———
-
-💸 IL PROBLEMA
-
-Ogni anno $23 miliardi di gift card restano inutilizzate nel mondo.
-Chi prova a venderle online rischia:
-→ 45% di probabilità di essere truffato sui social
-→ 15-30% di fee sulle piattaforme centralizzate
-→ Giorni o settimane di attesa per la verifica
-
-Il problema reale? In ogni scambio P2P, qualcuno deve "andare per primo".
-E lì iniziano le truffe.
-
-🧮 LA SOLUZIONE: GAME THEORY
-
-Ho costruito GiftBlitz — un marketplace decentralizzato dove 
-la matematica sostituisce la fiducia.
-
-Come funziona:
-→ Il venditore deposita il 100% del valore della gift card
-→ Il compratore deposita il 110% + il prezzo
-→ Entrambi i depositi sono bloccati nello smart contract
-→ Truffare GARANTISCE una perdita netta per il truffatore
-
-Non serve fidarsi. Serve solo la matematica.
-
-🔐 TECNOLOGIA
-
-• Smart contract in Move su IOTA L1
-• Crittografia end-to-end (AES-256 + ECDH)
-• Reputazione Soulbound NFT (non comprabile, non falsificabile)
-• Zero backend, zero server, 100% on-chain
-• Fee: 1% (non 30%)
-
-🚀 RISULTATO
-
-In 6 settimane ho costruito:
-✅ 2 smart contract deployati su IOTA Testnet
-✅ Frontend completo con 8 pagine e UI premium
-✅ Sistema di sicurezza a 5 livelli
-✅ Top 30 nell'hackathon (eleggibile per l'accelerator)
-
-📌 PROSSIMI PASSI
-
-→ Programma di accelerazione MasterZ / IOTA Foundation
-→ Supporto per voucher e codici custom (qualsiasi brand)
-→ Upgrade design premium
-→ Percorso verso il mainnet
+Here's what I built — and why.
 
 ———
 
-🤝 CERCO COMPAGNI DI VIAGGIO
+💸 THE PROBLEM
 
-Ho costruito la tecnologia da solo — smart contract, frontend, 
-crittografia, deploy. Ma per trasformare un prototipo in un 
-prodotto vero servono competenze che vanno oltre il codice.
+Every year, $23 billion in gift cards go unused worldwide.
+If you try to sell them online, you face:
+→ 45% scam rate on peer-to-peer platforms
+→ 15-30% fees on centralized exchanges
+→ Days or weeks waiting for "verification"
 
-Sto cercando persone con la voglia di costruire qualcosa di 
-concreto nel Web3 — non un altro token, ma un prodotto che 
-risolve un problema da $23 miliardi.
+The real issue? In every P2P trade, someone has to go first.
+And that's where fraud begins.
 
-Cerco soprattutto:
+🧮 THE SOLUTION: FREEDOM + MATH
+
+I built GiftBlitz — a P2P protocol where anyone can trade 
+any digital code with anyone else in the world.
+No middlemen. No permission. No censorship.
+
+Amazon gift card? Yes. Local restaurant voucher? Yes.
+Spa coupon, cinema ticket, store credit? Yes.
+If it has a code and a value, GiftBlitz protects it.
+
+How?
+→ The seller deposits 100% of the card's face value
+→ The buyer deposits 110% + the price
+→ Everything is locked in a transparent, public smart contract
+→ Cheating GUARANTEES a net loss for the cheater
+
+You don't need to trust anyone — not the other person,
+not a platform, not even us. Code is law.
+
+🔓 ETHICS & TRANSPARENCY
+
+This isn't just a marketplace. It's a principle:
+trust between strangers should rely on mathematics,
+not on a company's terms of service.
+
+• 100% decentralized — no servers, no databases, no CEO 
+  who can freeze your account
+• 100% transparent — every rule lives in the smart contract, 
+  open source, verifiable by anyone
+• 100% peer-to-peer — money goes from buyer to seller, period. 
+  We never touch the funds
+• 100% free — any voucher, coupon, gift card, digital code 
+  from any brand in the world. No gatekeeper decides what you can trade
+• End-to-end encrypted — not even we can read your codes
+• Soulbound reputation — can't be bought, can't be faked. Only earned.
+• Fee: 1%. Not 30%. Because the value belongs to the people who create it.
+
+🚀 RESULTS
+
+In 6 weeks I built:
+✅ 2 smart contracts deployed on IOTA Testnet
+✅ A protocol where any digital code can be traded trustlessly
+✅ 5 layers of security (blockchain → encryption → game theory)
+✅ #13 out of 66 in the hackathon (eligible for the accelerator)
+
+📌 WHAT'S NEXT
+
+→ MasterZ / IOTA Foundation Acceleration Program
+→ Custom voucher & code support (any brand, any code)
+→ Premium design upgrade
+→ Path to mainnet deployment
+
+———
+
+🤝 LOOKING FOR CO-BUILDERS
+
+I built the tech alone — smart contracts, frontend, 
+encryption, deployment. But turning a prototype into 
+a real product takes skills that go beyond code.
+
+I'm looking for people who want to build something real 
+in Web3 — not another token, but a product that solves 
+a $23 billion problem.
+
+I'm especially looking for:
 
 → 📣 Marketing & Growth — social media, community building, 
-  content strategy, SEO. Chi sa far parlare di un prodotto.
-→ 🎨 Design — UI/UX, branding, motion design. Chi sa 
-  trasformare un buon prodotto in un'esperienza memorabile.
-→ 📋 Operations & Legal — aspetti burocratici, compliance, 
-  struttura societaria, grant applications. Chi sa navigare 
-  il lato business di una startup.
-→ 💼 Business Development — partnership con brand, relazioni 
-  con investitori, pitch. Chi sa aprire porte.
+  content strategy. People who make products get noticed.
+→ 🎨 Design — UI/UX, branding, motion design. People who 
+  turn a good product into a memorable experience.
+→ 📋 Operations & Legal — compliance, company structure, 
+  grant applications. People who navigate the business side.
+→ 💼 Business Development — brand partnerships, investor 
+  relations, pitching. People who open doors.
 
-Bonus (ma non priorità — lo sviluppo lo gestisco io):
-→ 🔧 Dev Frontend o Blockchain (Move/Solidity)
+Bonus (not a priority — I handle the dev side):
+→ 🔧 Frontend or Blockchain Dev (Move/Solidity)
 
-Non serve che tu sappia tutto di blockchain o di crypto.
-Serve che tu abbia voglia di sporcarti le mani su un 
-progetto reale, con un prodotto reale, già funzionante.
+You don't need to know everything about blockchain or crypto.
+You need to want to get your hands dirty on a real project,
+with a real product, already working.
 
-📩 Scrivimi in DM o commenta — leggo tutto.
+📩 DM me or comment below — I read everything.
 
 ———
 
-Se credi che la fiducia debba essere matematica e non emotiva,
-seguimi per gli aggiornamenti del progetto.
+If you believe trust should be mathematical, not emotional,
+follow me for project updates.
 
-Oppure prova tu stesso → [link testnet]
+Or try it yourself → [testnet link]
 
 #Web3 #Blockchain #IOTA #GameTheory #Startup #GiftCards 
 #DeFi #SmartContracts #BuildInPublic #Hackathon #CoFounder #Hiring
