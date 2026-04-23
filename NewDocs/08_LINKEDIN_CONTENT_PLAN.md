@@ -5,7 +5,7 @@
 # POST 1: "The Announcement" — The Journey from Hackathon to Product
 
 > **When to post:** Immediately (this week)  
-> **Format:** Long-form text + 10-slide Carousel  
+> **Format:** Long-form text + 9-slide Carousel  
 > **Objective:** Share the journey, build credibility, and generate interest.
 
 ---
@@ -202,23 +202,6 @@ Visual: A "VS" icon in the center with a strong light split effect.
 Style: High energy, clear winner/loser visual language.
 ```
 
-### SLIDE 4 — La Soluzione (Game Theory)
-
-```
-Prompt image:
-Create a technical but clean diagram of the "Asymmetric Dual Deposit".
-Background: Dark navy.
-
-Visual: 
-- SELLER (Cyan icon) deposits 100%
-- BUYER (Purple icon) deposits 110% + Price
-- Center: A glowing hexagonal Smart Contract Vault.
-
-Text overlay: "Cheating = Guaranteed Net Loss."
-"Game theory makes honesty the only rational choice."
-
-Style: Geometric, logical, premium fintech.
-```
 
 ### SLIDE 5 — Come Funziona (4 Step)
 
@@ -635,13 +618,12 @@ ENGAGEMENT:
 | 1 | Cover (Hook) | ✅ Ready | `01_cover.png` |
 | 2 | The Problem | ✅ Ready | `02_problem.png` |
 | 3 | Comparison (VS) | ✅ Ready | `03_solution.png` |
-| 4 | Solution (Game Theory) | ✅ Ready | `04_how_it_works.png` |
-| 5 | How it Works (4 Steps) | ✅ Ready | `05_security.png` |
-| 6 | Security (5 Layers) | ✅ Ready | `06_security.png` |
-| 7 | Ethics & Transparency | ✅ Ready | `07_ethics.png` |
-| 8 | Results (Building) | ✅ Ready | `08_results.png` |
-| 9 | Roadmap | ✅ Ready | `09_roadmap.png` |
-| 10 | Join the Mission (CTA) | ✅ Ready | `10_cta.png` |
+| 4 | How it Works (4 Steps) | ✅ Ready | `04_how_it_works.png` |
+| 5 | Security (5 Layers) | ✅ Ready | `05_security.png` |
+| 6 | Ethics & Transparency | ✅ Ready | `06_ethics.png` |
+| 7 | Results (Building) | ✅ Ready | `07_results.png` |
+| 8 | Roadmap | ✅ Ready | `08_roadmap.png` |
+| 9 | Join the Mission (CTA) | ✅ Ready | `09_cta.png` |
 
 > [!TIP]
 > Per completare le slide mancanti (6-10), copia i prompt relativi in un tool come Midjourney o DALL-E 3. Lo stile è già ottimizzato per essere coerente con le prime 5 slide.
