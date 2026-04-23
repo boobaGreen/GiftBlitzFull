@@ -2,15 +2,15 @@
 
 ---
 
-# POST 1: "L'Annuncio" — Il Racconto del Progetto e dell'Hackathon
+# POST 1: "The Announcement" — The Journey from Hackathon to Product
 
-> **Quando pubblicare:** Subito (questa settimana)  
-> **Formato:** Testo lungo + Carousel 6-8 slide  
-> **Obiettivo:** Raccontare il journey, dare credibilità, creare curiosità
+> **When to post:** Immediately (this week)  
+> **Format:** Long-form text + 10-slide Carousel  
+> **Objective:** Share the journey, build credibility, and generate interest.
 
 ---
 
-## ✍️ TESTO DEL POST
+## ✍️ POST COPY
 
 ```
 🏆 #13 out of 66 projects at the MasterZ × IOTA Hackathon 2026.
@@ -130,36 +130,36 @@ Or try it yourself → [testnet link]
 
 ---
 
-## 🎨 PROMPT PER CAROUSEL (10 Slide — Premium Edition)
+## 🎨 CAROUSEL PROMPTS (10 Slides — Premium Edition)
 
-### Setup Generale per tutte le slide
+### General Setup for all slides
 
 ```
-STILE DI BASE PER TUTTE LE SLIDE:
-- Formato: 1080x1350px (verticale, ottimizzato per LinkedIn carousel)
+BASE STYLE FOR ALL SLIDES:
+- Format: 1080x1350px (vertical, optimized for LinkedIn carousel)
 - Background: Dark navy/slate gradient (#020617 → #0f172a)
-- Font titoli: Bold, sans-serif, bianco puro
-- Font body: Regular, sans-serif, grigio chiaro (#94a3b8)
-- Accento primario: Cyan (#06b6d4)
-- Accento secondario: Purple (#a855f7)
-- Angolo in alto a destra: piccolo logo "GiftBlitz" in grigio chiaro
-- Sottile linea gradient cyan→purple orizzontale in basso
-- Stile: Premium fintech, cinematico, minimalista ma d'impatto.
-- NO immagini stock. Solo icone 3D, grafici geometrici, tipografia forte.
+- Title font: Bold, sans-serif, pure white
+- Body font: Regular, sans-serif, light gray (#94a3b8)
+- Primary accent: Cyan (#06b6d4)
+- Secondary accent: Purple (#a855f7)
+- Top right corner: Small "GiftBlitz" logo in light gray
+- Thin cyan→purple gradient horizontal line at the bottom
+- Style: Premium fintech, cinematic, minimalist but impactful.
+- NO stock images. Only 3D icons, geometric graphics, strong typography.
 ```
 
 ### SLIDE 1 — Cover (L'Hook)
 
 ```
-Prompt immagine:
+Prompt image:
 Create an ultra-premium LinkedIn carousel cover slide, 1080x1350px.
 Background: Deep navy (#020617) with a subtle, cinematic radial glow of cyan (#06b6d4) from the center.
 
 Center Content:
 - Top: Small badge icon "🏆 Top 30 Project" (MasterZ × IOTA Hackathon 2026)
-- Main Title: Large, bold white text: "RISOLVIAMO UN PROBLEMA DA"
-- Highlight: Huge, glowing gradient text (Cyan to Purple): "$23 MILIARDI"
-- Bottom: "6 Settimane. Un'idea. Zero Trust." in clean gray typography.
+- Main Title: Large, bold white text: "SOLVING A PROBLEM WORTH"
+- Highlight: Huge, glowing gradient text (Cyan to Purple): "$23 BILLION"
+- Bottom: "6 Weeks. One Idea. Zero Trust." in clean gray typography.
 
 Visual: A 3D holographic gift card floating at an angle, partially disintegrating into digital pixels/particles.
 Style: Minimal, high contrast, cinematic lighting.
@@ -168,14 +168,14 @@ Style: Minimal, high contrast, cinematic lighting.
 ### SLIDE 2 — Il Problema (I Numeri)
 
 ```
-Prompt immagine:
+Prompt image:
 Create a dark-themed infographic slide.
-Title: "IL PROBLEMA" in bold white.
+Title: "THE PROBLEM" in bold white.
 
 Center Section — Three stats with glowing icons:
-1. "$23B" (Cyan) — Gift card inutilizzate ogni anno. (Icon: Ghost gift card)
-2. "45%" (Red/Amber) — Tasso di scam nelle vendite P2P. (Icon: Warning shield)
-3. "30%" (Purple) — Fee medie delle piattaforme centralizzate. (Icon: Money with wings)
+1. "$23B" (Cyan) — Gift cards unused every year globally. (Icon: Ghost gift card)
+2. "45%" (Red/Amber) — Scam rate in P2P gift card sales. (Icon: Warning shield)
+3. "30%" (Purple) — Average fees on centralized platforms. (Icon: Money with wings)
 
 Visual: Clean vertical layout, separated by subtle glassmorphism dividers.
 Style: Data-driven, impactful, professional.
@@ -184,19 +184,19 @@ Style: Data-driven, impactful, professional.
 ### SLIDE 3 — La Trappola Tradizionale (VS)
 
 ```
-Prompt immagine:
+Prompt image:
 Create a split comparison slide.
-Left side (Dark Red glow): "PIATTAFORME TRADIZIONALI"
-- 30% Fee
-- Giorni di attesa
-- Solo grandi brand
-- Ti devi fidare di un'azienda
+Left side (Dark Red glow): "TRADITIONAL PLATFORMS"
+- 30% Fees
+- Days of waiting
+- Major brands only
+- Trust a corporation
 
 Right side (Cyan glow): "GIFTBLITZ"
-- 1% Fee
-- Istantaneo
-- Qualsiasi brand/codice
-- Ti fidi della MATEMATICA
+- 1% Fees
+- Instant
+- Any brand/code
+- Trust MATHEMATICS
 
 Visual: A "VS" icon in the center with a strong light split effect. 
 Style: High energy, clear winner/loser visual language.
@@ -205,17 +205,17 @@ Style: High energy, clear winner/loser visual language.
 ### SLIDE 4 — La Soluzione (Game Theory)
 
 ```
-Prompt immagine:
+Prompt image:
 Create a technical but clean diagram of the "Asymmetric Dual Deposit".
 Background: Dark navy.
 
 Visual: 
 - SELLER (Cyan icon) deposits 100%
-- BUYER (Purple icon) deposits 110% + Prezzo
+- BUYER (Purple icon) deposits 110% + Price
 - Center: A glowing hexagonal Smart Contract Vault.
 
-Text overlay: "Truffare = Perdita Netta Garantita."
-"La teoria dei giochi rende l'onestà l'unica scelta razionale."
+Text overlay: "Cheating = Guaranteed Net Loss."
+"Game theory makes honesty the only rational choice."
 
 Style: Geometric, logical, premium fintech.
 ```
@@ -223,12 +223,12 @@ Style: Geometric, logical, premium fintech.
 ### SLIDE 5 — Come Funziona (4 Step)
 
 ```
-Prompt immagine:
+Prompt image:
 Create a vertical timeline showing 4 steps.
-1. LIST & LOCK: Il seller cifra il codice e deposita lo stake.
-2. PURCHASE: Il buyer paga e deposita la cauzione.
-3. REVEAL: Decrittazione locale (Zero Knowledge).
-4. FINALIZE: Fondi rilasciati, stake restituiti. 1% fee.
+1. LIST & LOCK: Seller encrypts the code and deposits the stake.
+2. PURCHASE: Buyer pays and deposits the security stake.
+3. REVEAL: Local decryption (Zero Knowledge).
+4. FINALIZE: Funds released, stakes returned. 1% fee.
 
 Visual: Glowing dots connected by a gradient line. Minimalist icons for each step.
 Style: Clean UI flow, airy, easy to follow.
@@ -237,16 +237,16 @@ Style: Clean UI flow, airy, easy to follow.
 ### SLIDE 6 — 5 Livelli di Sicurezza
 
 ```
-Prompt immagine:
+Prompt image:
 Create a "layered" security visualization.
-Title: "SICUREZZA A 5 LIVELLI"
+Title: "5-LAYER SECURITY STACK"
 
 Layers (from bottom to top):
 1. IOTA L1 (Blockchain)
-2. Move Smart Contracts (Logica)
-3. Dual Deposit (Teoria dei Giochi)
-4. AES-256 + ECDH (Crittografia)
-5. Soulbound NFT (Reputazione)
+2. Move Smart Contracts (Logic)
+3. Dual Deposit (Game Theory)
+4. AES-256 + ECDH (Encryption)
+5. Soulbound NFT (Reputation)
 
 Visual: Stacked semi-transparent 3D plates, each with a different colored glow.
 Style: Technical, sophisticated, "Apple-like" security whitepaper style.
@@ -255,15 +255,15 @@ Style: Technical, sophisticated, "Apple-like" security whitepaper style.
 ### SLIDE 7 — Etica e Trasparenza
 
 ```
-Prompt immagine:
+Prompt image:
 Create a powerful text-heavy mission slide.
 Background: Dark navy with a faint glowing IOTA tangle pattern.
 
-Main Text: "100% DECENTRALIZZATO. 100% TUO."
-- No Middlemen (Niente intermediari)
-- No Censorship (Nessuna restrizione sui brand)
-- No Hidden Fees (Fee fissa 1%)
-- Privacy Totale (Nessuno legge i tuoi codici)
+Main Text: "100% DECENTRALIZED. 100% YOURS."
+- No Middlemen
+- No Censorship (Any brand/code)
+- No Hidden Fees (Flat 1%)
+- Total Privacy (E2E Encrypted)
 
 Visual: An abstract 3D key or a broken chain icon glowing in cyan.
 Style: Strong typography, bold statement.
@@ -272,15 +272,15 @@ Style: Strong typography, bold statement.
 ### SLIDE 8 — Risultati (Building in Public)
 
 ```
-Prompt immagine:
+Prompt image:
 Create an achievement showcase slide.
-Title: "6 SETTIMANE DI BUILDING"
+Title: "6 WEEKS OF BUILDING"
 
 Cards Grid:
-- Top 30 su 66 progetti (Hackathon)
-- 2 Smart Contracts (Move)
-- 8 Pagine UI (Premium Design)
-- 7.200+ Righe di codice
+- Top 13 out of 66 projects (Hackathon)
+- 2 Move Smart Contracts
+- 8 Premium UI Pages
+- 7,200+ Lines of Code
 - Eligible for Accelerator Program
 
 Visual: A grid of dark slate cards with neon borders.
@@ -290,12 +290,12 @@ Style: "Trophy cabinet" feel, rewarding, high-energy.
 ### SLIDE 9 — Prossimi Passi (Roadmap)
 
 ```
-Prompt immagine:
+Prompt image:
 Create a sleek roadmap timeline.
-- APRILE: Custom Voucher Support (Any brand)
-- MAGGIO: MasterZ Acceleration Program
-- GIUGNO: Premium UX & Mobile Upgrade
-- LUGLIO: 🚀 Mainnet Launch
+- APRIL: Custom Voucher Support (Any brand)
+- MAY: MasterZ Acceleration Program
+- JUNE: Premium UX & Mobile Upgrade
+- JULY: 🚀 Mainnet Launch
 
 Visual: A glowing path leading toward a bright horizon.
 Style: Forward-looking, optimistic, professional.
@@ -304,14 +304,14 @@ Style: Forward-looking, optimistic, professional.
 ### SLIDE 10 — Unisciti alla Missione (CTA)
 
 ```
-Prompt immagine:
+Prompt image:
 Create a "Closing & Join" slide.
-Main Title: "CERCO COMPAGNI DI VIAGGIO"
-Subtitle: "Marketing, Design, Ops & Co-founders."
+Main Title: "LOOKING FOR CO-FOUNDERS"
+Subtitle: "Marketing, Design, Ops & Growth."
 
 Footer: 
-- "DM per collaborare"
-- "Link al progetto nei commenti"
+- "DM to collaborate"
+- "Project link in comments"
 - Badge: Built on IOTA.
 
 Visual: Two hands made of light particles meeting in the center (abstract), or a stylized rocket taking off.
@@ -321,7 +321,7 @@ Style: Cinematic, inspiring, clear call to action.
 
 ---
 
-# 📅 PIANO EDITORIALE LINKEDIN — 8 SETTIMANE
+# 📅 LINKEDIN EDITORIAL PLAN — 8 WEEKS
 
 ## Settimana 1 (Subito)
 
@@ -630,18 +630,18 @@ ENGAGEMENT:
 
 # 🚩 STATO AVANZAMENTO CAROUSEL (Aggiornato 23/04/2026)
 
-| Slide | Titolo | Stato | Asset |
-|-------|--------|-------|-------|
-| 1 | Cover (Hook) | ✅ Pronto | `giftblitz_slide_1_cover.png` |
-| 2 | Il Problema | ✅ Pronto | `giftblitz_slide_2_problem.png` |
-| 3 | La Trappola (VS) | ✅ Pronto | `giftblitz_slide_3_vs_comparison.png` |
-| 4 | La Soluzione (Game Theory) | ✅ Pronto | `giftblitz_slide_4_game_theory.png` |
-| 5 | Come Funziona (4 Step) | ✅ Pronto | `giftblitz_slide_5_how_it_works_v2.png` |
-| 6 | Sicurezza (5 Livelli) | ✅ Pronto | `giftblitz_slide_6_security.png` |
-| 7 | Etica e Trasparenza | ✅ Pronto | `giftblitz_slide_7_ethics.png` |
-| 8 | Risultati (Building) | ✅ Pronto | `giftblitz_slide_8_results.png` |
-| 9 | Roadmap | ✅ Pronto | `giftblitz_slide_9_roadmap.png` |
-| 10 | Unisciti alla Missione (CTA) | ✅ Pronto | `giftblitz_slide_10_cta.png` |
+| Slide | Title | Status | Asset |
+|-------|-------|--------|-------|
+| 1 | Cover (Hook) | ✅ Ready | `01_cover.png` |
+| 2 | The Problem | ✅ Ready | `02_problem.png` |
+| 3 | Comparison (VS) | ✅ Ready | `03_solution.png` |
+| 4 | Solution (Game Theory) | ✅ Ready | `04_how_it_works.png` |
+| 5 | How it Works (4 Steps) | ✅ Ready | `05_security.png` |
+| 6 | Security (5 Layers) | ✅ Ready | `06_security.png` |
+| 7 | Ethics & Transparency | ✅ Ready | `07_ethics.png` |
+| 8 | Results (Building) | ✅ Ready | `08_results.png` |
+| 9 | Roadmap | ✅ Ready | `09_roadmap.png` |
+| 10 | Join the Mission (CTA) | ✅ Ready | `10_cta.png` |
 
 > [!TIP]
 > Per completare le slide mancanti (6-10), copia i prompt relativi in un tool come Midjourney o DALL-E 3. Lo stile è già ottimizzato per essere coerente con le prime 5 slide.
