@@ -130,7 +130,7 @@ Or try it yourself → [testnet link]
 
 ---
 
-## 🎨 PROMPT PER CAROUSEL (6-8 Slide)
+## 🎨 PROMPT PER CAROUSEL (10 Slide — Premium Edition)
 
 ### Setup Generale per tutte le slide
 
@@ -144,352 +144,180 @@ STILE DI BASE PER TUTTE LE SLIDE:
 - Accento secondario: Purple (#a855f7)
 - Angolo in alto a destra: piccolo logo "GiftBlitz" in grigio chiaro
 - Sottile linea gradient cyan→purple orizzontale in basso
-- Stile: Premium fintech, pulito, minimalista ma d'impatto
-- NO immagini stock. Solo icone, grafici, tipografia forte.
+- Stile: Premium fintech, cinematico, minimalista ma d'impatto.
+- NO immagini stock. Solo icone 3D, grafici geometrici, tipografia forte.
 ```
 
-### SLIDE 1 — Cover (Hook)
-
-```
-Prompt immagine:
-
-Create a premium dark-themed LinkedIn carousel cover slide, 1080x1350px.
-
-Background: Deep navy (#020617) with a very subtle radial gradient 
-of cyan (#06b6d4) glowing softly from the center.
-
-Center of the image:
-- Large bold white text: "🏆 Top 30 su 66"
-- Below it, slightly smaller: "MasterZ × IOTA Hackathon 2026"
-- Below that, a thin cyan horizontal line divider
-- Below the line: "Come ho costruito un marketplace" in medium gray
-- Below: "dove la MATEMATICA sostituisce la FIDUCIA" in bold white
-  (the word "MATEMATICA" should be in cyan color, the word "FIDUCIA" 
-  in purple)
-
-Small "GiftBlitz" logo text in the top-right corner, subtle gray.
-Bottom: thin gradient line from cyan to purple, stretching full width.
-
-Style: Ultra-clean, premium, like a pitch deck cover slide. No images, 
-only typography. The spacing should be generous and airy.
-```
-
-### SLIDE 2 — Il Problema
+### SLIDE 1 — Cover (L'Hook)
 
 ```
 Prompt immagine:
+Create an ultra-premium LinkedIn carousel cover slide, 1080x1350px.
+Background: Deep navy (#020617) with a subtle, cinematic radial glow of cyan (#06b6d4) from the center.
 
-Create a dark-themed infographic slide, 1080x1350px.
-Background: Dark navy (#020617).
+Center Content:
+- Top: Small badge icon "🏆 Top 30 Project" (MasterZ × IOTA Hackathon 2026)
+- Main Title: Large, bold white text: "RISOLVIAMO UN PROBLEMA DA"
+- Highlight: Huge, glowing gradient text (Cyan to Purple): "$23 MILIARDI"
+- Bottom: "6 Settimane. Un'idea. Zero Trust." in clean gray typography.
 
-Top section:
-- Title in bold white: "IL PROBLEMA"
-- Thin cyan line underneath
-
-Center section — Three big statistics stacked vertically with icons:
-
-STAT 1:
-- Large cyan number: "$23B"
-- Small gray text: "in gift card inutilizzate ogni anno"
-- Icon: A fading/ghost gift card icon (semi-transparent)
-
-STAT 2:
-- Large red/amber number: "45%"  
-- Small gray text: "tasso di scam nelle vendite P2P"
-- Icon: Warning triangle icon
-
-STAT 3:
-- Large purple number: "15-30%"
-- Small gray text: "fee delle piattaforme centralizzate"
-- Icon: Money with wings icon (flying away)
-
-Each stat is separated by a subtle horizontal dotted line.
-Bottom: thin gradient line cyan→purple.
-Small "GiftBlitz" in top-right corner.
-
-Style: Clean data visualization, impactful numbers, minimal.
+Visual: A 3D holographic gift card floating at an angle, partially disintegrating into digital pixels/particles.
+Style: Minimal, high contrast, cinematic lighting.
 ```
 
-### SLIDE 3 — La Soluzione (Game Theory)
+### SLIDE 2 — Il Problema (I Numeri)
 
 ```
 Prompt immagine:
+Create a dark-themed infographic slide.
+Title: "IL PROBLEMA" in bold white.
 
-Create a dark-themed diagram slide, 1080x1350px.
-Background: Dark navy (#020617).
+Center Section — Three stats with glowing icons:
+1. "$23B" (Cyan) — Gift card inutilizzate ogni anno. (Icon: Ghost gift card)
+2. "45%" (Red/Amber) — Tasso di scam nelle vendite P2P. (Icon: Warning shield)
+3. "30%" (Purple) — Fee medie delle piattaforme centralizzate. (Icon: Money with wings)
 
-Top: Title in bold white: "LA SOLUZIONE"
-Subtitle in cyan: "Asymmetric Dual Deposit"
-
-Center: A visual diagram showing:
-
-Two stylized human silhouettes facing each other:
-- Left silhouette labeled "SELLER" (cyan glow)
-- Right silhouette labeled "BUYER" (purple glow)
-
-Between them, a glowing hexagonal vault/smart contract icon.
-
-Two arrows flowing INTO the vault:
-- From SELLER: cyan arrow with text "Deposita 100%"
-- From BUYER: purple arrow with text "Deposita 110% + Prezzo"
-
-Below the vault, a green checkmark with text:
-"Truffare = Perdita Netta Garantita"
-
-Below that, a small box showing:
-"Seller truffa → -20€  ❌"
-"Buyer truffa → -30€  ❌"
-"Entrambi onesti → WIN-WIN ✅"
-
-Bottom: thin gradient line cyan→purple.
-Style: Clean, geometric, like a Game Theory textbook diagram 
-but with premium dark UI aesthetics.
+Visual: Clean vertical layout, separated by subtle glassmorphism dividers.
+Style: Data-driven, impactful, professional.
 ```
 
-### SLIDE 4 — Come Funziona (4 Steps)
+### SLIDE 3 — La Trappola Tradizionale (VS)
 
 ```
 Prompt immagine:
+Create a split comparison slide.
+Left side (Dark Red glow): "PIATTAFORME TRADIZIONALI"
+- 30% Fee
+- Giorni di attesa
+- Solo grandi brand
+- Ti devi fidare di un'azienda
 
-Create a dark-themed vertical flow diagram, 1080x1350px.
-Background: Dark navy (#020617).
+Right side (Cyan glow): "GIFTBLITZ"
+- 1% Fee
+- Istantaneo
+- Qualsiasi brand/codice
+- Ti fidi della MATEMATICA
 
-Top: Title in bold white: "COME FUNZIONA"
-Subtitle: "4 step. Meno di 5 minuti." in gray.
-
-Four steps listed vertically, each with a numbered circle, 
-icon, title, and subtitle. Connected by dotted vertical lines.
-
-STEP 1:
-- Circle: "1" in cyan
-- Icon: Lock + Gift card
-- Title (white bold): "List & Lock"
-- Subtitle (gray): "Il seller cifra il codice e deposita lo stake"
-
-STEP 2:
-- Circle: "2" in purple  
-- Icon: Cart + Shield
-- Title (white bold): "Purchase & Stake"
-- Subtitle (gray): "Il buyer paga e deposita la cauzione"
-
-STEP 3:
-- Circle: "3" in pink
-- Icon: Key + Eye
-- Title (white bold): "Reveal & Verify"
-- Subtitle (gray): "Il codice viene decifrato nel browser"
-
-STEP 4:
-- Circle: "4" in green
-- Icon: Checkmark + Coins
-- Title (white bold): "Finalize"
-- Subtitle (gray): "Depositi restituiti. Fee 1%. Fatto."
-
-Bottom: thin gradient line cyan→purple.
-Style: Numbered vertical timeline, clean icons, generous spacing.
+Visual: A "VS" icon in the center with a strong light split effect. 
+Style: High energy, clear winner/loser visual language.
 ```
 
-### SLIDE 5 — Sicurezza (5 Livelli)
+### SLIDE 4 — La Soluzione (Game Theory)
 
 ```
 Prompt immagine:
+Create a technical but clean diagram of the "Asymmetric Dual Deposit".
+Background: Dark navy.
 
-Create a dark-themed security layers slide, 1080x1350px.
-Background: Dark navy (#020617).
+Visual: 
+- SELLER (Cyan icon) deposits 100%
+- BUYER (Purple icon) deposits 110% + Prezzo
+- Center: A glowing hexagonal Smart Contract Vault.
 
-Top: Title in bold white: "5 LIVELLI DI SICUREZZA"
+Text overlay: "Truffare = Perdita Netta Garantita."
+"La teoria dei giochi rende l'onestà l'unica scelta razionale."
 
-Center: Five horizontal bars stacked vertically, each with different 
-accent color glow on the left edge, an icon, and label text:
-
-Bar 1 (cyan glow):
-- Icon: Chain links
-- Text: "IOTA L1 Blockchain"
-
-Bar 2 (purple glow):
-- Icon: Code brackets
-- Text: "Move Smart Contracts"
-
-Bar 3 (blue glow):
-- Icon: Vault/lock
-- Text: "Dual Deposit Game Theory"
-
-Bar 4 (green glow):
-- Icon: Shield + key
-- Text: "AES-256 + ECDH Encryption"
-
-Bar 5 (gold glow):
-- Icon: Crown/badge
-- Text: "Soulbound Reputation NFT"
-
-Each bar has a dark slate background (#1e293b) with subtle 
-glassmorphism effect and the colored glow on the left edge.
-
-Bottom: thin gradient line cyan→purple.
-Style: Layered security visualization, premium, like an 
-Apple security whitepaper.
+Style: Geometric, logical, premium fintech.
 ```
 
-### SLIDE 6 — Risultati Hackathon
+### SLIDE 5 — Come Funziona (4 Step)
 
 ```
 Prompt immagine:
+Create a vertical timeline showing 4 steps.
+1. LIST & LOCK: Il seller cifra il codice e deposita lo stake.
+2. PURCHASE: Il buyer paga e deposita la cauzione.
+3. REVEAL: Decrittazione locale (Zero Knowledge).
+4. FINALIZE: Fondi rilasciati, stake restituiti. 1% fee.
 
-Create a dark-themed results slide, 1080x1350px. 
-Background: Dark navy (#020617).
-
-Top: Title in bold white: "RISULTATI"
-Subtitle in cyan: "6 settimane di building"
-
-Center: A grid of achievement cards (2x3 or 2x2+1):
-
-Card 1: 
-- Large icon: Smart contract icon (cyan)
-- Number: "2"
-- Label: "Smart Contracts deployati"
-
-Card 2:
-- Large icon: Pages/screens icon (purple)  
-- Number: "8"
-- Label: "Pagine frontend"
-
-Card 3:
-- Large icon: Code brackets (green)
-- Number: "7,200+"
-- Label: "Righe di codice"
-
-Card 4:
-- Large icon: Trophy (gold)
-- Number: "Top 30"
-- Label: "su 66 progetti"
-
-Card 5:
-- Large icon: Shield (cyan)
-- Number: "5"
-- Label: "Livelli di sicurezza"
-
-Card 6:
-- Large icon: Percentage (green)
-- Number: "1%"
-- Label: "Fee (vs 30% media)"
-
-Each card has a dark slate background with subtle border and 
-the colored glow matching the icon color.
-
-Bottom: thin gradient line cyan→purple.
-Style: Achievement showcase, clean grid, impactful numbers.
+Visual: Glowing dots connected by a gradient line. Minimalist icons for each step.
+Style: Clean UI flow, airy, easy to follow.
 ```
 
-### SLIDE 7 — Prossimi Passi
+### SLIDE 6 — 5 Livelli di Sicurezza
 
 ```
 Prompt immagine:
+Create a "layered" security visualization.
+Title: "SICUREZZA A 5 LIVELLI"
 
-Create a dark-themed roadmap slide, 1080x1350px.
-Background: Dark navy (#020617).
+Layers (from bottom to top):
+1. IOTA L1 (Blockchain)
+2. Move Smart Contracts (Logica)
+3. Dual Deposit (Teoria dei Giochi)
+4. AES-256 + ECDH (Crittografia)
+5. Soulbound NFT (Reputazione)
 
-Top: Title in bold white: "PROSSIMI PASSI"
-Subtitle: "Dal prototype al prodotto" in gray.
-
-Center: A vertical timeline with 4 milestones, connected by a 
-glowing gradient line (cyan at top → purple at bottom):
-
-Milestone 1 (cyan dot):
-- Label: "APRILE 2026"
-- Title: "Custom Voucher Support"
-- Subtitle: "Qualsiasi brand, qualsiasi codice"
-
-Milestone 2 (blue dot):
-- Label: "MAGGIO 2026"  
-- Title: "Acceleration Program"
-- Subtitle: "MasterZ + IOTA Foundation"
-
-Milestone 3 (purple dot):
-- Label: "GIUGNO 2026"
-- Title: "Premium Design"
-- Subtitle: "UI/UX upgrade + mobile"
-
-Milestone 4 (green dot, slightly larger):
-- Label: "LUGLIO 2026"
-- Title: "🚀 MAINNET LAUNCH"
-- Subtitle: "Trading con soldi veri"
-
-The timeline line glows with the gradient color, and each 
-milestone dot pulses slightly brighter than the line.
-
-Bottom: thin gradient line cyan→purple.
-Style: Clean vertical roadmap, like a startup pitch deck.
+Visual: Stacked semi-transparent 3D plates, each with a different colored glow.
+Style: Technical, sophisticated, "Apple-like" security whitepaper style.
 ```
 
-### SLIDE 8 — Cerco Compagni di Viaggio
+### SLIDE 7 — Etica e Trasparenza
 
 ```
 Prompt immagine:
+Create a powerful text-heavy mission slide.
+Background: Dark navy with a faint glowing IOTA tangle pattern.
 
-Create a dark-themed "Join Us" CTA slide, 1080x1350px.
-Background: Dark navy (#020617) with a very subtle aurora effect 
-(soft cyan and purple light wisps in the upper portion).
+Main Text: "100% DECENTRALIZZATO. 100% TUO."
+- No Middlemen (Niente intermediari)
+- No Censorship (Nessuna restrizione sui brand)
+- No Hidden Fees (Fee fissa 1%)
+- Privacy Totale (Nessuno legge i tuoi codici)
 
-Top section:
-- Large bold white text: "CERCO COMPAGNI"
-- Next line, in gradient text (cyan→purple): "DI VIAGGIO"
-
-Center section — 5 role cards stacked vertically, each a slim 
-horizontal bar with dark slate background and a colored left accent:
-
-Bar 1 (cyan accent): "📣 Marketing & Growth"
-Bar 2 (purple accent): "🎨 Design (UI/UX & Branding)"
-Bar 3 (blue accent): "📋 Operations & Legal"
-Bar 4 (amber accent): "💼 Business Development"
-Bar 5 (muted gray accent, smaller text): "🔧 Dev (Bonus)"
-
-Below the bars, with spacing:
-- White italic text: "Non serve sapere tutto di blockchain."
-- Bold white: "Serve voglia di costruire."
-
-Below, after a thin cyan divider line:
-- Cyan text: "Scrivimi in DM →"
-- White bold: "GiftBlitz"
-- Small gray: "Liquidity for Unused Assets"
-
-Bottom: logos row showing "Built on IOTA" and "MasterZ Hackathon 2026"
-Thin gradient line cyan→purple at very bottom.
-
-Style: Powerful closing with clear call-to-action for collaborators. 
-Cinematic feel, generous whitespace, premium.
+Visual: An abstract 3D key or a broken chain icon glowing in cyan.
+Style: Strong typography, bold statement.
 ```
 
-### SLIDE 9 — CTA Finale (Closing)
+### SLIDE 8 — Risultati (Building in Public)
 
 ```
 Prompt immagine:
+Create an achievement showcase slide.
+Title: "6 SETTIMANE DI BUILDING"
 
-Create a dark-themed closing CTA slide, 1080x1350px.
-Background: Dark navy (#020617) with a centered soft radial glow 
-(mix of cyan and purple, very subtle).
+Cards Grid:
+- Top 30 su 66 progetti (Hackathon)
+- 2 Smart Contracts (Move)
+- 8 Pagine UI (Premium Design)
+- 7.200+ Righe di codice
+- Eligible for Accelerator Program
 
-Center of the image (vertically centered):
-
-- Large bold white text: "La fiducia"
-- Next line, larger: "dovrebbe essere"
-- Next line, largest, in gradient text (cyan→purple):
-  "MATEMATICA"
-
-Below, with generous spacing:
-- Medium gray text: "Non emotiva."
-
-Below, after a thin cyan divider line:
-- White bold: "GiftBlitz"
-- Gray: "Liquidity for Unused Assets"
-
-Below:
-- Cyan text: "Seguimi per gli aggiornamenti →"
-- Small gray: "Link al progetto nei commenti 👇"
-
-Bottom: logos row showing "Built on IOTA" and "MasterZ Hackathon 2026"
-Thin gradient line cyan→purple at very bottom.
-
-Style: Powerful closing statement, cinematic feel, lots of whitespace.
+Visual: A grid of dark slate cards with neon borders.
+Style: "Trophy cabinet" feel, rewarding, high-energy.
 ```
+
+### SLIDE 9 — Prossimi Passi (Roadmap)
+
+```
+Prompt immagine:
+Create a sleek roadmap timeline.
+- APRILE: Custom Voucher Support (Any brand)
+- MAGGIO: MasterZ Acceleration Program
+- GIUGNO: Premium UX & Mobile Upgrade
+- LUGLIO: 🚀 Mainnet Launch
+
+Visual: A glowing path leading toward a bright horizon.
+Style: Forward-looking, optimistic, professional.
+```
+
+### SLIDE 10 — Unisciti alla Missione (CTA)
+
+```
+Prompt immagine:
+Create a "Closing & Join" slide.
+Main Title: "CERCO COMPAGNI DI VIAGGIO"
+Subtitle: "Marketing, Design, Ops & Co-founders."
+
+Footer: 
+- "DM per collaborare"
+- "Link al progetto nei commenti"
+- Badge: Built on IOTA.
+
+Visual: Two hands made of light particles meeting in the center (abstract), or a stylized rocket taking off.
+Style: Cinematic, inspiring, clear call to action.
+```
+
 
 ---
 
@@ -584,8 +412,29 @@ Style: High contrast, clean, impactful comparison.
 
 | Giorno | Tipo | Contenuto | Formato |
 |--------|------|-----------|---------|
-| **Lun** | 🎯 Vision | "Perché ho scelto di costruire su IOTA (e non su Ethereum)" | Solo testo lungo |
+| **Lun** | 🎯 Vision | "Perché ho scelto di costruire su IOTA (e non su Ethereum)" | Solo testo lungo + Banner |
 | **Gio** | 👥 Community | "Cercando i primi 100 utenti — ecco la mia strategia" | Testo + bullet list |
+
+**Prompt immagine Vision (Banner Why IOTA):**
+```
+Create a premium technical comparison banner (1200x627px).
+Background: Dark navy with a faint glowing IOTA tangle pattern.
+
+Center: Two architectural pillars.
+Pillar 1 (Grayish): "TRADITIONAL BLOCKCHAINS"
+- Sequential bottlenecks
+- High fees
+- High energy consumption
+
+Pillar 2 (Glow Cyan): "IOTA L1 (THE TANGLE)"
+- Parallel processing (Move)
+- Zero/Near-zero fees
+- Eco-friendly architecture
+- Native Asset support
+
+Text overlay: "Why we chose the fastest path to mainstream adoption."
+Style: Technical, premium, "blueprint" look but with modern UI aesthetics.
+```
 
 ---
 
@@ -639,6 +488,31 @@ Numbers should be bold and large.
 |--------|------|-----------|---------|
 | **Lun** | 🗺️ Roadmap | "Da hackathon a mainnet — la roadmap Q2-Q4 2026" | Carousel timeline |
 | **Gio** | 🎉 Milestone | "Oggi lanciamo su IOTA Mainnet [o annuncio importante]" | Testo + immagine evento |
+
+**Prompt carousel roadmap (3 slide Timeline):**
+```
+Slide 1: "Q2 2026: The Foundation"
+- Beta Testing Launch
+- Custom Voucher Support
+- Initial User Onboarding
+Accent: Cyan. Icon: Foundation/Anchor.
+
+Slide 2: "Q3 2026: Scaling UP"
+- Premium UI/UX Redesign
+- Mobile App (PWA)
+- Seed Funding Round
+Accent: Purple. Icon: Rocket/Arrow up.
+
+Slide 3: "Q4 2026: Mainnet & Beyond"
+- Official Mainnet Deployment
+- Multi-brand Partnerships
+- Global Expansion
+Accent: Green. Icon: Globe/World.
+
+Each slide: Dark background, vertical glowing timeline line on the left.
+Large bold quarter text (e.g., "Q2"). Minimalist list of goals.
+Style: Professional roadmap, high-end startup aesthetic.
+```
 
 ---
 
@@ -751,7 +625,24 @@ ENGAGEMENT:
 | **Banner profilo** | 1584×396px | Header del profilo |
 | **Post quadrato** | 1080×1080px | Alternative per post singoli |
 
-> **Consiglio:** Usa sempre il formato **carousel verticale (1080×1350)** 
-> per i contenuti importanti — LinkedIn premia i carousel con 2-3x 
-> l'engagement di un post normale perché l'utente deve "sfogliare" 
+
+---
+
+# 🚩 STATO AVANZAMENTO CAROUSEL (Aggiornato 23/04/2026)
+
+| Slide | Titolo | Stato | Asset |
+|-------|--------|-------|-------|
+| 1 | Cover (Hook) | ✅ Pronto | `giftblitz_slide_1_cover.png` |
+| 2 | Il Problema | ✅ Pronto | `giftblitz_slide_2_problem.png` |
+| 3 | La Trappola (VS) | ✅ Pronto | `giftblitz_slide_3_vs_comparison.png` |
+| 4 | La Soluzione (Game Theory) | ✅ Pronto | `giftblitz_slide_4_game_theory.png` |
+| 5 | Come Funziona (4 Step) | ✅ Pronto | `giftblitz_slide_5_how_it_works_v2.png` |
+| 6 | Sicurezza (5 Livelli) | ✅ Pronto | `giftblitz_slide_6_security.png` |
+| 7 | Etica e Trasparenza | ✅ Pronto | `giftblitz_slide_7_ethics.png` |
+| 8 | Risultati (Building) | ✅ Pronto | `giftblitz_slide_8_results.png` |
+| 9 | Roadmap | ✅ Pronto | `giftblitz_slide_9_roadmap.png` |
+| 10 | Unisciti alla Missione (CTA) | ✅ Pronto | `giftblitz_slide_10_cta.png` |
+
+> [!TIP]
+> Per completare le slide mancanti (6-10), copia i prompt relativi in un tool come Midjourney o DALL-E 3. Lo stile è già ottimizzato per essere coerente con le prime 5 slide.
 > le slide, aumentando il tempo di permanenza.
