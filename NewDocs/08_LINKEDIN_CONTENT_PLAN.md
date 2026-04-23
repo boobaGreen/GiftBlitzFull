@@ -13,119 +13,36 @@
 ## ✍️ POST COPY
 
 ```
-🏆 #13 out of 66 projects at the MasterZ × IOTA Hackathon 2026.
+GiftBlitz: Solving a $23 billion market gap in digital asset exchange.
 
-6 weeks ago I had an idea.
-Today I have a working product on the blockchain.
+I am sharing the progress of GiftBlitz, a project that recently ranked #13 out of 66 at the MasterZ x IOTA Hackathon 2026.
 
-Here's what I built — and why.
+The project addresses a significant global inefficiency: $23 billion in gift cards and digital vouchers go unused annually. Current peer-to-peer secondary markets are plagued by a 45% fraud rate, while centralized exchanges charge fees as high as 30% and impose restrictive verification processes.
 
-———
+The Core Problem: In traditional P2P trades, trust is centralized or non-existent. One party must always take the risk of going first.
 
-💸 THE PROBLEM
+The Solution: GiftBlitz.
+I have developed a decentralized protocol where any digital code can be traded trustlessly. By utilizing a game-theoretical model (Asymmetric Dual Deposit) and smart contracts on the IOTA network, we ensure that honesty is the only rational economic choice.
 
-Every year, $23 billion in gift cards go unused worldwide.
-If you try to sell them online, you face:
-→ 45% scam rate on peer-to-peer platforms
-→ 15-30% fees on centralized exchanges
-→ Days or weeks waiting for "verification"
+Current Status:
+- Functional protocol deployed on IOTA Testnet.
+- Two core smart contracts implemented in Move.
+- End-to-end encryption for code delivery (AES-256 + ECDH).
+- Soulbound reputation system for long-term security.
 
-The real issue? In every P2P trade, someone has to go first.
-And that's where fraud begins.
+The Path Forward:
+The technical foundation is solid, but scaling a protocol into a global platform requires more than just code. I am now looking for co-founders and early-stage partners to join the core team.
 
-🧮 THE SOLUTION: FREEDOM + MATH
+I am specifically looking for expertise in:
+- Marketing & Growth: To build the community and drive user adoption.
+- Design (UI/UX): To transform a technical prototype into a premium, seamless user experience.
+- Business Development & Legal: To handle compliance, brand partnerships, and institutional relations.
 
-I built GiftBlitz — a P2P protocol where anyone can trade 
-any digital code with anyone else in the world.
-No middlemen. No permission. No censorship.
+This is not a theoretical project. It is a working product solving a massive real-world problem. If you have a background in fintech, Web3 operations, or growth strategy and want to build a fundamental layer of the future exchange economy, let’s discuss.
 
-Amazon gift card? Yes. Local restaurant voucher? Yes.
-Spa coupon, cinema ticket, store credit? Yes.
-If it has a code and a value, GiftBlitz protects it.
+Contact me via DM or in the comments for more technical details or to schedule a call.
 
-How?
-→ The seller deposits 100% of the card's face value
-→ The buyer deposits 110% + the price
-→ Everything is locked in a transparent, public smart contract
-→ Cheating GUARANTEES a net loss for the cheater
-
-You don't need to trust anyone — not the other person,
-not a platform, not even us. Code is law.
-
-🔓 ETHICS & TRANSPARENCY
-
-This isn't just a marketplace. It's a principle:
-trust between strangers should rely on mathematics,
-not on a company's terms of service.
-
-• 100% decentralized — no servers, no databases, no CEO 
-  who can freeze your account
-• 100% transparent — every rule lives in the smart contract, 
-  open source, verifiable by anyone
-• 100% peer-to-peer — money goes from buyer to seller, period. 
-  We never touch the funds
-• 100% free — any voucher, coupon, gift card, digital code 
-  from any brand in the world. No gatekeeper decides what you can trade
-• End-to-end encrypted — not even we can read your codes
-• Soulbound reputation — can't be bought, can't be faked. Only earned.
-• Fee: 1%. Not 30%. Because the value belongs to the people who create it.
-
-🚀 RESULTS
-
-In 6 weeks I built:
-✅ 2 smart contracts deployed on IOTA Testnet
-✅ A protocol where any digital code can be traded trustlessly
-✅ 5 layers of security (blockchain → encryption → game theory)
-✅ #13 out of 66 in the hackathon (eligible for the accelerator)
-
-📌 WHAT'S NEXT
-
-→ MasterZ / IOTA Foundation Acceleration Program
-→ Custom voucher & code support (any brand, any code)
-→ Premium design upgrade
-→ Path to mainnet deployment
-
-———
-
-🤝 LOOKING FOR CO-BUILDERS
-
-I built the tech alone — smart contracts, frontend, 
-encryption, deployment. But turning a prototype into 
-a real product takes skills that go beyond code.
-
-I'm looking for people who want to build something real 
-in Web3 — not another token, but a product that solves 
-a $23 billion problem.
-
-I'm especially looking for:
-
-→ 📣 Marketing & Growth — social media, community building, 
-  content strategy. People who make products get noticed.
-→ 🎨 Design — UI/UX, branding, motion design. People who 
-  turn a good product into a memorable experience.
-→ 📋 Operations & Legal — compliance, company structure, 
-  grant applications. People who navigate the business side.
-→ 💼 Business Development — brand partnerships, investor 
-  relations, pitching. People who open doors.
-
-Bonus (not a priority — I handle the dev side):
-→ 🔧 Frontend or Blockchain Dev (Move/Solidity)
-
-You don't need to know everything about blockchain or crypto.
-You need to want to get your hands dirty on a real project,
-with a real product, already working.
-
-📩 DM me or comment below — I read everything.
-
-———
-
-If you believe trust should be mathematical, not emotional,
-follow me for project updates.
-
-Or try it yourself → [testnet link]
-
-#Web3 #Blockchain #IOTA #GameTheory #Startup #GiftCards 
-#DeFi #SmartContracts #BuildInPublic #Hackathon #CoFounder #Hiring
+#Web3 #Fintech #IOTA #Blockchain #Startup #GameTheory #CoFounder #GiftCards #DeFi
 ```
 
 ---
